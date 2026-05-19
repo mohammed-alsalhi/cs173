@@ -1,0 +1,180 @@
+\documentclass[12pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{pagecolor}
+\usepackage{marginnote}
+\usepackage{fancyhdr}
+\usepackage{bm}
+
+
+% Define cream background color
+\definecolor{cream}{HTML}{faf7f1}
+\pagecolor{cream}
+
+% Define red color for dates
+\newcommand{\red}[1]{\textcolor{red}{#1}}
+
+% Define defn and defeq commands
+\newcommand{\defn}[1]{\textbf{#1}}
+\newcommand{\defeq}{\mathrel{\vcenter{\baselineskip0.5ex \lineskiplimit0pt \hbox{\scriptsize.}\hbox{\scriptsize.}}}=}
+
+% Define sidenote command (simplified - uses marginnote)
+\newcommand{\sidenote}[1]{\marginnote{\small\itshape #1}}
+
+% Title formatting
+\makeatletter
+\renewcommand{\maketitle}{%
+  \begin{flushleft}
+    {\Large\bfseries CS173: Discrete Structures}\\[0.3em]
+    {\Large\bfseries Problem Set 0}\\[0.5em]
+    {\normalsize Mohammed Al Salhi}
+  \end{flushleft}
+  \vspace{1em}
+}
+\makeatother
+\AtBeginDocument{\mathversion{bold}}
+
+\begin{document}
+
+\maketitle
+
+\begin{enumerate}[left=0pt, itemsep=2em, parsep=1em]
+  \item
+    Determine the truth value, if any, of each of the following sentences.
+    
+    \begin{enumerate}[label=(\alph*), itemsep=1.5em, leftmargin=2em]
+      \item
+        ``Every integer is either even or odd.''
+        
+        \textbf{TRUE.}
+        
+        Let $n$ be an integer. Thus $2n$ is an even number, and $2n+1$ is and an odd number. Incrementing up from $2n+1$ is $2n+2 = 2k$ where $k=n+1$ and is an integer meaning $2k$ is again even. By the principles of induction all integer are thus even or odd. 
+    
+      \item
+        ``Every number is either even or odd.''
+        
+        \textbf{FALSE.}
+        
+        Can be proven by counterexample. $2.5$ is a number and is neither even nor odd. 
+        
+      \item
+        ``Every non-empty set of integers has a smallest element.''
+        
+        \textbf{FALSE.}
+        
+        Can be proven by counterexample. Take the set of all negative integers $\{\ldots, -2, -1\}$. This set has no smallest element.
+        
+      \item
+        ``Every non-empty set of natural numbers has a smallest element.''
+        
+        \textbf{TRUE.}
+        
+        The set of natural numbers is bounded below by $0$ hence all subsets of natural numbers must have a smallest value. 
+        
+      \item
+        ``Every natural number is boring.''
+        
+        \textbf{FALSE.}
+        
+        The premise of being boring is dialectical. Fore there to be 'boring' natural numbers there has to an opposite, or a reference. That suggest that there must exist some 'interesting' or 'non-boring' natural numbers for 'boring' natural numbers to exist. If all numbers were boring, then none would be boring. The term would lose meaning.
+        
+      \item
+        ``No natural number is boring.''
+        
+        \textbf{FALSE.}
+        
+        From part (e), there has to exist some boring natural numbers so that non-boring' natural numbers exist.
+    \end{enumerate}
+
+  \item
+    Determine the truth value, if any, of each of the following sentences.
+    
+    \begin{enumerate}[label=(\alph*), itemsep=1.5em, leftmargin=2em]
+      \item
+        ``This sentence is true.''
+        
+        \textbf{INDETERMINATE.}
+        
+        Let $S \defeq$ ``$S$ is true.'' 
+        If $S$ is true, then the assertion is true, which is consistent.
+        If $S$ is false, then what $S$ assertion is false, which is also consistent.
+        
+      \item
+        ``This sentence is false.''
+        
+        \textbf{PARADOX.}
+        
+        Let $Q \defeq$ ``$Q$ is false.'' If $Q$ is true, then what $Q$ asserts must hold, meaning $Q$ is false which is a contradiction.
+        If $Q$ is false, then what $Q$ asserts does not hold, meaning $Q$ is not false, so $Q$ is true which again is a contradiction.
+        
+      \item
+        ``The set of all sets that contain themselves contains itself.''
+        
+        \textbf{INDETERMINATE.}
+        
+
+        Let this set be $R$. If $R \in R$, then $R$ satisfies the definition of $R$ and thus is in $R$, which is consistent.
+        If $R \notin R$, then $R$ does not satisfy the definition, which is also consistent.
+        
+      \item
+        ``The set of all sets that do not contain themselves does not contain itself.''
+        
+        \textbf{PARADOX.}
+        
+        Let this set be $N$. If $N \notin N$, then $N$ satisfies the definition of $N$ and thus is in $N$, which is a contradiction.
+        If $N \in N$, then $N$ does not satisfy the definition, but is in $N$ which is also a contradiction.
+
+        
+      \item
+        ``If this sentence is false, then $7$ is a prime number.''
+        
+        \textbf{TRUE.}
+        
+        Let $A \defeq$ ``If $A$ is false, then 7 is a prime number.'' and $B \defeq$ ``7 is prime''. Then $A \defeq$ $\neg A \Rightarrow B$.
+        If $A$ is false then $\neg A$ is true, which implies $B$ has to be true. $B$ is obviously true, which means this is consistent. 
+        If $A$ is true then $\neg A$ is false, which means $B$ is not dependent on $A$ and can be either $\top$ or $\bot$, thus this is still consistent. 
+        
+        
+      \item
+        ``If this sentence is true, then $7$ is not a prime number.''
+        
+        \textbf{FALSE.}
+        
+        Let $A \defeq$ ``If $A$ is true, then $7$ is not a prime number.'' and $B \defeq$ ``$7$ is not prime''. Then $A \defeq A \Rightarrow B$.
+        If $A$ is true then it implies $B$ has to be true. But $B$ is obviously false, so this is inconsistent.
+        If $A$ is false then it means $B$ is not dependent on $A$ and can be either $\top$ or $\bot$, thus this is consistent. So $A$ has to be $\bot$.
+
+    \end{enumerate}
+
+  \item
+    Consider the infinite sequence of sentences indexed by natural numbers
+    \begin{equation*}
+      S_0, S_1, S_2, \ldots, S_i, \ldots
+    \end{equation*}
+    where each sentence asserts that all of the subsequent sentences are false.
+    \begin{equation*}
+      S_i \defeq \text{``}S_j \text{ is false for all } j > i\text{''}
+    \end{equation*}
+    For example, $S_3 \defeq$ ``$S_j$ is false for all $j > 3$,'' which means $S_3$ is equivalent to the assertion that ``the sentences $S_4, S_5, S_6, \dots$ are all false.''
+    
+    What are the truth values, if any, of the sentences in this sequence?
+    
+
+    \textbf{All $S_n$ are INDETERMINATE.}
+    
+    $S_0$ cannot be $\top$, because if $S_0$ were true, then it would assert that $S_1$ is $\bot$.  
+    But $S_1$ says that all sentences $S_n$ with $n>1$ are false.  
+    If $S_1$ is false, then there exists some $S_n$ with $n>1$ that is true, which contradicts the assertion made by $S_0$ that all subsequent sentences are false.
+    
+    The same applies to any $S_n$: assuming $S_n$ is $\top$ forces $S_{n+1}$ to be $\bot$, which in turn implies the existence of some later sentence that is $\top$, contradicting the original claim of $S_n$.
+    
+    The only way all sentences could avoid contradiction by being true would be if there were a final sentence $S_N$ that is true. However, there is no last sentence, since the sequence is infinite.
+    
+    Therefore, none of the sentences $S_n$ can be assigned a truth value.
+\end{enumerate}
+
+\end{document}

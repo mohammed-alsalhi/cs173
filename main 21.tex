@@ -1,0 +1,297 @@
+\documentclass[12pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{pagecolor}
+\usepackage{marginnote}
+\usepackage{fancyhdr}
+\usepackage{bm}
+\usepackage{etoolbox}
+\usepackage{mdframed}
+
+\definecolor{cream}{HTML}{faf7f1}
+\pagecolor{cream}
+
+\newcommand{\defn}[1]{\textbf{#1}}
+\newcommand{\defeq}{\mathrel{\vcenter{\baselineskip0.5ex \lineskiplimit0pt
+                     \hbox{\scriptsize.}\hbox{\scriptsize.}}}=}
+\newcommand{\T}{\top}
+\newcommand{\F}{\bot}
+\newcommand{\Pow}{\mathbb{P}}
+\newcommand{\suc}{\mathfrak{suc}}
+\newcommand{\N}{\mathbb{N}}
+
+\newtheoremstyle{proofstyle}
+  {}{}{}{}{\bfseries}{.}{ }{}
+\theoremstyle{proofstyle}
+\newtheorem*{proof*}{Proof}
+
+\newcommand{\sidenote}[1]{\marginnote{\small\itshape #1}}
+
+\makeatletter
+\renewcommand{\maketitle}{%
+  \begin{flushleft}
+    {\Large\bfseries CS173: Discrete Structures}\\[0.3em]
+    {\Large\bfseries Problem Set 5}\\[0.5em]
+    {\normalsize Mohammed Al Salhi}
+  \end{flushleft}
+  \vspace{1em}
+}
+\makeatother
+
+\AtBeginDocument{\mathversion{bold}}
+
+\begin{document}
+
+\maketitle
+
+\begin{enumerate}[left=0pt, itemsep=2em, parsep=1em]
+
+%% ---------------------------------------------------------------
+%% Problem 1
+%% ---------------------------------------------------------------
+\item We say that a set $x$ is \defn{$\in$-transitive} $:\Leftrightarrow \forall y(y \in x \Rightarrow \forall z(z \in y \Rightarrow z \in x))$.
+
+Prove that every natural number is $\in$-transitive.
+
+\begin{proof*}
+We will show $(\forall n \in \N)(n \text{ is } {\in}\text{-transitive})$ by weak induction.
+
+\medskip
+\textbf{Basis Step:}
+We must show $0$ is $\in$-transitive, i.e., $\forall y(y \in 0 \Rightarrow \forall z(z \in y \Rightarrow z \in 0))$. Since $0 = \emptyset$, there is no $y$ such that $y \in 0$. Therefore any statement $\forall y(y \in 0 \Rightarrow p)$ where p is an arbitrary proposition holds.
+
+\medskip
+\textbf{Inductive Step:}
+Let $k \in \N$, and assume $k$ is $\in$-transitive. We will show $\suc(k)$ is $\in$-transitive.
+
+Recall $\suc(k) = k \cup \{k\}$ by definition. Let $y$ be arbitrary and suppose $y \in \suc(k)$. Then $y \in k \cup \{k\}$, so either $y \in k$ or $y \in \{k\}$, meaning either $y \in k$ or $y = k$.
+
+Now let $z$ be arbitrary and suppose $z \in y$. We consider two cases.
+
+\medskip
+\textit{Case 1:} Suppose $y \in k$. Since $k$ is $\in$-transitive by the inductive hypothesis and $y \in k$ and $z \in y$, we conclude $z \in k$. Since $k \subseteq k \cup \{k\} = \suc(k)$, we have $z \in \suc(k)$.
+
+\medskip
+\textit{Case 2:} Suppose $y = k$. Then $z \in y = k$, so $z \in k \subseteq k \cup \{k\} = \suc(k)$, giving us $z \in \suc(k)$.
+
+\medskip
+In either case, $z \in \suc(k)$. Since $y$ and $z$ were arbitrary, $\suc(k)$ is $\in$-transitive.
+
+Therefore, we conclude $(\forall n \in \N)(n \text{ is } {\in}\text{-transitive})$.
+\end{proof*}
+
+\newpage
+
+%% ---------------------------------------------------------------
+%% Problem 2
+%% ---------------------------------------------------------------
+\item We will work up to a proof of commutativity of addition.
+
+\begin{enumerate}[label=(\alph*), itemsep=1.5em, leftmargin=2em]
+
+  \item Prove $(\forall x, y \in \N)(\suc(x + y) = \suc(x) + y)$.
+
+  \begin{proof*}
+  Let $x \in \N$. We will prove $(\forall y \in \N)(\suc(x + y) = \suc(x) + y)$ by weak induction.
+
+  \medskip
+  \textbf{Basis Step:}
+  We observe the following.
+  \[
+    \suc(x) + 0 = \suc(x) \tag{by definition of $+$}
+  \]
+  \[
+    \suc(x + 0) = \suc(x) \tag{by definition of $+$}
+  \]
+  Therefore $\suc(x + 0) = \suc(x) + 0$.
+
+  \medskip
+  \textbf{Inductive Step:}
+  Let $k \in \N$, and assume $\suc(x + k) = \suc(x) + k$. We observe the following.
+  \begin{align*}
+    \suc(x) + \suc(k) &= \suc(\suc(x) + k) &&\text{by definition of }+ \\
+                      &= \suc(\suc(x + k)) &&\text{by the inductive hypothesis}\\
+                      &= \suc(x + \suc(k)) &&\text{by definition of }+
+  \end{align*}
+  Therefore $\suc(x + \suc(k)) = \suc(x) + \suc(k)$.
+
+  We can therefore conclude $(\forall y \in \N)(\suc(x + y) = \suc(x) + y)$, and since $x$ was arbitrary, $(\forall x, y \in \N)(\suc(x + y) = \suc(x) + y)$.
+  \end{proof*}
+
+  \item Prove $(\forall x, y \in \N)(x + y = y + x)$.
+
+  \begin{proof*}
+  Let $x \in \N$. We will prove $(\forall y \in \N)(x + y = y + x)$ by weak induction.
+
+  \medskip
+  \textbf{Basis Step:}
+  We observe the following.
+  \begin{align*}
+    x + 0 &= x &&\text{by Theorem: Zero is the Additive Identity} \\
+          &= 0 + x &&\text{by Theorem: Zero is the Additive Identity}
+  \end{align*}
+  Therefore $x + 0 = 0 + x$ as desired.
+
+  \medskip
+  \textbf{Inductive Step:}
+  Let $k \in \N$, and assume $x + k = k + x$. We observe the following.
+  \begin{align*}
+    x + \suc(k) &= \suc(x + k) &&\text{by definition of }+ \\
+                &= \suc(k + x) &&\text{by the inductive hypothesis} \\
+                &= \suc(k) + x &&\text{by part (a)}
+  \end{align*}
+  Therefore $x + \suc(k) = \suc(k) + x$ as desired.
+
+  We can therefore conclude $(\forall y \in \N)(x + y = y + x)$, and since $x$ was arbitrary, $(\forall x, y \in \N)(x + y = y + x)$.
+  \end{proof*}
+
+\end{enumerate}
+
+\newpage
+
+%% ---------------------------------------------------------------
+%% Problem 3
+%% ---------------------------------------------------------------
+\item Show that $(\forall x, y \in \N)(x < y \Rightarrow (\exists n \in \N)(x + n = y))$.
+
+\begin{proof*}
+Let $x \in \N$. We will prove $(\forall y \in \N)(x < y \Rightarrow (\exists n \in \N)(x + n = y))$ by weak induction.
+
+\medskip
+\textbf{Basis Step:}
+We must show $x < 0 \Rightarrow (\exists n \in \N)(x + n = 0)$. Recall that $x < 0$ means $x \in 0 = \emptyset$ by definition, which is false for any $x$. Therefore the implication $x < 0 \Rightarrow \ldots$ holds vacuously.
+
+\medskip
+\textbf{Inductive Step:}
+Let $k \in \N$, and assume $x < k \Rightarrow (\exists n \in \N)(x + n = k)$. We must show $x < \suc(k) \Rightarrow (\exists n \in \N)(x + n = \suc(k))$.
+
+Suppose $x < \suc(k)$, meaning $x \in \suc(k) = k \cup \{k\}$. Then either $x \in k$ or $x \in \{k\}$, i.e., either $x < k$ or $x = k$.
+
+\medskip
+\textit{Case 1:} Suppose $x < k$. By the inductive hypothesis, there exists $n_0 \in \N$ such that $x + n_0 = k$. Then observe:
+\begin{align*}
+  x + \suc(n_0) &= \suc(x + n_0) &&\text{by definition of }+ \\
+                &= \suc(k)        &&\text{since }x + n_0 = k
+\end{align*}
+So $\suc(n_0) \in \N$ witnesses $(\exists n \in \N)(x + n = \suc(k))$.
+
+\medskip
+\textit{Case 2:} Suppose $x = k$. Then observe:
+\begin{align*}
+  x + 1 &= \suc(x) &&\text{by Lemma 6.5}\\
+        &= \suc(k) &&\text{since }x = k
+\end{align*}
+So $1 \in \N$ witnesses $(\exists n \in \N)(x + n = \suc(k))$.
+
+\medskip
+In either case, $(\exists n \in \N)(x + n = \suc(k))$ holds. We therefore conclude $x < \suc(k) \Rightarrow (\exists n \in \N)(x + n = \suc(k))$.
+
+Since $x$ was arbitrary, $(\forall x, y \in \N)(x < y \Rightarrow (\exists n \in \N)(x + n = y))$ as desired.
+\end{proof*}
+
+\newpage
+
+%% ---------------------------------------------------------------
+%% Problem 4
+%% ---------------------------------------------------------------
+\item Prove that $(\forall x, y, z \in \N)(x \cdot (y + z) = (x \cdot y) + (x \cdot z))$.
+
+\begin{proof*}
+Let $x, y \in \N$. We will prove $(\forall z \in \N)(x \cdot (y + z) = (x \cdot y) + (x \cdot z))$ by weak induction.
+
+\medskip
+\textbf{Basis Step:}
+We observe the following.
+\begin{align*}
+  x \cdot (y + 0) &= x \cdot y &&\text{by definition of }+ \\
+                  &= (x \cdot y) + 0 &&\text{by definition of }\cdot \\
+                  &= (x \cdot y) + (x \cdot 0) &&\text{by definition of }\cdot
+\end{align*}
+Therefore $x \cdot (y + 0) = (x \cdot y) + (x \cdot 0)$ as desired.
+
+\medskip
+\textbf{Inductive Step:}
+Let $k \in \N$, and assume $x \cdot (y + k) = (x \cdot y) + (x \cdot k)$. We observe the following.
+\begin{align*}
+  x \cdot (y + \suc(k))
+    &= x \cdot \suc(y + k) &&\text{by definition of }+ \\
+    &= x \cdot (y + k) + x &&\text{by definition of }\cdot \\
+    &= ((x \cdot y) + (x \cdot k)) + x &&\text{by the inductive hypothesis} \\
+    &= (x \cdot y) + ((x \cdot k) + x) &&\text{by associativity of }+ \\
+    &= (x \cdot y) + (x \cdot \suc(k)) &&\text{by definition of }\cdot
+\end{align*}
+Therefore $x \cdot (y + \suc(k)) = (x \cdot y) + (x \cdot \suc(k))$.
+
+We can therefore conclude $(\forall z \in \N)(x \cdot (y + z) = (x \cdot y) + (x \cdot z))$, and since $x$ and $y$ were arbitrary, $(\forall x, y, z \in \N)(x \cdot (y + z) = (x \cdot y) + (x \cdot z))$.
+\end{proof*}
+
+\newpage
+
+%% ---------------------------------------------------------------
+%% Problem 5
+%% ---------------------------------------------------------------
+\item Given a sequence of natural numbers $f : \N \to \N$ and a natural number $a \in \N$, we recursively define the iterated summation of finitely many values of $f$ as follows:
+\[
+  \sum_{i=a}^{a} f(i) \defeq f(a)
+\]
+\[
+  \sum_{i=a}^{\suc(b)} f(i) \defeq \left(\sum_{i=a}^{b} f(i)\right) + f(\suc(b))
+  \quad \text{where } b \in \N \text{ such that } a \leq b
+\]
+For completeness, we say $\displaystyle\sum_{i=a}^{b} f(i) \defeq 0$ when $b \in \N$ such that $b < a$. For this problem, you may also assume associativity and commutativity of multiplication over $\N$.
+
+Prove that $\displaystyle(\forall n \in \N)\!\left(1 + \sum_{i=0}^{n} 2^i = 2^{n+1}\right)$.
+
+\begin{proof*}
+We will prove $(\forall n \in \N)\!\left(1 + \displaystyle\sum_{i=0}^{n} 2^i = 2^{n+1}\right)$ by weak induction.
+
+\medskip
+\textbf{Basis Step:}
+We observe the following. In the basis step, we need to prove $1 + \displaystyle\sum_{i=0}^{0} 2^i = 2^{0+1}$.
+\begin{align*}
+  1 + \sum_{i=0}^{0} 2^i
+    &= 1 + 2^0 &&\text{by definition of iterated summation} \\
+    &= 1 + 1   &&\text{by definition of exponentiation} \\
+    &= 2       &&\text{by definition of +} \\
+    &= 2^1     &&\text{since }2^1 = 2^{\suc(0)} = 2^0 \cdot 2 = 1 \cdot 2 = 2\\
+    &= 2^{0+1} &&\text{since }0 + 1 = 1
+\end{align*}
+Therefore $1 + \displaystyle\sum_{i=0}^{0} 2^i = 2^{0+1}$ as desired.
+
+\medskip
+\textbf{Inductive Step:}
+Let $k \in \N$, and assume $1 + \displaystyle\sum_{i=0}^{k} 2^i = 2^{k+1}$. In the inductive step, we must prove $1 + \displaystyle\sum_{i=0}^{\suc(k)} 2^i = 2^{\suc(k)+1}$.
+We observe the following.
+\begin{align*}
+  1 + \sum_{i=0}^{\suc(k)} 2^i
+    &= 1 + \left(\sum_{i=0}^{k} 2^i\right) + 2^{\suc(k)}
+      &&\text{by definition of iterated summation} \\
+    &= \left(1 + \sum_{i=0}^{k} 2^i\right) + 2^{\suc(k)}
+      &&\text{by associativity of }+ \\
+    &= 2^{k+1} + 2^{\suc(k)}
+      &&\text{by the inductive hypothesis} \\
+    &= 2^{k+1} + 2^{k+1}
+      &&\text{since }(\forall x \in \N)(\suc(x) = x + 1) \\
+    &= 2 \cdot 2^{k+1}
+      &&\text{by commutativity of }\cdot\text{ and definition of }\cdot \\
+    &= 2^{k+1} \cdot 2
+      &&\text{by commutativity of }\cdot \\
+    &= 2^{\suc(k+1)}
+      &&\text{by definition of exponentiation} \\
+    &= 2^{(k+1)+1}
+      &&\text{since }(\forall x \in \N)(\suc(x) = x + 1) \\
+    &= 2^{\suc(k)+1}
+      &&\text{by associativity of }+
+\end{align*}
+Thus, we have shown $1 + \displaystyle\sum_{i=0}^{\suc(k)} 2^i = 2^{\suc(k)+1}$ as required.
+
+Therefore, we can conclude $(\forall n \in \N)\!\left(1 + \displaystyle\sum_{i=0}^{n} 2^i = 2^{n+1}\right)$.
+\end{proof*}
+
+\end{enumerate}
+
+\end{document}

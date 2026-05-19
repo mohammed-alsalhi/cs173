@@ -1,0 +1,337 @@
+\documentclass[12pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{pagecolor}
+\usepackage{marginnote}
+\usepackage{fancyhdr}
+\usepackage{bm}
+\usepackage{etoolbox}
+\usepackage{mdframed}
+
+\definecolor{cream}{HTML}{faf7f1}
+\pagecolor{cream}
+
+\newcommand{\defn}[1]{\textbf{#1}}
+\newcommand{\defeq}{\mathrel{\vcenter{\baselineskip0.5ex \lineskiplimit0pt
+                     \hbox{\scriptsize.}\hbox{\scriptsize.}}}=}
+\newcommand{\T}{\top}
+\newcommand{\F}{\bot}
+\newcommand{\Pow}{\mathbb{P}}
+
+\newtheoremstyle{proofstyle}
+  {}{}{}{}{\bfseries}{.}{ }{}
+\theoremstyle{proofstyle}
+\newtheorem*{proof*}{Proof}
+
+% Define sidenote command (simplified - uses marginnote)
+\newcommand{\sidenote}[1]{\marginnote{\small\itshape #1}}
+
+% Title formatting
+\makeatletter
+\renewcommand{\maketitle}{%
+  \begin{flushleft}
+    {\Large\bfseries CS173: Discrete Structures}\\[0.3em]
+    {\Large\bfseries Problem Set 4}\\[0.5em]
+    {\normalsize Mohammed Al Salhi}
+  \end{flushleft}
+  \vspace{1em}
+}
+\makeatother
+
+\AtBeginDocument{\mathversion{bold}}
+
+\begin{document}
+
+\maketitle
+
+\noindent
+Throughout this problem set, we will use the following shorthand notation for axioms:
+\begin{itemize}
+    \item \textbf{Extensionality} refers to The Axiom of Extensionality (Axiom 1)
+    \item \textbf{Pairing} refers to The Axiom of Pairing (Axiom 2)
+\end{itemize}
+
+\begin{enumerate}[left=0pt, itemsep=2em, parsep=1em]
+
+%% ---------------------------------------------------------------
+%% Problem 1
+%% ---------------------------------------------------------------
+\item For any set $x$, the power set of $x$ is given by $\Pow(x) \defeq \{y \mid y \subseteq x\}$.
+
+\begin{enumerate}[label=(\alph*), itemsep=1.5em, leftmargin=2em]
+
+\item Prove $\forall x \forall y\,(\Pow(x) \cup \Pow(y) \subseteq \Pow(x \cup y))$.
+
+\begin{proof*}
+    Let $x$ and $y$ be arbitrary sets.
+
+    To prove $\Pow(x) \cup \Pow(y) \subseteq \Pow(x \cup y)$, we must show $\forall w\,(w \in \Pow(x) \cup \Pow(y) \Rightarrow w \in \Pow(x \cup y))$ by the definition of subset.
+
+    \begin{quote}
+        Let $w$ be arbitrary and assume $w \in \Pow(x) \cup \Pow(y)$.
+
+        By the definition of union, $w \in \Pow(x)$ or $w \in \Pow(y)$.
+
+        \textit{Case 1:} Suppose $w \in \Pow(x)$.
+
+        \begin{quote}
+            By the definition of power set, $w \subseteq x$.
+
+            By Problem 1c of PS3, $x \subseteq x \cup y$.
+
+            By Problem 1a of PS3 (transitivity of $\subseteq$), $w \subseteq x \cup y$.
+
+            Thus $w \in \Pow(x \cup y)$ by the definition of power set.
+        \end{quote}
+
+        \textit{Case 2:} Suppose $w \in \Pow(y)$.
+
+        \begin{quote}
+            By the definition of power set, $w \subseteq y$.
+
+            Since $x \cup y = y \cup x$ by commutativity of union, and $y \subseteq y \cup x = x \cup y$ by Problem 1c of PS3, we have $y \subseteq x \cup y$.
+
+            By Problem 1a of PS3 (transitivity of $\subseteq$), $w \subseteq x \cup y$.
+
+            Thus $w \in \Pow(x \cup y)$ by the definition of power set.
+        \end{quote}
+
+        In both cases, $w \in \Pow(x \cup y)$.
+    \end{quote}
+
+    Therefore $\Pow(x) \cup \Pow(y) \subseteq \Pow(x \cup y)$. \qed
+\end{proof*}
+
+\item Prove $\exists x \exists y\,(\Pow(x) \cup \Pow(y) \neq \Pow(x \cup y))$.
+
+\begin{proof*}
+    We exhibit a counterexample. Let $x = \{\emptyset\}$ and $y = \{\{\emptyset\}\}$.
+
+    Then $x \cup y = \{\emptyset, \{\emptyset\}\}$, and
+    \[
+        \Pow(x \cup y) = \bigl\{\emptyset,\,\{\emptyset\},\,\{\{\emptyset\}\},\,\{\emptyset,\{\emptyset\}\}\bigr\}.
+    \]
+
+    Meanwhile $\Pow(x) = \{\emptyset, \{\emptyset\}\}$ and $\Pow(y) = \{\emptyset, \{\{\emptyset\}\}\}$, so
+    \[
+        \Pow(x) \cup \Pow(y) = \bigl\{\emptyset,\,\{\emptyset\},\,\{\{\emptyset\}\}\bigr\}.
+    \]
+
+    Observe that $\{\emptyset, \{\emptyset\}\} \in \Pow(x \cup y)$ but $\{\emptyset, \{\emptyset\}\} \notin \Pow(x) \cup \Pow(y)$.
+
+    Therefore, by Extensionality, $\Pow(x) \cup \Pow(y) \neq \Pow(x \cup y)$ for these choices of $x$ and $y$, which proves $\exists x \exists y\,(\Pow(x) \cup \Pow(y) \neq \Pow(x \cup y))$. \qed
+\end{proof*}
+\newpage
+\item Prove $\forall x \forall y\,(x \cap y = y \Rightarrow y \in \Pow(x))$.
+
+\begin{proof*}
+    Let $x$ and $y$ be arbitrary sets. Assume $x \cap y = y$.
+
+    To show $y \in \Pow(x)$, we must show $y \subseteq x$ by the definition of power set.
+
+    To show $y \subseteq x$, we must show $\forall w\,(w \in y \Rightarrow w \in x)$ by the definition of subset.
+
+    \begin{quote}
+        Let $w$ be arbitrary and assume $w \in y$.
+
+        Since $x \cap y = y$, we have $w \in x \cap y$.
+
+        By the definition of intersection, $w \in x \wedge w \in y$.
+
+        Therefore $w \in x$.
+    \end{quote}
+
+    Therefore $y \subseteq x$, which means $y \in \Pow(x)$ by the definition of power set. \qed
+\end{proof*}
+
+\item Prove $\forall x \forall y\,(y \in \Pow(x) \Rightarrow x \cap y = y)$.
+
+\begin{proof*}
+    Let $x$ and $y$ be arbitrary sets. Assume $y \in \Pow(x)$.
+
+    By the definition of power set, $y \subseteq x$, i.e.\ $\forall w\,(w \in y \Rightarrow w \in x)$.
+
+    To show $x \cap y = y$, we use Extensionality: it suffices to show $\forall w\,(w \in x \cap y \Leftrightarrow w \in y)$.
+
+    \begin{quote}
+        Let $w$ be arbitrary.
+
+        \textbf{($\Rightarrow$)} Assume $w \in x \cap y$. By the definition of intersection, $w \in y$.
+
+        \textbf{($\Leftarrow$)} Assume $w \in y$. Since $y \subseteq x$, we have $w \in x$. Thus $w \in x$ and $w \in y$, so $w \in x \cap y$ by the definition of intersection.
+    \end{quote}
+
+    Therefore, by Extensionality, $x \cap y = y$. \qed
+\end{proof*}
+
+\end{enumerate}
+\newpage
+%% ---------------------------------------------------------------
+%% Problem 2
+%% ---------------------------------------------------------------
+\item For any sets $x$ and $y$, the \defn{relative complement} of $y$ in $x$ is $x \setminus y \defeq \{z \mid z \in x \wedge z \notin y\}$. The \defn{symmetric difference} of $x$ and $y$ is $x \mathbin{\triangle} y \defeq (x \setminus y) \cup (y \setminus x)$.
+
+\begin{enumerate}[label=(\alph*), itemsep=1.5em, leftmargin=2em]
+
+\item Prove that $\forall x\,\bigl((x \cup \{x\}) \setminus \{x\} = x\bigr)$.
+
+\begin{proof*}
+    Let $x$ be an arbitrary set.
+
+    By Extensionality, it suffices to show $\forall w\,(w \in (x \cup \{x\}) \setminus \{x\} \Leftrightarrow w \in x)$.
+
+    \begin{quote}
+        Let $w$ be arbitrary.
+
+        \textbf{($\Rightarrow$)} Assume $w \in (x \cup \{x\}) \setminus \{x\}$.
+
+        \begin{quote}
+            By the definition of relative complement, $w \in x \cup \{x\}$ and 
+            
+            $w \notin \{x\}$.
+
+            By the definition of union, $w \in x$ or $w \in \{x\}$.
+
+            Since $w \notin \{x\}$, we must have $w \in x$.
+        \end{quote}
+
+        \textbf{($\Leftarrow$)} Assume $w \in x$.
+
+        \begin{quote}
+            By Problem 1c of PS3, $x \subseteq x \cup \{x\}$, so $w \in x \cup \{x\}$.
+
+            Since $x \notin x$ by Clavicula Theorem 5.1, and $w \in x$, we have $w \neq x$, so $w \notin \{x\}$.
+            
+            Therefore $w \notin \{x\}$, and so $w \in (x \cup \{x\}) \setminus \{x\}$.
+        \end{quote}
+    \end{quote}
+
+    Therefore, by Extensionality, $(x \cup \{x\}) \setminus \{x\} = x$. \qed
+\end{proof*}
+
+\item Prove that $x \mathbin{\triangle} y = (x \cup y) \setminus (x \cap y)$ for all sets $x$ and $y$.
+
+\begin{proof*}
+    Let $x$ and $y$ be arbitrary sets.
+
+    By Extensionality, it suffices to show $\forall w\,(w \in x \mathbin{\triangle} y \Leftrightarrow w \in (x \cup y) \setminus (x \cap y))$.
+
+    \begin{quote}
+        Let $w$ be arbitrary.
+
+        Note that by the respective definitions:
+        \begin{align*}
+            w \in x \mathbin{\triangle} y &\Leftrightarrow w \in (x \setminus y) \cup (y \setminus x)\\
+            &\Leftrightarrow (w \in x \wedge w \notin y) \vee (w \in y \wedge w \notin x).\\ \
+            \\
+            w \in (x \cup y) \setminus (x \cap y) &\Leftrightarrow w \in x \cup y \wedge w \notin x \cap y\\
+            &\Leftrightarrow (w \in x \vee w \in y) \wedge \neg(w \in x \wedge w \in y)\\
+            &\Leftrightarrow (w \in x \vee w \in y) \wedge (w \notin x \vee w \notin y). \\
+            &\Leftrightarrow (w \in x \wedge w \notin y) \vee (w \in y \wedge w \notin x).\\ 
+        \end{align*}
+        Since both conditions reduce to $(w \in x \wedge w \notin y) \vee (w \in y \wedge w \notin x)$, we have $w \in x \mathbin{\triangle} y \Leftrightarrow w \in (x \cup y) \setminus (x \cap y)$.
+    \end{quote}
+    Therefore, by Extensionality, $x \mathbin{\triangle} y = (x \cup y) \setminus (x \cap y)$. \qed
+\end{proof*}
+
+\end{enumerate}
+\newpage
+%% ---------------------------------------------------------------
+%% Problem 3
+%% ---------------------------------------------------------------
+\item Recall that the Axiom of Regularity asserts $\forall x\,(x \neq \emptyset \Rightarrow \exists y\,(y \in x \wedge x \cap y = \emptyset))$.
+
+\begin{enumerate}[label=(\alph*), itemsep=1.5em, leftmargin=2em]
+
+\item Show that $\forall x\,(x \neq x \cup \{x\})$.
+
+\begin{proof*}
+    Let $x$ be an arbitrary set. Consider the set $\{x\}$, which exists by Pairing.
+
+    Suppose for contradiction that $x = x \cup \{x\}$.
+\begin{quote}
+         Since $\{x\} \neq \emptyset$, by the Axiom of Regularity we have some $y \in \{x\}$ such that $\{x\} \cap y = \emptyset$.
+
+    Since $y \in \{x\}$, we have $y = x$.
+
+    Thus $\{x\} \cap x = \emptyset$.
+
+    Recall $x \in x \cup \{x\}$, since $x = x \cup \{x\}$ then $x \in x$.
+
+    Since $x \in \{x\}$ and $x \in x$, we have $x \in \{x\} \cap x$.
+
+    This contradicts $\{x\} \cap x = \emptyset$.
+\end{quote}
+
+    Therefore,by contradiction, $x \neq x \cup \{x\}$. \qed
+\end{proof*}
+
+\item Show that $\forall x \forall y\,(x \neq y \Rightarrow x \cup \{x\} \neq y \cup \{y\})$.
+
+\begin{proof*}
+    Let $x$ and $y$ be arbitrary sets such that $x \neq y$.
+
+    Suppose for contradiction that $x \cup \{x\} = y \cup \{y\}$.
+
+    \begin{quote}
+        Since $x \in \{x\} \subseteq x \cup \{x\} = y \cup \{y\}$, we have $x \in y \cup \{y\}$.
+
+        By the definition of union, $x \in y$ or $x \in \{y\}$. Since $x \in \{y\}$ implies $x = y$, contradicting $x \neq y$, we must have $x \in y$.
+
+        By the same argument with $x$ and $y$ swapped, $y \in x \cup \{x\} = y \cup \{y\}$ gives $y \in x$.
+
+        Now consider the set $\{x, y\}$, which exists by Pairing. It is nonempty, so by the Axiom of Regularity there exists $z \in \{x, y\}$ such that $\{x, y\} \cap z = \emptyset$.
+
+        Since $z \in \{x, y\}$, either $z = x$ or $z = y$.
+
+        If $z = x$, then $\{x, y\} \cap x = \emptyset$. But $y \in x$ and $y \in \{x, y\}$, so 
+        
+        $y \in \{x, y\} \cap x$, a contradiction.
+
+        If $z = y$, then $\{x, y\} \cap y = \emptyset$. But $x \in y$ and $x \in \{x, y\}$, so 
+        
+        $x \in \{x, y\} \cap y$, a contradiction.
+    \end{quote}
+
+    In both cases we reach a contradiction, so $x \cup \{x\} \neq y \cup \{y\}$. \qed
+\end{proof*}
+
+\end{enumerate}
+
+\newpage
+%% ---------------------------------------------------------------
+%% Problem 4
+%% ---------------------------------------------------------------
+
+\item We define the \defn{Cartesian product} of two sets $X$ and $Y$ by $X \times Y \defeq \{(x, y) \mid x \in X \wedge y \in Y\}$. Show that the Cartesian product of any two sets exists.
+
+\begin{proof*}
+    Let $X$ and $Y$ be arbitrary sets.
+
+    We first show that every ordered pair $(x, y)$ with $x \in X$ and $y \in Y$ is an element of $\Pow(\Pow(X \cup Y))$.
+
+    \begin{quote}
+        Let $x \in X$ and $y \in Y$. Since $x \in X$ and $y \in Y$, both $x$ and $y$ are in $X \cup Y$.
+
+        Therefore $\{x\} \subseteq X \cup Y$ and $\{x, y\} \subseteq X \cup Y$, so $\{x\}, \{x,y\} \in \Pow(X \cup Y)$.
+
+        Thus $(x, y) = \{\{x\}, \{x, y\}\} \subseteq \Pow(X \cup Y)$, which means \\ $(x, y) \in \Pow(\Pow(X \cup Y))$.
+    \end{quote}
+
+    By the Axiom of Power Set, $\Pow(X \cup Y)$ and $\Pow(\Pow(X \cup Y))$ both exist.
+
+    Let $\varphi(z) \defeq \exists x \exists y\,((z = (x, y)) \wedge x \in X \wedge y \in Y)$. By the Axiom of Separation, we obtain the set
+    \[
+        X \times Y \defeq \{z \in \Pow(\Pow(X \cup Y)) \mid \exists x \exists y\,((z = (x, y)) \wedge x \in X \wedge y \in Y)\}.
+    \]
+
+    This set contains exactly the ordered pairs $(x, y)$ with $x \in X$ and $y \in Y$, so $X \times Y$ exists. \qed
+\end{proof*}
+
+\end{enumerate}
+
+\end{document}

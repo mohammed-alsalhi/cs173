@@ -1,0 +1,380 @@
+% Compile with: pdflatex lecture_33.tex
+% Requires: amsmath, amssymb, amsthm, mathtools, xcolor, mdframed,
+%           enumitem, hyperref, pagecolor, microtype
+
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{mathtools}
+\usepackage{xcolor}
+\usepackage{mdframed}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{pagecolor}
+\usepackage{microtype}
+
+% ---------- Colour palette ----------
+\definecolor{cream}{HTML}{FFFDF5}
+\definecolor{defblue}{HTML}{1A4A7A}
+\definecolor{thmgreen}{HTML}{1A5C3A}
+\definecolor{warnAmber}{HTML}{7A4A00}
+\definecolor{dangerRed}{HTML}{7A1A1A}
+\definecolor{boxbluebg}{HTML}{EBF3FB}
+\definecolor{boxgreenbg}{HTML}{EBF7EF}
+\definecolor{boxamberbg}{HTML}{FDF5E6}
+\definecolor{boxredbg}{HTML}{FBEBEB}
+\pagecolor{cream}
+
+% ---------- Theorem styles ----------
+\newtheoremstyle{defstyle}    {8pt}{8pt}{\normalfont}{0pt}{\bfseries\color{defblue}} {.}{0.5em}{}
+\newtheoremstyle{thmstyle}    {8pt}{8pt}{\normalfont}{0pt}{\bfseries\color{thmgreen}}{.}{0.5em}{}
+\newtheoremstyle{notstyle}    {8pt}{8pt}{\normalfont}{0pt}{\bfseries\color{warnAmber}}{.}{0.5em}{}
+\newtheoremstyle{cautionstyle}{8pt}{8pt}{\normalfont}{0pt}{\bfseries\color{dangerRed}}{.}{0.5em}{}
+
+\theoremstyle{defstyle}
+\newtheorem{definition}{Definition}[section]
+
+\theoremstyle{thmstyle}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{lemma}[theorem]{Lemma}
+
+\theoremstyle{notstyle}
+\newtheorem*{remark}{Remark}
+\newtheorem*{example}{Example}
+
+\theoremstyle{cautionstyle}
+\newtheorem*{caution}{Caution}
+
+% ---------- Boxes ----------
+\newmdenv[
+  backgroundcolor=boxbluebg, linecolor=defblue, linewidth=2pt,
+  topline=false, rightline=false, bottomline=false,
+  innerleftmargin=10pt, innerrightmargin=10pt,
+  innertopmargin=6pt, innerbottommargin=6pt,
+  skipabove=8pt, skipbelow=8pt
+]{defbox}
+
+\newmdenv[
+  backgroundcolor=boxgreenbg, linecolor=thmgreen, linewidth=2pt,
+  topline=false, rightline=false, bottomline=false,
+  innerleftmargin=10pt, innerrightmargin=10pt,
+  innertopmargin=6pt, innerbottommargin=6pt,
+  skipabove=8pt, skipbelow=8pt
+]{thmbox}
+
+\newmdenv[
+  backgroundcolor=boxamberbg, linecolor=warnAmber, linewidth=2pt,
+  topline=false, rightline=false, bottomline=false,
+  innerleftmargin=10pt, innerrightmargin=10pt,
+  innertopmargin=6pt, innerbottommargin=6pt,
+  skipabove=8pt, skipbelow=8pt
+]{notebox}
+
+\newmdenv[
+  backgroundcolor=boxredbg, linecolor=dangerRed, linewidth=2pt,
+  topline=false, rightline=false, bottomline=false,
+  innerleftmargin=10pt, innerrightmargin=10pt,
+  innertopmargin=6pt, innerbottommargin=6pt,
+  skipabove=8pt, skipbelow=8pt
+]{cautionbox}
+
+% ---------- Macros ----------
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Nd}{\mathbb{N}_{\text{d}}}
+
+\begin{document}
+
+\begin{center}
+  {\Large\bfseries Lecture 33 --- Infinity of $\N$, $|\N| = |\N \times \N|$, and Cantor's Theorem}\\[4pt]
+  {\normalsize CS 173: Discrete Structures \quad$\cdot$\quad Cardinality \& the Diagonal Argument}\\[2pt]
+  {\small\color{gray} University of Illinois at Urbana-Champaign}
+\end{center}
+\vspace{1em}\hrule\vspace{1.5em}
+
+\section{Setup and Goal}
+
+We continue developing the theory of cardinality. Two large claims sit on the
+horizon:
+\[
+  |\N| \;=\; |\Nd| \;=\; |\Z|, \qquad\qquad |\N| \;=\; |\N \times \N|.
+\]
+Before we can prove either, we need a foundational fact: the set $\N$ itself is
+infinite. To formalise this we recall that, throughout this course, a natural
+number $n \in \N$ is treated as the finite set $n = \{0, 1, \dots, n-1\}$, so a
+statement like $|n| = |\N|$ is a statement about cardinalities of sets.
+
+Our first target is therefore the following.
+
+\begin{notebox}
+\begin{remark}
+We want to show
+\[
+  (\forall n \in \N)\bigl(|n| \neq |\N|\bigr),
+\]
+i.e.\ no finite natural number has the same cardinality as $\N$. Equivalently,
+$\N$ is infinite.
+\end{remark}
+\end{notebox}
+
+\section{$\N$ is infinite}
+
+\begin{thmbox}
+\begin{theorem}[$\N$ is infinite]
+$\N$ is infinite. Equivalently,
+\[
+  (\forall n \in \N)\bigl(|n| \neq |\N|\bigr).
+\]
+\end{theorem}
+\end{thmbox}
+
+\begin{proof}
+Towards a contradiction, suppose there exists $n \in \N$ such that $|n| = |\N|$.
+Then there exists a bijection
+\[
+  f : n \longrightarrow \N.
+\]
+(Recall $n = \{0, 1, \dots, n-1\}$.)
+
+\medskip
+\noindent\textbf{Construct a witness that $f$ misses.} Define
+\[
+  S \;:=\; \sum_{i=0}^{n-1} f(i),
+\]
+and observe that $S \in \N$ because each $f(i) \in \N$ and $\N$ is closed under
+finite sums.
+
+\medskip
+\noindent\textbf{Bound every output of $f$ by $S$.} For any
+$i \in \{z \in \N \mid z < n\}$, we have
+\[
+  f(i)
+  \;\leq\; f(i) + \!\!\sum_{\substack{j=0 \\ j \neq i}}^{n-1}\!\! f(j)
+  \;=\; \sum_{j=0}^{n-1} f(j)
+  \;=\; S.
+\]
+The first inequality holds because every term $f(j)$ being summed lies in
+$\N$, hence is non-negative. Therefore
+\[
+  (\forall i \in n)\bigl(f(i) \;\leq\; S \;<\; S+1\bigr).
+\]
+
+\medskip
+\noindent\textbf{Derive the contradiction.} Since $f$ is surjective and
+$S+1 \in \N$, there exists $x \in \{z \in \N \mid z < n\}$ such that
+\[
+  f(x) \;=\; S + 1.
+\]
+However, by the bound just established, $f(x) < S+1$, so $f(x) \neq S+1$.
+Contradiction.
+
+\medskip
+Therefore no such bijection exists, and $\N$ is infinite.
+\end{proof}
+
+\begin{notebox}
+\begin{remark}[Why this proof works]
+The argument is a clean cardinality version of the diagonal style: assuming a
+bijection from a finite set onto $\N$ lets us \emph{construct} a specific
+natural number, namely $S+1$, that is strictly larger than every value the
+bijection produces. Surjectivity then forces a contradiction.
+\end{remark}
+\end{notebox}
+
+\section{$|\N| = |\N \times \N|$}
+
+Having established that $\N$ is genuinely infinite, we now compare it against
+the seemingly larger set $\N \times \N$ of ordered pairs of naturals. Despite
+appearances, the two have the same cardinality.
+
+\begin{thmbox}
+\begin{theorem}
+$|\N| \;=\; |\N \times \N|.$
+\end{theorem}
+\end{thmbox}
+
+\begin{proof}[Proof (in progress)]
+By the Schr\"oder--Bernstein style strategy, it suffices to exhibit two
+injections, one in each direction.
+
+\medskip
+\noindent\textbf{An injection $f : \N \to \N \times \N$.} Define
+\[
+  f(n) \;:=\; (0, n).
+\]
+This is plainly injective: if $f(n_1) = f(n_2)$, then $(0, n_1) = (0, n_2)$,
+so $n_1 = n_2$.
+
+\medskip
+\noindent\textbf{An injection $g : \N \times \N \to \N$.} Define
+\[
+  g(x, y) \;:=\; 2^{x}\,\cdot\,3^{y}.
+\]
+We claim $g$ is injective. Suppose $g(x_1, y_1) = g(x_2, y_2)$, i.e.
+\[
+  2^{x_1} \cdot 3^{y_1} \;=\; 2^{x_2} \cdot 3^{y_2}.
+\]
+By the Fundamental Theorem of Arithmetic, the prime factorisation of a positive
+integer is unique. Since $2$ and $3$ are distinct primes, the exponents on
+each side must agree, giving $x_1 = x_2$ and $y_1 = y_2$. Hence
+$(x_1, y_1) = (x_2, y_2)$, so $g$ is injective.
+
+\medskip
+With injections in both directions established, the conclusion
+$|\N| = |\N \times \N|$ follows from the cardinal comparability theorem to be
+applied next lecture. \qedhere
+\end{proof}
+
+\begin{notebox}
+\begin{remark}[Why $2^{x} \cdot 3^{y}$?]
+The choice of two distinct primes is what makes the encoding injective. Any two
+distinct primes $p, q$ would do --- for example $g(x, y) = p^{x} q^{y}$ ---
+because unique factorisation guarantees that recovering $(x, y)$ from
+$g(x, y)$ is unambiguous. Picking $2$ and $3$ is just the smallest, cleanest
+choice.
+\end{remark}
+\end{notebox}
+
+\begin{cautionbox}
+\begin{caution}
+Avoid the temptation to write $g(x, y) = 2^{x} + 3^{y}$ or
+$g(x, y) = x + y$. Neither is injective: e.g.\ $1 + 2 = 2 + 1$ but
+$(1, 2) \neq (2, 1)$. Multiplicativity together with distinct prime bases is
+exactly what unique factorisation needs.
+\end{caution}
+\end{cautionbox}
+
+\section{Cantor's Theorem}
+
+So far we have stacked $\N, \Z, \N \times \N$ on top of each other and found
+they all share the same cardinality. A natural question: is there \emph{any}
+operation that genuinely produces a strictly larger set? Cantor's theorem
+answers yes --- the power set always does.
+
+\begin{thmbox}
+\begin{theorem}[Cantor's Theorem]
+$\forall X \bigl(|X| < |P(X)|\bigr).$
+\end{theorem}
+\end{thmbox}
+
+\begin{proof}[Proof (the diagonal argument)]
+Let $X$ be a set. Towards a contradiction, suppose $|X| \geq |P(X)|$. Then
+there exists a function
+\[
+  \varphi : X \longrightarrow P(X)
+\]
+such that $\varphi$ is surjective. Define the \emph{anti-diagonal set}
+\[
+  \Delta \;:=\; \{\, x \in X \,\mid\, x \notin \varphi(x) \,\}.
+\]
+Observe that $\Delta \subseteq X$, so $\Delta \in P(X)$.
+
+\medskip
+Since $\varphi$ is surjective and $\Delta \in P(X)$, there exists
+$\delta \in X$ such that
+\[
+  \varphi(\delta) \;=\; \Delta.
+\]
+We now ask whether $\delta \in \Delta$, and split into the two exhaustive
+cases.
+
+\medskip
+\noindent\textbf{Case 1: $\delta \in \Delta$.}\;
+By definition of $\Delta$, membership requires $\delta \notin \varphi(\delta)$.
+Since $\varphi(\delta) = \Delta$, this gives $\delta \notin \Delta$,
+contradicting the case assumption.
+
+\medskip
+\noindent\textbf{Case 2: $\delta \notin \Delta$.}\;
+Then $\neg(\delta \notin \varphi(\delta))$ fails to hold for $\delta$, i.e.\
+$\delta$ does \emph{not} satisfy the membership condition for $\Delta$. Since
+the only way to fail $x \notin \varphi(x)$ is to have $x \in \varphi(x)$, we
+get $\delta \in \varphi(\delta) = \Delta$, contradicting the case assumption.
+
+\medskip
+Both cases yield a contradiction, so no surjection $\varphi : X \to P(X)$
+exists. Combined with the obvious injection $x \mapsto \{x\}$ from $X$ into
+$P(X)$ (which gives $|X| \leq |P(X)|$), we conclude
+\[
+  |X| \;<\; |P(X)|. \qedhere
+\]
+\end{proof}
+
+\begin{notebox}
+\begin{remark}[The case split, restated cleanly]
+The whole proof hinges on a single self-referential question:
+\emph{is $\delta$ a member of the set $\varphi(\delta) = \Delta$?} The
+definition of $\Delta$ makes the two possible answers logically swap:
+\[
+  \delta \in \Delta \iff \delta \notin \varphi(\delta) \iff \delta \notin \Delta.
+\]
+That biconditional is the contradiction. Cases 1 and 2 just walk through it
+in each direction.
+\end{remark}
+\end{notebox}
+
+\begin{notebox}
+\begin{remark}[Connection to Russell's paradox]
+The same self-referential trick produces Russell's paradox: take $X$ to be
+``the set of all sets'' and let $\varphi$ be the identity, so $\Delta$
+becomes the set of all sets that do not contain themselves. The
+contradiction here is precisely why no such universal set can exist in ZFC.
+Cantor's theorem can be read as a constructive cardinality version of the
+same observation.
+\end{remark}
+\end{notebox}
+
+\begin{notebox}
+\begin{remark}[Why ``diagonal'' / ``anti-diagonalising''?]
+Imagine listing the elements of $X$ down the rows of an infinite table, and
+labelling the columns with the same elements. The cell at row $x$, column $y$
+records whether $y \in \varphi(x)$. The set $\Delta$ is built by walking
+\emph{down the diagonal} ($x = y$ in each row) and flipping the answer:
+$x$ goes into $\Delta$ exactly when $x \notin \varphi(x)$. By construction,
+$\Delta$ disagrees with $\varphi(x)$ at the entry $x$ for every row $x$, so it
+cannot be any row of the table. The same trick powers Cantor's proof that
+$|\R| > |\N|$, and Russell's paradox.
+\end{remark}
+\end{notebox}
+
+\begin{notebox}
+\begin{remark}[Reference]
+The construction is sometimes called the \emph{anti-diagonalising set} in the
+literature; nLab catalogues it under ``diagonal argument''.
+\end{remark}
+\end{notebox}
+
+\section{Summary}
+
+\begin{enumerate}[leftmargin=*]
+  \item $\N$ is infinite: no finite natural number $n$ satisfies $|n| = |\N|$.
+        The proof builds the witness $S+1$ from the sum
+        $S = \sum_{i=0}^{n-1} f(i)$ and uses surjectivity to force a
+        contradiction.
+  \item Adding pairs does not enlarge cardinality: $|\N| = |\N \times \N|$.
+        The forward injection $n \mapsto (0, n)$ is trivial; the reverse
+        injection $(x, y) \mapsto 2^{x} \cdot 3^{y}$ relies on unique prime
+        factorisation.
+  \item Cardinality arguments at this level have a recipe: \emph{either}
+        construct an explicit bijection, \emph{or} construct two injections
+        and appeal to the cardinal comparability theorem.
+  \item \textbf{Cantor's theorem:} $|X| < |P(X)|$ for every set $X$. The proof
+        opens with the anti-diagonal set
+        $\Delta = \{x \in X \mid x \notin \varphi(x)\}$, which by construction
+        cannot be in the image of any surjection $\varphi : X \to P(X)$.
+\end{enumerate}
+
+\begin{notebox}
+\begin{remark}[Looking ahead]
+Next lecture will (i) close out the chain $|\N| = |\Nd| = |\Z|$ and (ii)
+finish combining today's two injections into the formal $|\N| = |\N \times \N|$
+via the cardinal comparability theorem. With Cantor's theorem now in hand, the
+canonical application is $|\N| < |P(\N)| = |\R|$ --- the existence of
+cardinalities strictly larger than $|\N|$, and the beginning of the
+infinite hierarchy of infinities.
+\end{remark}
+\end{notebox}
+
+\end{document}

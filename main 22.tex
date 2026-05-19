@@ -1,0 +1,138 @@
+\documentclass[12pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{pagecolor}
+\usepackage{fancyhdr}
+\usepackage{bm}
+\usepackage{etoolbox}
+\usepackage{mdframed}
+
+\definecolor{cream}{HTML}{faf7f1}
+\pagecolor{cream}
+
+% Contradiction symbol
+\newcommand{\contradiction}{\(\lightning\)}
+\usepackage{stmaryrd}
+\newcommand{\contra}{\ensuremath{\Rightarrow\Leftarrow}}
+
+\newtheoremstyle{proofstyle}
+  {}{}{}{}{\bfseries}{.}{ }{}
+\theoremstyle{proofstyle}
+
+% Case indentation environment
+\newenvironment{caseblock}[1]{%
+  \begin{quote}
+  \noindent\textbf{#1}\ %
+}{%
+  \end{quote}
+}
+
+\makeatletter
+\renewcommand{\maketitle}{%
+  \begin{flushleft}
+    {\Large\bfseries CS173: Discrete Structures}\\[0.3em]
+    {\Large\bfseries Proving induction}\\[0.5em]
+    {\normalsize Mohammed Al Salhi}
+  \end{flushleft}
+  \vspace{1em}
+}
+\makeatother
+
+\AtBeginDocument{\mathversion{bold}}
+
+\begin{document}
+\maketitle
+
+\noindent\textbf{Theorem (Weak Induction).} For any wff $\varphi$ with one free variable, the following equivalence holds:
+\[
+(\forall n \in \mathbb{N})(\varphi(n)) \iff \varphi(0) \land (\forall k \in \mathbb{N})(\varphi(k) \Rightarrow \varphi(S(k)))
+\]
+
+\noindent\textbf{Theorem.}
+\[
+\forall M\bigl((M \subseteq \mathbb{N} \land M \neq \emptyset)
+\Rightarrow \exists m\bigl(m \in M \land (\forall n \in M)(m \leq n)\bigr)\bigr)
+\]
+
+\begin{proof}[Proof]
+
+\noindent$(\Leftarrow)$ Assume $\varphi(0)$ and $(\forall k \in \mathbb{N})(\varphi(k) \Rightarrow \varphi(S(k)))$.
+
+Let $n \in \mathbb{N}$. Towards a contradiction, assume $\neg\varphi(n)$.
+
+Consider $M := \{m \mid m \in \mathbb{N} \land \neg\varphi(m)\}$. Observe $M \subseteq \mathbb{N}$.
+
+Observe $n \in M$ (because $n \in \mathbb{N}$ and $\neg\varphi(n)$). Therefore $M \neq \emptyset$.
+
+So, there exists $m \in M$ such that $(\forall x \in M)(m \leq x)$.
+
+\begin{caseblock}{Case 1: Suppose $m = 0$.}
+  Recall $\varphi(0)$, so $\varphi(m)$. However, $\neg\varphi(m)$ because $m \in M$. \contra
+\end{caseblock}
+
+\begin{caseblock}{Case 2: Suppose there exists $w \in \mathbb{N}$ such that $S(w) = m$.}
+  This means $w \cup \{w\} = m$. So $w \in m$. So $w < m$.
+
+  \begin{caseblock}{Case 2.1: Suppose $\neg\varphi(w)$.}
+    Then $w \in M$. Since $(\forall a \in M)(m \leq a)$, we have $m \leq w$.\\
+    By definition, $m \in w$ or $m = w$. However, $m \neq w$.\\
+    So $m \in w$. However, $\forall x\, \forall y\,(x \in y \Rightarrow y \notin x)$. \contra
+  \end{caseblock}
+
+  \begin{caseblock}{Case 2.2: Suppose $\varphi(w)$.}
+    Then, by assumption, we know $\varphi(w) \Rightarrow \varphi(S(w))$.\\
+    So $\varphi(S(w))$. So $\varphi(m)$. However, $\neg\varphi(m)$. \contra
+  \end{caseblock}
+\end{caseblock}
+
+\medskip
+\noindent$(\Rightarrow)$ Assume $(\forall n \in \mathbb{N})(\varphi(n))$.
+
+Since $0 \in \mathbb{N}$, we know $\varphi(0)$.
+
+Let $k \in \mathbb{N}$. Assume $\varphi(k)$.
+
+Since $k \in \mathbb{N}$, we know $S(k) \in \mathbb{N}$. Therefore $\varphi(S(k))$.
+
+\end{proof}
+
+\bigskip
+\noindent\textbf{Theorem.}
+\[
+(\forall n \in \mathbb{N})(1 + n = S(n))
+\]
+
+\begin{proof}[Proof]
+By weak induction on $n$.
+
+\medskip
+\noindent\textbf{Base Case:} Observe
+\[
+1 + 0 = 1 \quad \text{by definition of addition}
+\]
+\[
+= S(0) \quad \text{by definition of } 1
+\]
+
+\medskip
+\noindent\textbf{Inductive Step:} Let $k \in \mathbb{N}$.
+
+\noindent We need to show (NTS): $1 + S(k) = S(S(k))$, assuming the inductive hypothesis $1 + k = S(k)$.
+
+\medskip
+Assume $1 + k = S(k)$. Observing:
+\[
+1 + S(k) = S(1 + k) \quad \text{by definition of addition}
+\]
+\[
+= S(S(k)) \quad \text{by the inductive hypothesis}
+\]
+
+Therefore, $(\forall n \in \mathbb{N})(1 + n = S(n))$.
+
+\end{proof}
+\end{document}

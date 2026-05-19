@@ -1,0 +1,315 @@
+\documentclass[12pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{pagecolor}
+\usepackage{marginnote}
+\usepackage{fancyhdr}
+\usepackage{bm}
+\usepackage{etoolbox}
+\usepackage{mdframed}
+
+\definecolor{cream}{HTML}{faf7f1}
+\pagecolor{cream}
+
+\newcommand{\defn}[1]{\textbf{#1}}
+\newcommand{\defeq}{\mathrel{\vcenter{\baselineskip0.5ex \lineskiplimit0pt
+                     \hbox{\scriptsize.}\hbox{\scriptsize.}}}=}
+\newcommand{\T}{\top}
+\newcommand{\F}{\bot}
+
+\newtheoremstyle{proofstyle}
+  {}{}{}{}{\bfseries}{.}{ }{}
+\theoremstyle{proofstyle}
+\newtheorem*{proof*}{Proof}
+
+
+% Define sidenote command (simplified - uses marginnote)
+\newcommand{\sidenote}[1]{\marginnote{\small\itshape #1}}
+
+% Title formatting
+\makeatletter
+\renewcommand{\maketitle}{%
+  \begin{flushleft}
+    {\Large\bfseries CS173: Discrete Structures}\\[0.3em]
+    {\Large\bfseries Problem Set 3}\\[0.5em]
+    {\normalsize Mohammed Al Salhi}
+  \end{flushleft}
+  \vspace{1em}
+}
+\makeatother
+
+\AtBeginDocument{\mathversion{bold}}
+
+\begin{document}
+
+\maketitle
+
+\noindent
+Throughout this problem set, we will use the following shorthand notation for axioms:
+\begin{itemize}
+    \item \textbf{Extensionality} refers to The Axiom of Extensionality (Axiom 1)
+    \item \textbf{Pairing} refers to The Axiom of Pairing (Axiom 2)
+\end{itemize}
+
+\begin{enumerate}[left=0pt, itemsep=2em, parsep=1em]
+
+\item Prove each of the following statements.
+
+\begin{enumerate}[label=(\alph*), itemsep=1.5em, leftmargin=2em]
+
+\item Prove $\forall x\forall y\forall z((x \subseteq y \wedge y \subseteq z) \Rightarrow x \subseteq z)$.
+
+\begin{proof*}
+    Let $x$, $y$, and $z$ be arbitrary sets. Assume $x \subseteq y$ and $y \subseteq z$.
+    
+    To prove $x \subseteq z$, we must show $\forall w(w \in x \Rightarrow w \in z)$ by the definition of subset.
+    
+    \begin{quote}
+        Let $w$ be an arbitrary set and assume $w \in x$.
+        
+        Since $x \subseteq y$, we have $\forall u(u \in x \Rightarrow u \in y)$ by the definition of subset.
+        
+        Thus $w \in y$.
+        
+        Since $y \subseteq z$, we have $\forall u(u \in y \Rightarrow u \in z)$ by the definition of subset.
+        
+        Thus $w \in z$.
+    \end{quote}
+    
+    Therefore $\forall w(w \in x \Rightarrow w \in z)$, which means $x \subseteq z$ by the definition of subset. \qed
+\end{proof*}
+
+\item Prove $\forall x\forall y(x \cap y \subseteq x)$.
+
+\begin{proof*}
+    Let $x$ and $y$ be arbitrary sets.
+    
+    To prove $x \cap y \subseteq x$, we must show $\forall w(w \in (x \cap y) \Rightarrow w \in x)$ by the definition of subset.
+    
+    \begin{quote}
+        Let $w$ be arbitrary and assume $w \in (x \cap y)$.
+        
+        Since $x \cap y$ is an intersection of $x$ with $y$, we have 
+        
+        $\forall u(u \in x \cap y \Leftrightarrow ((u \in x) \wedge (u \in y)))$ by the definition of intersection of two sets.
+        
+        Thus $w \in x \wedge w \in y$.
+        
+        Therefore $w \in x$.
+    \end{quote}
+    
+    Therefore $\forall w(w \in x \cap y \Rightarrow w \in x)$, which means $x \cap y \subseteq x$ by the definition of subset. \qed
+\end{proof*}
+\newpage
+
+\item Prove $\forall x\forall y(x \subseteq x \cup y)$.
+
+\begin{proof*}
+    Let $x$ and $y$ be arbitrary sets.
+    
+    To prove $x \subseteq x \cup y$, we must show $\forall w(w \in x \Rightarrow w \in x \cup y)$ by the definition of subset.
+    
+    \begin{quote}
+        Let $w$ be arbitrary and assume $w \in x$.
+        
+        Consider the definition $x \cup y := \{u \mid u \in x \vee u \in y\}$.
+        
+        Since $w \in x$, we have $w \in x \vee w \in y$.
+        
+        Thus $w \in x \cup y$.
+    \end{quote}
+    
+    Therefore $\forall w(w \in x \Rightarrow w \in x \cup y)$, which means $x \subseteq x \cup y$ by the definition of subset. \qed
+\end{proof*}
+\item Prove $\forall x\forall y(x \cap y \subseteq x \cup y)$.
+
+\begin{proof*}
+    Let $x$ and $y$ be arbitrary sets.
+    
+    By problem 1b, we have $x \cap y \subseteq x$.
+    
+    By problem 1c, we have $x \subseteq x \cup y$.
+    
+    By problem 1a (transitivity of $\subseteq$), since $x \cap y \subseteq x$ and $x \subseteq x \cup y$, we have $x \cap y \subseteq x \cup y$. \qed
+\end{proof*}
+
+\end{enumerate}
+
+\item Prove each of the following statements.
+
+\begin{enumerate}[label=(\alph*), itemsep=1.5em, leftmargin=2em]
+
+\item Prove $\forall x\forall y\exists p(p = (x, y))$.
+
+\begin{proof*}
+    Let $x$ and $y$ be arbitrary sets.
+        
+    By Pairing applied to $x$ and $x$, there exists a set $\{x, x\}$.
+    
+    By Extensionality, $\{x, x\} = \{x\}$.
+    
+    By Pairing applied to $x$ and $y$, there exists a set $\{x, y\}$.
+    
+    By Pairing applied to $\{x\}$ and $\{x, y\}$, there exists a set $\{\{x\}, \{x, y\}\}$.
+
+   Thus, by definition, there exists an ordered pair $(x,y)$.
+
+    Therefore $\exists p(p = (x, y))$. \qed
+\end{proof*}
+\newpage
+\item Prove $\forall a\forall b\forall x\forall y((a, b) = (x, y) \Leftrightarrow (a = x \wedge b = y))$.
+
+\begin{proof*}
+    Let $a$, $b$, $x$, and $y$ be arbitrary sets.
+    
+    We prove both directions of the biconditional.
+    
+    \textbf{($\Rightarrow$)} Assume $(a, b) = (x, y)$.
+
+    \begin{quote}
+        By the definition of ordered pair, $\{\{a\}, \{a, b\}\} = \{\{x\}, \{x, y\}\}$.
+    
+        We consider two cases.
+        
+        \textit{Case 1:} Suppose $a = b$.
+        
+        \begin{quote}
+            Since $a = b$, we have $\{a, b\} = \{a\}$ by Extensionality.
+            
+            Thus $\{\{a\}, \{a, b\}\} = \{\{a\}, \{a\}\} = \{\{a\}\}$ by Extensionality.
+            
+            Therefore $\{\{x\}, \{x, y\}\} = \{\{a\}\}$.
+            
+            By Extensionality, both $\{x\}$ and $\{x, y\}$ must equal $\{a\}$.
+            
+            From $\{x\} = \{a\}$, we have $x = a$.
+            
+            From $\{x, y\} = \{a\}$, we have $y = a$.
+            
+            Thus $a = x$ and $b = a = y$, so $a = x$ and $b = y$.
+        \end{quote}
+        
+        \textit{Case 2:} Suppose $a \neq b$.
+        
+        \begin{quote}
+            Since $a \neq b$, we have $b \in \{a, b\}$ but $b \notin \{a\}$.
+            
+            Thus $\{a\} \neq \{a, b\}$ by The Extensionality.
+            
+            Since $\{\{a\}, \{a, b\}\} = \{\{x\}, \{x, y\}\}$, we know $\{a\} \in \{\{x\}, \{x, y\}\}$.
+            
+            By Extensionality, either $\{a\} = \{x\}$ or $\{a\} = \{x, y\}$.
+            
+            Suppose $\{a\} = \{x, y\}$.
+            
+            \begin{quote}
+                Then both $x$ and $y$ must equal $a$ by Extensionality.
+                
+                Thus $x = a = y$, which means $x = y$.
+                
+                But then $\{x, y\} = \{x\}$ by The Extensionality.
+                
+                Since $\{a, b\} \in \{\{a\}, \{a, b\}\} = \{\{x\}, \{x, y\}\}$ and \\ $\{x, y\} = \{x\}$, we have $\{a, b\} = \{x\}$.
+                
+                Combined with $\{a\} = \{x\}$, this gives $\{a, b\} = \{a\}$.
+                
+                This contradicts $\{a\} \neq \{a, b\}$.
+            \end{quote}
+            
+            Therefore $\{a\} \neq \{x, y\}$, so we must have $\{a\} = \{x\}$.
+            
+            From $\{a\} = \{x\}$, we have $a = x$ by Extensionality.
+            
+            Since $\{a, b\} \in \{\{a\}, \{a, b\}\}$ and $\{a, b\} \neq \{a\} = \{x\}$, \\ we have $\{a, b\} = \{x, y\}$.
+            
+            From $\{a, b\} = \{x, y\}$ and $a = x$, we have $b \in \{x, y\}$.
+            
+            If $b = x$, then $b = x = a$, contradicting $a \neq b$.
+            
+            Thus $b = y$.
+        \end{quote}
+        
+        In both cases, $a = x$ and $b = y$.
+    \end{quote}
+    
+    
+    
+    \textbf{($\Leftarrow$)} Assume $a = x$ and $b = y$.
+    
+    \begin{quote}
+        Since $a = x$, we have $\{a\} = \{x\}$ by Extensionality. 
+        
+        Since $a = x$ and $b = y$, we have $\{a, b\} = \{x, y\}$ by Extensionality.
+        
+        Therefore $\{\{a\}, \{a, b\}\} = \{\{x\}, \{x, y\}\}$ by Extensionality.
+        
+        By the definition of ordered pair, $(a, b) = (x, y)$. 
+    \end{quote}
+    
+
+
+    Therefore $(a, b) = (x, y) \Leftrightarrow (a = x \wedge b = y)$. \qed
+\end{proof*}
+
+\end{enumerate}
+
+\newpage
+
+\item Prove each of the following statements.
+
+\begin{enumerate}[label=(\alph*), itemsep=1.5em, leftmargin=2em]
+
+\item Prove that $\forall x(x \cup \{x\} \neq \emptyset)$.
+
+\begin{proof*}
+    Let $x$ be an arbitrary set.
+    
+    By Pairing applied to $x$ and $x$, there exists a set $\{x, x\}$.
+    
+    By Extensionality, $\{x, x\} = \{x\}$.
+    
+    Since $\{x\} \subseteq x \cup \{x\}$ by Problem 1c, and $x \in \{x\}$, we have $x \in x \cup \{x\}$ by the definition of subset.    \
+    
+    Suppose for contradiction that $x \cup \{x\} = \emptyset$. By Extensionality, $x \cup \{x\}$ and $\emptyset$ have the same elements. But $x \in x \cup \{x\}$ and $x \notin \emptyset$, a contradiction.
+    
+    Therefore, $x \cup \{x\} \neq \emptyset$. \qed
+\end{proof*}
+
+\item Prove that $\forall x\forall y(x \neq y \Rightarrow x \cup \{x\} \neq y \cup \{y\})$.
+
+\begin{proof*}
+    Let $x$ and $y$ be arbitrary sets such that $x \neq y$.
+    
+    To prove this we will use reductio ad absurdum. 
+    \begin{quote}
+        Assume $x \cup \{x\} = y \cup \{y\}$.
+        
+        As shown in problem 3a, we have $x \in x \cup \{x\}$, and so $x \in y \cup \{y\}$.
+        
+        So, by Extensionality, $x \in y$ or $x \in \{y\}$. 
+        
+        Since $x \in \{y\}$ implies, by Extensionality, $x = y$, which contradicts $x \neq y$, we have $x \in y$.
+        
+        Again, as shown in problem 3a, we have $y \in y \cup \{y\}$ and so $y \in x \cup \{x\}$.
+
+        Assume, for the sake of this proof, $y \notin x$.
+                
+        Since $y \in x \cup \{x\}$ and $y \notin x$, we must have $y \in \{x\}$, so $y = x$. 
+        
+        We have both $x \neq y$ and $y = x$, which is a contradiction.
+    \end{quote}
+        
+    Therefore, by reductio ad absurdum, we have $x \neq y \Rightarrow x \cup \{x\} \neq y \cup \{y\}$. \qed
+        
+    However, by applying the same symmetric argument that showed $x \in y$, we can also derive $y \in x$. This means the step where we assumed 
+    $y \notin x$ is not justified. With only Axioms 0, 1, and 2, we cannot rule out the case where $x \in y$ and $y \in x$ simultaneously.
+\end{proof*}
+\end{enumerate}
+
+\end{enumerate}
+
+\end{document}

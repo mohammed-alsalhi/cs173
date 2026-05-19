@@ -1,0 +1,361 @@
+\documentclass[12pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{pagecolor}
+\usepackage{marginnote}
+\usepackage{fancyhdr}
+\usepackage{bm}
+\usepackage{etoolbox}
+
+% Define cream background color
+\definecolor{cream}{HTML}{faf7f1}
+\pagecolor{cream}
+
+% Define defn and defeq commands
+\newcommand{\defn}[1]{\textbf{#1}}
+\newcommand{\defeq}{\mathrel{\vcenter{\baselineskip0.5ex \lineskiplimit0pt
+                     \hbox{\scriptsize.}\hbox{\scriptsize.}}}=}
+\newcommand{\T}{\top}
+\newcommand{\F}{\bot}
+
+\newtheoremstyle{proofstyle}
+  {}{}{\itshape}{}{\bfseries}{.}{ }{}
+\theoremstyle{proofstyle}
+\newtheorem*{proof*}{Proof}
+
+\AtBeginEnvironment{proof*}{\setlength{\parskip}{0.5em}}
+
+\let\oldquote\quote
+\let\oldendquote\endquote
+\renewenvironment{quote}
+    {\oldquote\setlength{\parskip}{0.2em}}
+    {\oldendquote}
+
+% Define sidenote command (simplified - uses marginnote)
+\newcommand{\sidenote}[1]{\marginnote{\small\itshape #1}}
+
+% Title formatting
+\makeatletter
+\renewcommand{\maketitle}{%
+  \begin{flushleft}
+    {\Large\bfseries CS173: Discrete Structures}\\[0.3em]
+    {\Large\bfseries Problem Set 2}\\[0.5em]
+    {\normalsize Mohammed Al Salhi}
+  \end{flushleft}
+  \vspace{1em}
+}
+\makeatother
+
+\AtBeginDocument{\mathversion{bold}}
+
+\begin{document}
+
+\maketitle
+
+\begin{enumerate}[left=0pt, itemsep=2em, parsep=1em]
+
+\item Prove each of the following statements for all propositions $\varphi, \psi, \xi$, and $\chi$.
+
+\begin{enumerate}[label=(\alph*), itemsep=1.5em, leftmargin=2em]
+
+\item $\vdash (\neg\varphi \to \varphi) \to \varphi$ \hfill Consequentia Mirabilis
+
+\begin{proof*}
+    Let $\varphi$ be an arbitrary proposition.
+    
+    To prove $(\neg\varphi \to \varphi) \to \varphi$ it suffices to show $(\neg\varphi \to \varphi) \vdash \varphi$, by the deduction rule.
+    
+    \begin{quote}
+        Assume $(\neg\varphi \to \varphi)$.
+        
+        To prove $\varphi$, we use reductio ad absurdum.
+
+        \begin{quote}
+        Assume $\neg\varphi$.
+        
+        By the assumption $(\neg\varphi \to \varphi)$, we have $\varphi$ by modus ponens.
+        
+        However, we also have $\neg\varphi$ from our assumption.
+        
+        Thus we have both $\varphi$ and $\neg\varphi$, which is a contradiction.
+
+        \end{quote}
+        
+        Therefore, by reductio ad absurdum, $\varphi$ holds.
+         
+    \end{quote}
+    
+    Therefore, by the deduction rule, $(\neg\varphi \to \varphi) \to \varphi$. \qed
+\end{proof*}
+
+\item $\varphi \vdash \varphi \vee \psi$ \hfill Disjunction Introduction
+
+\begin{proof*}
+    Let $\varphi$ and $\psi$ be arbitrary propositions. Assume $\varphi$.
+
+    To prove $\varphi \vee \psi$, we use reductio ad absurdum.
+
+    \begin{quote}
+    
+    Assume $\neg(\varphi \vee \psi)$.
+    \begin{align*}
+    \neg(\varphi \vee \psi) \equiv \neg\varphi \wedge \neg\psi && \text{(By De Morgan's law)}
+    \end{align*}
+    We know have $\neg\varphi \wedge \neg\psi$.
+    
+    By conjunction elimination, we have $\neg\varphi$.
+    
+    However, we originally assumed $\varphi$.
+
+    Thus we have both $\varphi$ and $\neg\varphi$, which is a contradiction.
+
+    \end{quote}
+    
+    Therefore, by reductio ad absurdum, $\varphi \vee \psi$ holds. \qed
+\end{proof*}
+
+\newpage
+
+\item $(\varphi \vee \psi), (\varphi \to \xi), (\psi \to \xi) \vdash \xi$ \hfill Disjunction Elimination
+
+\begin{proof*}
+    Let $\varphi, \psi,$ and $\xi$ be arbitrary propositions. Assume $(\varphi \vee \psi)$, $(\varphi \to \xi)$, and $(\psi \to \xi)$.
+    
+    To prove $\xi$, we use reductio ad absurdum.
+
+    \begin{quote}
+    
+    Assume $\neg\xi$.
+    
+    By the assumption $(\varphi \to \xi)$ and $\neg\xi$, we have $\neg\varphi$ by modus tollens.
+    
+    By the assumption $(\psi \to \xi)$ and $\neg\xi$, we have $\neg\psi$ by modus tollens.
+    
+    By conjunction introduction, we have $\neg\varphi \wedge \neg\psi$: 
+    \begin{align*}
+        \neg\varphi \wedge \neg\psi &\equiv \neg(\varphi \vee \psi) && \text{(By De Morgan's law)}
+    \end{align*}        
+    Thus we have $\neg(\varphi \vee \psi)$.
+    
+    However, we originally assumed $(\varphi \vee \psi)$.
+    
+    Thus we have both $(\varphi \vee \psi)$ and $\neg(\varphi \vee \psi)$, which is a contradiction.
+
+    \end{quote}
+    
+    Therefore, by reductio ad absurdum, $\xi$ holds. \qed
+\end{proof*}
+
+\item $\varphi, \neg\varphi \vdash \psi$ \hfill Ex Falso Quodlibet
+
+\begin{proof*}
+    Let $\varphi$ and $\psi$ be arbitrary propositions. Assume $\varphi$ and $\neg\varphi$.
+    
+    By conjunction introduction, we have $\varphi \wedge \neg\varphi$.
+    \begin{align*}
+        \varphi \wedge \neg\varphi &\equiv \neg\varphi \wedge \varphi && \text{(By Commutativity)} \\
+        &\equiv \bot && \text{(By Complement)}
+    \end{align*}
+    Thus we have $\bot$.
+    
+    To prove $\psi$, we use reductio ad absurdum.
+
+    \begin{quote}
+    Assume $\neg\psi$.
+    
+    We have previously proven $\top$. Furthermore, we have also proven $\top \equiv \neg\bot$
+    
+    We have both $\bot$ and $\neg\bot$, which is a contradiction.
+    \end{quote}
+    
+    Therefore, by reductio ad absurdum, $\psi$ holds. \qed
+\end{proof*}
+\newpage
+\item $(\varphi \vee \psi), \neg\varphi \vdash \psi$ \hfill Disjunctive Syllogism
+
+\begin{proof*}
+    Let $\varphi$ and $\psi$ be arbitrary propositions. Assume $\varphi \lor \psi$ and also assume $\neg\varphi$.
+    
+    By conjunction introduction, we have $(\varphi \lor \psi) \land \neg \varphi$:
+     \begin{align*}
+        (\varphi \lor \psi) \land \neg \varphi &\equiv \neg \varphi \land (\varphi \lor \psi)  && \text{(By Commutativity)} \\
+        &\equiv (\neg \varphi \land \varphi) \lor (\neg \varphi \land \psi) && \text{(By Distributivity)} \\
+        &\equiv \F \lor (\neg \varphi \land \psi) && \text{(By Complement)} \\
+        &\equiv \neg \varphi \land \psi && \text{(By Identity)}\\
+        &\equiv \psi \land \neg \varphi && \text{(By Commutativity)}
+    \end{align*}
+    By conjunction elimination, we have $\psi$. \\
+    Therefore, $\psi$ holds. \qed
+\end{proof*}
+
+\item $(\varphi \to \xi), (\psi \to \chi), (\varphi \vee \psi) \vdash (\xi \vee \chi)$ \hfill Constructive Dilemma
+
+\begin{proof*}
+    Let $\varphi, \psi, \xi,$ and $\chi$ be arbitrary propositions. Assume $(\varphi \to \xi)$, $(\psi \to \chi)$, and $(\varphi \vee \psi)$.
+    
+    To prove $\xi \vee \chi$, we use reductio ad absurdum.
+    
+    \begin{quote}
+    Assume $\neg(\xi \vee \chi)$.
+    \begin{align*}
+        \neg(\xi \vee \chi) &\equiv \neg\xi \wedge \neg\chi && \text{(By De Morgan's law)}
+    \end{align*}
+    
+    By conjunction elimination, we have $\neg\xi$ and $\neg\chi$.
+    
+    By the assumption $(\varphi \to \xi)$ and $\neg\xi$, we have $\neg\varphi$ by modus tollens.
+    
+    By the assumption $(\psi \to \chi)$ and $\neg\chi$, we have $\neg\psi$ by modus tollens.
+    
+    By conjunction introduction, we have $\neg\varphi \wedge \neg\psi$.
+    \begin{align*}
+        \neg\varphi \wedge \neg\psi &\equiv \neg(\varphi \vee \psi) && \text{(By De Morgan's law)}
+    \end{align*}
+    
+    Thus we have $\neg(\varphi \vee \psi)$.
+    
+    However, we originally assumed $(\varphi \vee \psi)$.
+    
+    Thus we have both $(\varphi \vee \psi)$ and $\neg(\varphi \vee \psi)$, which is a contradiction.
+    \end{quote}
+    
+    Therefore, by reductio ad absurdum, $\xi \vee \chi$ holds. \qed
+\end{proof*}
+
+\end{enumerate}
+
+\newpage
+
+\item Prove each of the following statements.
+
+\begin{enumerate}[label=(\alph*), itemsep=1.5em, leftmargin=2em]
+
+\item Consider a universe of discourse containing all human beings who have ever existed or been mentioned in literature. Let $\mu$ and $\omega$ be unary predicates.
+
+Prove that $\forall x(\mu(x) \to \omega(x)), \mu(\text{Socrates}) \vdash \omega(\text{Socrates})$.
+
+\begin{proof*}
+    Assume $\forall x(\mu(x) \to \omega(x))$ and $\mu(\text{Socrates})$.
+    
+    By universal elimination on $\forall x(\mu(x) \to \omega(x))$ with $x = \text{Socrates}$, we have $\mu(\text{Socrates}) \to \omega(\text{Socrates})$. 
+    
+    By the assumption $\mu(\text{Socrates})$ and $\mu(\text{Socrates}) \to \omega(\text{Socrates})$, we have $\omega(\text{Socrates})$ by modus ponens.
+    
+    Therefore, $\omega(\text{Socrates})$ holds. \qed
+\end{proof*}
+
+\item Consider a non-empty universe of discourse consisting of all persons inhabiting New Port City, Japan in the year 2029 ad. Let $\alpha$ and $\gamma$ be unary predicates.
+
+Prove that $\forall x(\neg\gamma(x) \to \alpha(x)), \neg\alpha(\text{Kusanagi}) \vdash \exists x(\gamma(x))$.
+
+\begin{proof*}
+    Assume $\forall x(\neg\gamma(x) \to \alpha(x))$ and $\neg\alpha(\text{Kusanagi})$.
+    
+    For clarity, let $K = \text{Kusanagi}$.
+    
+    By universal elimination on $\forall x(\neg\gamma(x) \to \alpha(x))$ with $x = K$, we have \\ $\neg\gamma(K) \to \alpha(K)$.
+    
+    By the assumption $\neg\alpha(K)$ and $\neg\gamma(K) \to \alpha(K)$, we have $\neg(\neg\gamma(K))$ by modus tollens.
+    \begin{align*}
+        \neg(\neg\gamma(K)) &\equiv \gamma(K) && \text{(By Double Negation)}
+    \end{align*}
+    
+    Thus we have $\gamma(K)$.
+    
+    By existential introduction on $\gamma(K)$, we have $\exists x(\gamma(x))$.
+    
+    Therefore, $\exists x(\gamma(x))$ holds. \qed
+\end{proof*}
+\newpage
+\item Let $\mathcal{L}$ be a binary predicate and show that $\vdash \neg\exists x\forall y(\mathcal{L}(x, y) \leftrightarrow \neg\mathcal{L}(y, y))$.
+
+\begin{proof*} To prove $\neg\exists x\forall y(\mathcal{L}(x, y) \leftrightarrow \neg\mathcal{L}(y, y))$, we use reductio ad absurdum. 
+    
+    \begin{quote}
+    Assume $\neg(\neg\exists x\forall y(\mathcal{L}(x, y) \leftrightarrow \neg\mathcal{L}(y, y)))$, which, by double negation, equates to:
+    \begin{align*}
+        \exists x\forall y(\mathcal{L}(x, y) \leftrightarrow \neg\mathcal{L}(y, y))
+    \end{align*}
+    
+    By existential elimination, for some new term $a$, we have \\ $\forall y(\mathcal{L}(a, y) \leftrightarrow \neg\mathcal{L}(y, y))$.
+    
+    By universal elimination with $y = a$, we have $\mathcal{L}(a, a) \leftrightarrow \neg\mathcal{L}(a, a)$.
+    
+    Which, by biconditional disintegration, equates to:
+    \begin{align*}
+        (\mathcal{L}(a,a) \to \neg\mathcal{L}(a,a)) \wedge (\neg\mathcal{L}(a,a) \to \mathcal{L}(a,a))
+    \end{align*}
+    
+    By conjunction elimination, we have $\mathcal{L}(a,a) \to \neg\mathcal{L}(a,a)$ and \\$\neg\mathcal{L}(a,a) \to \mathcal{L}(a,a)$.
+
+    Consider $\mathcal{L}(a,a) \to \neg\mathcal{L}(a,a)$. By conditional disintegration:
+    \begin{align*}
+        \mathcal{L}(a,a) \to \neg\mathcal{L}(a,a) &\equiv \neg\mathcal{L}(a,a) \vee \neg\mathcal{L}(a,a) && \text{(By Conditional Disintegration)} \\
+        &\equiv \neg\mathcal{L}(a,a) && \text{(By Idempotence)}
+    \end{align*}
+    
+    Thus we have $\neg\mathcal{L}(a,a)$.
+    
+    Consider $\neg\mathcal{L}(a,a) \to \mathcal{L}(a,a)$. By conditional disintegration:
+    \begin{align*}
+        \neg\mathcal{L}(a,a) \to \mathcal{L}(a,a) &\equiv \neg(\neg\mathcal{L}(a,a)) \vee \mathcal{L}(a,a) && \text{(By Conditional Disintegration)} \\
+        &\equiv \mathcal{L}(a,a) \vee \mathcal{L}(a,a) && \text{(By Double Negation)} \\
+        &\equiv \mathcal{L}(a,a) && \text{(By Idempotence)}
+    \end{align*}
+    
+    Thus we have $\mathcal{L}(a,a)$.
+    
+    We have both $\mathcal{L}(a,a)$ and $\neg\mathcal{L}(a,a)$, which is a contradiction.
+    \end{quote}
+    
+    Therefore, by reductio ad absurdum, $\neg\exists x\forall y(\mathcal{L}(x, y) \leftrightarrow \neg\mathcal{L}(y, y))$ holds. \qed
+\end{proof*}
+
+
+\end{enumerate}
+
+\newpage
+
+\item For this problem, we will be treating a statement that is not a proposition as if it is a proposition as a cautionary tale. Remember that, for the purposes of proof-writing, we do not yet know any facts about the natural numbers.
+
+Consider a universe of discourse consisting of the natural numbers. Let $\varphi$ be the statement $\varphi \to \forall x(\pi(x))$.
+
+Prove that 4 is a prime number.
+
+\begin{proof*}
+    Let $\varphi$ be the statement $\varphi \to \forall x(\pi(x))$.
+
+    By existential elimination, to prove $\pi(4)$ we will show $\forall x(\pi(x))$.
+
+    By the deduction rule, to prove $\forall x(\pi(x))$ from $\varphi \to \forall x(\pi(x))$, we first show $\varphi$.
+
+    We use reductio ad absurdum.
+    \begin{quote} Assume $\neg\varphi$.
+
+    By disjunction introduction we have $\neg\varphi \vee \forall x(\pi(x))$:
+    \begin{align*}
+        \neg\varphi \vee \forall x(\pi(x)) &\equiv \varphi \to \forall x(\pi(x))  && \text{(By Conditional Disintegration)}
+    \end{align*}
+        
+    However, $\varphi$ is defined to be the statement $\varphi \to \forall x(\pi(x))$.
+    
+    Thus we have $\varphi$.
+    
+    We have both $\varphi$ and $\neg\varphi$, which is a contradiction.
+
+    \end{quote}
+    
+    Therefore, by reductio ad absurdum, $\varphi$ holds.
+        
+    By universal elimination with $x = 4$, we have $\pi(4)$.
+    
+    Therefore, 4 is a prime number. \qed
+\end{proof*}
+
+\end{enumerate}
+
+\end{document}

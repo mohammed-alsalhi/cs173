@@ -1,0 +1,236 @@
+\documentclass[12pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{pagecolor}
+\usepackage{marginnote}
+\usepackage{fancyhdr}
+\usepackage{bm}
+
+% Define cream background color
+\definecolor{cream}{HTML}{faf7f1}
+\pagecolor{cream}
+
+% Define defn and defeq commands
+\newcommand{\defn}[1]{\textbf{#1}}
+\newcommand{\defeq}{\mathrel{\vcenter{\baselineskip0.5ex \lineskiplimit0pt
+                     \hbox{\scriptsize.}\hbox{\scriptsize.}}}=}
+\newcommand{\T}{\top}
+\newcommand{\F}{\bot}
+
+\newtheoremstyle{proofstyle}
+  {}{}{\itshape}{}{\bfseries}{.}{ }{}
+\theoremstyle{proofstyle}
+\newtheorem*{proof*}{Proof}
+
+% Define sidenote command (simplified - uses marginnote)
+\newcommand{\sidenote}[1]{\marginnote{\small\itshape #1}}
+
+% Title formatting
+\makeatletter
+\renewcommand{\maketitle}{%
+  \begin{flushleft}
+    {\Large\bfseries CS173: Discrete Structures}\\[0.3em]
+    {\Large\bfseries Problem Set 1}\\[0.5em]
+    {\normalsize Mohammed Al Salhi}
+  \end{flushleft}
+  \vspace{1em}
+}
+\makeatother
+
+\AtBeginDocument{\mathversion{bold}}
+
+\begin{document}
+
+\maketitle
+
+\begin{enumerate}[left=0pt, itemsep=2em, parsep=1em]
+
+\item Prove each of the following statements without truth tables.
+
+\begin{enumerate}[label=(\alph*), itemsep=1.5em, leftmargin=2em]
+
+\item Prove $p \to p$ is a tautology for any proposition $p$.
+
+\begin{proof*}
+Let $p$ be a proposition.
+\begin{align*}
+p \to p &\equiv \neg p \vee p && \text{(By Conditional Disintegration)} \\
+&\equiv \T && \text{(By Complement)}
+\end{align*}
+$\therefore$ $p \to p$ is a tautology. \qed
+\end{proof*}
+
+\item Prove $p \to q \equiv \neg q \to \neg p$ for all propositions $p, q$.
+
+\begin{proof*}
+Let $p$ and also $q$ be propositions.
+\begin{align*}
+p \to q &\equiv \neg p \vee q && \text{(By Conditional Disintegration)} \\
+&\equiv q \vee \neg p && \text{(By Commutativity)} \\
+&\equiv \neg (\neg q ) \vee \neg p && \text{(By Double Negation)} \\
+&\equiv \neg q \to \neg p && \text{(By Conditional Disintegration)}
+\end{align*}
+$\therefore p \to q \equiv \neg q \to \neg p$ for all propositions $p, q$. \qed
+\end{proof*}
+
+\item Prove $\neg(p \to q) \equiv p \wedge \neg q$ for all propositions $p, q$.
+
+\begin{proof*}
+Let $p$ and also $q$ be propositions.
+\begin{align*}
+\neg(p \to q) &\equiv \neg(\neg p \vee q) && \text{(By Conditional Disintegration)} \\
+&\equiv \neg(\neg p) \wedge \neg q && \text{(By De Morgan's Law)} \\
+&\equiv p \wedge \neg q && \text{(By Double negation)}
+\end{align*}
+$\therefore \neg(p \to q) \equiv p \wedge \neg q$ for all propositions $p$ and also $q$. \qed
+\end{proof*}
+
+\item
+\begin{samepage}
+Prove $(p \wedge (p \to q)) \to q$ is a tautology for all propositions $p, q$.
+
+\begin{proof*}
+Let $p$ and also $q$ be propositions.
+\begin{align*}
+(p \wedge (p \to q)) \to q &\equiv (p \wedge (\neg p \vee q)) \to q && \text{(By Conditional Disintegration)} \\
+&\equiv ((p \wedge \neg p) \vee (p \wedge q)) \to q && \text{(By Distributivity)} \\
+&\equiv ((\neg p \wedge p) \vee (p \wedge q)) \to q && \text{(By Commutativity)} \\
+&\equiv (\F \vee (p \wedge q)) \to q && \text{(By Complement)} \\
+&\equiv (p \wedge q) \to q && \text{(By Identity)} \\
+&\equiv \neg(p \wedge q) \vee q && \text{(By Conditional Disintegration)} \\
+&\equiv (\neg p \vee \neg q) \vee q && \text{(By De Morgan's law)} \\
+&\equiv \neg p \vee (\neg q \vee q) && \text{(By Associativity)} \\
+&\equiv \neg p \vee \T && \text{(By Complement)} \\
+&\equiv \T && \text{(By Domination)}
+\end{align*}
+$\therefore (p \wedge (p \to q)) \to q$ is a tautology for all propositions $p, q$. \qed
+\end{proof*}
+\end{samepage}
+
+\item Prove $(p \vee q) \to r \equiv (p \to r) \wedge (q \to r)$ for all propositions $p, q, r$.
+
+\begin{proof*}
+Let $p, q,$ and also $r$ be propositions.
+\begin{align*}
+(p \vee q) \to r &\equiv \neg (p \vee q) \vee r && \text{(By Conditional Disintegration)} \\
+&\equiv (\neg p \wedge \neg q) \vee r && \text{(By De Morgan's law)}\\
+&\equiv r \vee (\neg p \wedge \neg q) && \text{(By Commutativity)}\\
+&\equiv (r \vee \neg p) \wedge ( r \vee \neg q) && \text{(By Distributivity)}\\
+&\equiv (\neg p \vee r) \wedge (\neg q \vee r) && \text{(By Commutativity)}\\
+&\equiv (p \to r) \wedge (q \to r) && \text{(By Conditional Disintegration)}
+\end{align*}
+$\therefore (p \vee q) \to r \equiv (p \to r) \wedge (q \to r)$ for all propositions $p, q, r$. \qed
+\end{proof*}
+
+\end{enumerate}
+
+\item Prove each of the following statements for all propositions $\varphi, \psi, \xi$.
+
+\begin{enumerate}[label=(\alph*), itemsep=1.5em, leftmargin=2em]
+
+\item $(\varphi \to \psi), (\psi \to \xi) \vdash \varphi \to \xi$ \hfill Hypothetical Syllogism
+
+\begin{proof*}
+    Let $\varphi, \psi, \xi$ be arbitrary propositions, and suppose $(\varphi \to \psi)$ and $(\psi \to \xi)$.
+    
+    To prove $(\varphi \to \xi)$, by the deduction rule, it suffices to show $\varphi \vdash \xi$.
+    
+    \begin{quote}
+        Assume $\varphi$. \\
+        By the assumption $(\varphi \to \psi)$, we have $\psi$ by modus ponens. \\
+        By the assumption $(\psi \to \xi)$, we have $\xi$ by modus ponens. \\
+        Thus $\varphi \vdash \xi$.
+    \end{quote}
+    
+    Therefore, by the deduction rule, $(\varphi \to \xi)$. \qed
+\end{proof*}
+
+\item $\vdash \varphi \to \varphi$
+
+\begin{proof*}
+    Let $\varphi$ be an arbitrary proposition.
+    
+    To prove $(\varphi \to \varphi)$, by the deduction rule, it suffices to show $\varphi \vdash \varphi$.
+    
+    \begin{quote}
+        Assume $\varphi$. \\
+        Then we have $\varphi$.
+    \end{quote}
+    
+    Therefore, by the deduction rule, $(\varphi \to \varphi)$. \qed
+\end{proof*}
+
+\item $\vdash \top$
+
+\begin{proof*}
+    From part (b), we have $\varphi \to \varphi$ for any proposition $\varphi$.
+    
+    From part 1(a) $\varphi \to \varphi \equiv \T $
+    
+    Therefore, we have $\top$. \qed
+\end{proof*}
+
+
+\item $\varphi, \psi \vdash \varphi \wedge \psi$ \hfill Conjunction Introduction
+
+\begin{proof*}
+    Let $\varphi$ and $\psi$ be a arbitrary propositions. Assume $\varphi$ and also assume $\psi$.
+    
+    To prove $\varphi \land \psi$, we use reductio ad absurdum. 
+    
+    We will show $(\neg(\varphi \land \psi) \vdash \psi)$ and $(\neg(\varphi \land \psi) \vdash \neg\psi)$.
+    
+    Assume $\neg(\varphi \land \psi)$.
+    \begin{align*}
+        \neg(\varphi \land \psi) &\equiv \neg\varphi \lor \neg\psi && \text{(By De Morgan's law)} \\
+        &\equiv \varphi \to \neg\psi && \text{(By Conditional Disintegration)}
+    \end{align*}
+        We now have $(\varphi \to \neg\psi)$ and $\varphi$ from the intial assumption \\
+        Thus we have $\neg\psi$ by Modus Ponens. However, we originally assumed $\psi$, so there is a contradiction. \\    
+    Therefore, by reductio ad absurdum, we conclude $\varphi \land \psi$.\qed
+\end{proof*}
+
+\newpage
+\item $\varphi \wedge \psi \vdash \varphi$ \hfill Conjunction Elimination
+
+\begin{proof*}
+    Let $\varphi$ and $\psi$ be arbitrary propositions. Assume $\varphi \land \psi$.
+    
+    To prove $\varphi$ we use reductio ad absurdum. Assume $\neg\varphi$.
+    
+    By conjunction introduction we have $(\varphi \land \psi) \land \neg\varphi$:
+    \begin{align*}
+        (\varphi \land \psi) \land \neg\varphi &\equiv \varphi \land (\psi \land \neg\varphi) && \text{(By Associativity)} \\
+        &\equiv \varphi \land (\neg\varphi \land \psi) && \text{(By Commutativity)} \\
+        &\equiv (\varphi \land \neg\varphi) \land \psi && \text{(By Associativity)} \\
+        &\equiv (\neg \varphi \land \varphi) \land \psi && \text{(By Commutativity)} \\
+        &\equiv \bot \land \psi && \text{(By Complement)} \\
+        &\equiv \bot && \text{(By Domination)}
+    \end{align*}
+    
+    Thus we have $\bot$.
+    
+    However, from part 2(c), we have $\top$.
+    
+    Furthermore:
+    \begin{align*}
+        \top &\equiv \neg \varphi \lor \varphi && \text{(By Complement)} \\
+        &\equiv \neg(\neg(\neg\varphi) \land \neg\varphi) && \text{(By De Morgan's law)} \\
+        &\equiv \neg(\varphi \land \neg\varphi) && \text{(By Double negation)} \\
+        &\equiv \neg(\neg\varphi \land \varphi) && \text{(By Commutativity)} \\
+        &\equiv \neg\bot && \text{(By Complement)}
+    \end{align*}
+    We have both $\bot$ and $\neg\bot$, which is a contradiction.
+    
+    Therefore, by reductio ad absurdum, $\varphi$ holds. \qed
+\end{proof*}
+
+\end{enumerate}
+
+\end{enumerate}
+
+\end{document}

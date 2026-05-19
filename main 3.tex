@@ -1,0 +1,288 @@
+\documentclass[12pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{pagecolor}
+\usepackage{marginnote}
+\usepackage{fancyhdr}
+\usepackage{bm}
+\usepackage{etoolbox}
+\usepackage{mdframed}
+
+\definecolor{cream}{HTML}{faf7f1}
+\definecolor{qboxbg}{HTML}{edeadf}
+\definecolor{qboxborder}{HTML}{8a8475}
+\pagecolor{cream}
+\mdfdefinestyle{lemmastyle}{backgroundcolor=cream}
+
+% Question box
+\newmdenv[
+  backgroundcolor=qboxbg, linecolor=qboxborder, linewidth=1.5pt,
+  topline=false, rightline=false, bottomline=false,
+  innerleftmargin=10pt, innerrightmargin=10pt,
+  innertopmargin=8pt, innerbottommargin=8pt,
+  skipabove=6pt, skipbelow=10pt
+]{questionbox}
+
+\newcommand{\defn}[1]{\textbf{#1}}
+\newcommand{\defeq}{\mathrel{\vcenter{\baselineskip0.5ex \lineskiplimit0pt
+                     \hbox{\scriptsize.}\hbox{\scriptsize.}}}=}
+\newcommand{\T}{\top}
+\newcommand{\F}{\bot}
+\newcommand{\Pow}{\mathbb{P}}
+\newcommand{\suc}{\mathfrak{suc}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\Func}{\mathcal{F}}
+\newcommand{\id}{\mathrm{id}}
+
+\newtheoremstyle{proofstyle}
+  {}{}{}{}{\bfseries}{.}{ }{}
+\theoremstyle{proofstyle}
+\newtheorem*{proof*}{Proof}
+
+\newcommand{\sidenote}[1]{\marginnote{\small\itshape #1}}
+
+\makeatletter
+\renewcommand{\maketitle}{%
+  \begin{flushleft}
+    {\Large\bfseries CS173: Discrete Structures}\\[0.3em]
+    {\Large\bfseries Problem Set 9}\\[0.5em]
+    {\normalsize Mohammed Al Salhi}
+  \end{flushleft}
+  \vspace{1em}
+}
+\makeatother
+
+\AtBeginDocument{\mathversion{bold}}
+
+\begin{document}
+
+\maketitle
+
+\begin{enumerate}[left=0pt, itemsep=2em, parsep=1em]
+
+%% ---------------------------------------------------------------
+%% Problem 1
+%% ---------------------------------------------------------------
+\item[]
+\begin{questionbox}
+\textbf{Problem 1.} Show that, for every tree $T$, there exists a unique path between any two vertices in $T$.
+\end{questionbox}
+
+\begin{proof*}
+
+Let $T$ be a tree and let $v, w \in V(T)$.
+
+We proceed by cases on $|V(T)|$. Since $T$ is a tree, $T$ is a finite graph,
+so $|V(T)| \in \N$. We consider $|V(T)| = 0$, $|V(T)| = 1$, $|V(T)| = 2$,
+and $|V(T)| \geq 3$ separately.
+
+If $|V(T)| = 0$, then $V(T) = \emptyset$, so there are no vertices $v, w \in V(T)$.
+The claim $(\forall v, w \in V(T))(\text{there is a unique path from } v \text{ to } w)$
+is vacuously true.
+
+If $|V(T)| = 1$, then $v = w$ and the unique path is the trivial path $p : 1 \to V(T)$
+with $p(0) = v$.
+
+If $|V(T)| = 2$, then $V(T) = \{v, w\}$ and since $T$ is connected, $\{v, w\} \in E(T)$.
+The only path is $p : 2 \to V(T)$ with $p(0) = v$ and $p(1) = w$ (or $v = w$ and
+the trivial path), so uniqueness holds.
+
+Now suppose $|V(T)| \geq 3$. Since $T$ is a tree, $T$ is connected, so by definition
+$(\exists k \in \N)(\exists p : (k+1) \to V(T))(p \text{ is a path with } p(0) = v
+\text{ and } p(k) = w)$.
+
+Suppose for contradiction there exist two distinct paths from $v$ to $w$:
+let $k_1, k_2 \in \N$ and let $p_1 : (k_1+1) \to V(T)$ and $p_2 : (k_2+1) \to V(T)$
+be paths with $p_1(0) = p_2(0) = v$ and $p_1(k_1) = p_2(k_2) = w$ and $p_1 \neq p_2$.
+
+Since $p_1 \neq p_2$, there exists a smallest $i \in \N$ such that $p_1(i+1) \neq p_2(i+1)$
+(with $p_1(i) = p_2(i)$). Let $u \defeq p_1(i)$.
+
+Similarly, let $j_1, j_2 \in \N$ with $j_1 > i$ and $j_2 > i$ be the smallest indices such that
+$p_1(j_1) = p_2(j_2)$; such indices exist because at least $p_1(k_1) = p_2(k_2) = w$.
+Let $u' \defeq p_1(j_1) = p_2(j_2)$.
+
+Define $c : ((j_1 - i) + (j_2 - i) + 1) \to V(T)$ by following $p_1$ forward from $u$ to $u'$,
+then $p_2$ backward from $u'$ to $u$:
+\[
+  c(m) \defeq \begin{cases}
+    p_1(i + m) & \text{if } 0 \leq m \leq j_1 - i, \\
+    p_2(j_2 - (m - (j_1 - i))) & \text{if } j_1 - i < m \leq (j_1 - i) + (j_2 - i).
+  \end{cases}
+\]
+Then $c(0) = p_1(i) = u$ and $c((j_1 - i) + (j_2 - i)) = p_2(i) = u$, so $c$ is a circuit.
+By the minimality of $i$, $j_1$, and $j_2$, no internal vertex repeats, so $c$ is a cycle.
+But $T$ is a tree, so $T$ contains no cycles --- a contradiction.
+
+Therefore the path from $v$ to $w$ is unique. \qed
+
+\end{proof*}
+
+\newpage
+
+%% ---------------------------------------------------------------
+%% Problem 2
+%% ---------------------------------------------------------------
+\item[]
+\begin{questionbox}
+\textbf{Problem 2.} Prove that every tree $T$ satisfying $|V(T)| \geq 2$ must contain at least one leaf node.
+\end{questionbox}
+
+\begin{proof*}
+
+Let $T$ be a tree with $|V(T)| \geq 2$. Since $T$ is connected and $|V(T)| \geq 2$,
+there is at least one edge, so there exists a path of length $\geq 1$.
+
+Every path $q : (m+1) \to V(T)$ (for any $m \in \N$) is injective by definition, so $q$
+visits $m+1$ distinct vertices, each belonging to $V(T)$. Hence $m + 1 \leq |V(T)|$,
+i.e., $m \leq |V(T)| - 1$. Since the length of any path in $T$ is bounded above by
+$|V(T)| - 1$, a path of maximum length exists. Let $k \in \N$ with $k \geq 1$ and let
+$p : (k+1) \to V(T)$ be such a path.
+
+Define the set
+$S \defeq \{y \in V(T) \mid (\exists x \in (k+1))(p(x) = y)\} = \{p(0), p(1), \ldots, p(k)\}$.
+
+Let $v \defeq p(k)$ (the last vertex of $p$). We claim $\deg_T(v) = 1$, i.e., $v$ is a leaf.
+
+Since $\{p(k-1), v\} \in E(T)$, we have $\deg_T(v) \geq 1$.
+
+Suppose for contradiction that $\deg_T(v) \geq 2$. Since $\{p(k-1), v\} \in E(T)$
+accounts for one incident edge, $(\exists w \in N_T(v))(w \neq p(k-1))$. Fix such a $w$.
+
+\textbf{Case 1:} $w \notin S$. Define $p' : (k+2) \to V(T)$ by
+$p'(i) \defeq p(i)$ for $0 \leq i \leq k$ and $p'(k+1) \defeq w$. Since $w \notin S$,
+$w$ is distinct from every vertex in $S$, so $p'$ is injective and
+hence $p'$ is a path of length $k+1$, contradicting the maximality of $p$.
+
+\textbf{Case 2:} $w \in S$. Then $(\exists j \in \N)(0 \leq j \leq k \text{ and } w = p(j))$.
+Fix such a $j$. Since $\{w, v\} \in E(T)$ and graphs have no self-loops, $w \neq v = p(k)$,
+so $j \neq k$. Since $w \neq p(k-1)$ by choice of $w$, we have $j \leq k - 2$.
+
+Define the walk $c : (k - j + 2) \to V(T)$ by $c(i) \defeq p(j + i)$ for
+$0 \leq i \leq k - j$ and $c(k - j + 1) \defeq p(j)$. Then $c(0) = c(k - j + 1) = p(j)$,
+consecutive vertices are connected by edges of $p$, the last edge
+$\{c(k-j), c(k-j+1)\} = \{p(k), p(j)\} = \{v, w\} \in E(T)$, and no vertex repeats
+except $p(j)$ at the start and end (by injectivity of $p$). So $c$ is a cycle in $T$,
+but $T$ is a tree, so $T$ contains no cycles --- a contradiction.
+
+Both cases yield a contradiction, so $\deg_T(v) = 1$ and $v$ is a leaf. \qed
+
+\end{proof*}
+
+\newpage
+
+%% ---------------------------------------------------------------
+%% Problem 3
+%% ---------------------------------------------------------------
+\item[]
+\begin{questionbox}
+\textbf{Problem 3.} Use induction to prove that every nonempty tree $T$ satisfies $|V(T)| = |E(T)| + 1$.
+\end{questionbox}
+
+\begin{proof*}
+
+Let $P(n)$ be the predicate
+\[
+  (\forall T)((T \text{ is a tree} \land T \text{ is nonempty} \land
+  |V(T)| = n\bigr) \Rightarrow \bigl(|V(T)| = |E(T)| + 1)).
+\]
+We prove $(\forall n \in \N)(n \geq 1 \Rightarrow P(n))$ by induction on $n$.
+
+\textbf{Base case.} We show $P(1)$. Let $T$ be a nonempty tree with $|V(T)| = 1$.
+Then $V(T) = \{v\}$ for some vertex $v$. Since graphs have no self-loops, no edge in $E(T)$
+can have $v$ as both endpoints, and $v$ is the only vertex, so $E(T) = \emptyset$.
+Hence $|E(T)| = 0$ and $|V(T)| = 1 = 0 + 1 = |E(T)| + 1$. So $P(1)$ holds.
+
+\textbf{Inductive step.} Let $n \in \N$ with $n \geq 1$ and assume $P(n)$, i.e.,
+\[
+  (\forall T')((T' \text{ is a tree} \land T' \text{ is nonempty} \land
+  |V(T')| = n\bigr) \Rightarrow \bigl(|V(T')| = |E(T')| + 1)).
+\]
+We show $P(n+1)$.
+
+Let $T$ be a nonempty tree with $|V(T)| = n + 1$. Since $n \geq 1$, we have
+$|V(T)| \geq 2$, so by Problem~2,
+$(\exists \ell \in V(T))(\deg_T(\ell) = 1)$.
+Fix such a leaf $\ell$. Since $\deg_T(\ell) = 1$, there is exactly one edge incident on
+$\ell$; let $e_\ell$ be this edge, i.e., $\{e_\ell\} = \{e \in E(T) \mid \ell \in e\}$.
+
+Define the graph $T'$ by $V(T') \defeq V(T) \setminus \{\ell\}$ and
+$E(T') \defeq E(T) \setminus \{e_\ell\}$. Then $|V(T')| = n$ and $|E(T')| = |E(T)| - 1$.
+
+We verify $T'$ is a nonempty tree:
+
+\textbf{Nonempty.} $|V(T')| = n \geq 1$, so $V(T') \neq \emptyset$.
+
+\textbf{Connected.} $(\forall u, w \in V(T'))$ there exists a path from $u$ to $w$ in $T$
+(since $T$ is connected). This path does not pass through $\ell$, because $\ell$ is a leaf:
+if the path entered $\ell$, it would have to exit through the same edge (the only one
+incident on $\ell$), revisiting the neighbor of $\ell$, contradicting injectivity. Hence the
+path lies entirely in $T'$, so $T'$ is connected.
+
+\textbf{No cycles.} Any cycle in $T'$ would also be a cycle in $T$ (since
+$E(T') \subseteq E(T)$), contradicting $T$ being a tree. So $T'$ contains no cycles.
+
+So $T'$ is a nonempty tree $\land$ $|V(T')| = n$, so
+\begin{align*}
+    |V(T')| &= |E(T')| + 1 & &\text{(by $P(n)$)} \\
+    |V(T)| - 1 &= (|E(T)| - 1) + 1 & &\text{(by single-element removal)} \\
+    |V(T)| &= |E(T)| + 1
+\end{align*}
+Therefore $P(n+1)$ holds, and by induction $P(n)$ holds for all $n \in \N$ with $n \geq 1$. \qed
+
+\end{proof*}
+
+\newpage
+
+%% ---------------------------------------------------------------
+%% Problem 4
+%% ---------------------------------------------------------------
+\item[]
+\begin{questionbox}
+\textbf{Problem 4.} Prove any graph $G$ satisfying
+$(\forall v \in V(G))\!\left(\deg_G(v) \geq \frac{|V(G)| - 1}{2}\right)$ is connected.
+\end{questionbox}
+
+\begin{proof*}
+
+Let $G$ be a graph with $|V(G)| = n \in \N$ and
+$(\forall v \in V(G))\!\left(\deg_G(v) \geq \frac{n-1}{2}\right)$.
+
+Let $u, w \in V(G)$ be arbitrary distinct vertices. We show there is a path from $u$ to $w$.
+
+\textbf{Case 1:} $\{u, w\} \in E(G)$. Then the function $p : 2 \to V(G)$ given by
+$p(0) = u$, $p(1) = w$ is a path of length 1 from $u$ to $w$.
+
+\textbf{Case 2:} $\{u, w\} \notin E(G)$. We show
+$(\exists x \in V(G))(x \in N_G(u) \text{ and } x \in N_G(w))$.
+
+Since $w \notin N_G(u)$ and $u \notin N_G(w)$, we have $N_G(u) \subseteq V(G) \setminus \{u, w\}$
+and $N_G(w) \subseteq V(G) \setminus \{u, w\}$, so both neighborhoods are subsets of a set
+of size $n - 2$.
+
+By the degree condition,
+$|N_G(u)| \geq \frac{n-1}{2}$ and $|N_G(w)| \geq \frac{n-1}{2}$.
+
+Suppose for contradiction $N_G(u) \cap N_G(w) = \emptyset$. Then
+\[
+  n - 2 \geq |N_G(u) \cup N_G(w)| = |N_G(u)| + |N_G(w)| \geq \frac{n-1}{2} + \frac{n-1}{2} = n - 1.
+\]
+This gives $n - 2 \geq n - 1$, a contradiction.
+
+Hence $(\exists x \in N_G(u) \cap N_G(w))$. Fix such an $x$. Then
+$\{u, x\} \in E(G)$ and $\{x, w\} \in E(G)$, so the function $p : 3 \to V(G)$ defined by
+$p(0) = u$, $p(1) = x$, $p(2) = w$ is a path of length 2 from $u$ to $w$.
+
+In both cases, there exists a path from $u$ to $w$, so $G$ is connected. \qed
+
+\end{proof*}
+
+\end{enumerate}
+
+\end{document}
