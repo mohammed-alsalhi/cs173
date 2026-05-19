@@ -1,0 +1,302 @@
+% Compile with: pdflatex lecture_27.tex
+% Requires: amsmath, amssymb, amsthm, mathtools, xcolor, mdframed,
+%           enumitem, hyperref, pagecolor, microtype
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{mathtools}
+\usepackage{xcolor}
+\usepackage{mdframed}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{pagecolor}
+\usepackage{microtype}
+
+% ── Colour palette ──────────────────────────────────────────
+\definecolor{cream}{HTML}{FFFDF5}
+\definecolor{defblue}{HTML}{1A4A7A}
+\definecolor{thmgreen}{HTML}{1A5C3A}
+\definecolor{warnAmber}{HTML}{7A4A00}
+\definecolor{dangerRed}{HTML}{7A1A1A}
+\definecolor{boxbluebg}{HTML}{EBF3FB}
+\definecolor{boxgreenbg}{HTML}{EBF7EF}
+\definecolor{boxamberbg}{HTML}{FDF5E6}
+\definecolor{boxredbg}{HTML}{FBEBEB}
+\pagecolor{cream}
+
+% ── Theorem styles ──────────────────────────────────────────
+\newtheoremstyle{defstyle}  {8pt}{8pt}{\normalfont}{0pt}{\bfseries\color{defblue}} {.}{0.5em}{}
+\newtheoremstyle{thmstyle}  {8pt}{8pt}{\normalfont}{0pt}{\bfseries\color{thmgreen}}{.}{0.5em}{}
+\newtheoremstyle{notstyle}  {8pt}{8pt}{\normalfont}{0pt}{\bfseries\color{warnAmber}}{.}{0.5em}{}
+\newtheoremstyle{cautionstyle}{8pt}{8pt}{\normalfont}{0pt}{\bfseries\color{dangerRed}}{.}{0.5em}{}
+
+\theoremstyle{defstyle}
+\newtheorem{definition}{Definition}[section]
+
+\theoremstyle{thmstyle}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{corollary}[theorem]{Corollary}
+
+\theoremstyle{notstyle}
+\newtheorem*{remark}{Remark}
+\newtheorem*{example}{Example}
+
+\theoremstyle{cautionstyle}
+\newtheorem*{caution}{Caution}
+
+% ── Framed boxes ────────────────────────────────────────────
+\newmdenv[
+  backgroundcolor=boxbluebg, linecolor=defblue, linewidth=2pt,
+  topline=false, rightline=false, bottomline=false,
+  innerleftmargin=10pt, innerrightmargin=10pt,
+  innertopmargin=6pt, innerbottommargin=6pt,
+  skipabove=8pt, skipbelow=8pt
+]{defbox}
+
+\newmdenv[
+  backgroundcolor=boxgreenbg, linecolor=thmgreen, linewidth=2pt,
+  topline=false, rightline=false, bottomline=false,
+  innerleftmargin=10pt, innerrightmargin=10pt,
+  innertopmargin=6pt, innerbottommargin=6pt,
+  skipabove=8pt, skipbelow=8pt
+]{thmbox}
+
+\newmdenv[
+  backgroundcolor=boxamberbg, linecolor=warnAmber, linewidth=2pt,
+  topline=false, rightline=false, bottomline=false,
+  innerleftmargin=10pt, innerrightmargin=10pt,
+  innertopmargin=6pt, innerbottommargin=6pt,
+  skipabove=8pt, skipbelow=8pt
+]{notebox}
+
+\newmdenv[
+  backgroundcolor=boxredbg, linecolor=dangerRed, linewidth=2pt,
+  topline=false, rightline=false, bottomline=false,
+  innerleftmargin=10pt, innerrightmargin=10pt,
+  innertopmargin=6pt, innerbottommargin=6pt,
+  skipabove=8pt, skipbelow=8pt
+]{cautionbox}
+
+% ── Macros ──────────────────────────────────────────────────
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\id}{\mathrm{id}}
+\newcommand{\powset}{\mathcal{P}}
+
+\begin{document}
+
+% ── Title ───────────────────────────────────────────────────
+\begin{center}
+  {\Large\bfseries Lecture 27 --- Finite Sets}\\[4pt]
+  {\normalsize CS 173: Discrete Structures \quad$\cdot$\quad Functions \& Cardinality}\\[2pt]
+  {\small\color{gray} University of Illinois at Urbana-Champaign}
+\end{center}
+\vspace{1em}\hrule\vspace{1.5em}
+
+%=================================================================
+\section{Finite Sets and Cardinality Notation}
+%=================================================================
+
+\begin{defbox}
+\begin{definition}[Finite Set]
+We say a set $X$ is \textbf{finite} if
+\[
+  (\exists\, n \in \N)\;\bigl(|X| = |n|\bigr).
+\]
+Here $|A| = |B|$ means there exists a bijection $f\colon A \to B$.
+\end{definition}
+\end{defbox}
+
+\begin{defbox}
+\begin{definition}[Cardinality of a Finite Set]
+If $|X| = |n|$ and $n \in \N$, then
+\[
+  |X| \coloneqq n = \{0,\, 1,\, 2,\, \dots,\, n-1\}.
+\]
+\end{definition}
+\end{defbox}
+
+%=================================================================
+\section{Injections and Left Inverses}
+%=================================================================
+
+\subsection{Setup}
+
+Suppose $f\colon A \to B$ is an injection. We wish to show there exists a function
+$g\colon B \to A$ such that
+\[
+  g \circ f = \id_A.
+\]
+Such a $g$ is called a \textbf{left inverse} for $f$.
+
+\begin{defbox}
+\begin{definition}[Identity Function]
+The \textbf{identity function} on a set $A$ is the function $\id_A \colon A \to A$
+defined by
+\[
+  \id_A(a) \coloneqq a \quad \text{for every } a \in A.
+\]
+\end{definition}
+\end{defbox}
+
+\begin{defbox}
+\begin{definition}[Left Inverse]
+Let $f\colon A \to B$. A function $g\colon B \to A$ is a \textbf{left inverse} for $f$
+if
+\[
+  g \circ f = \id_A,
+\]
+i.e.\ for every $a \in A$, $g\bigl(f(a)\bigr) = a$.
+\end{definition}
+\end{defbox}
+\newpage
+
+\subsection{Composition with the Identity}
+\begin{notebox}
+\begin{remark}
+For any functions $h\colon A \to A$ and $k\colon A \to A$, composing with the identity
+gives
+\[
+  h = \id_A \circ h, \qquad \id_A \circ k = k.
+\]
+In particular, $\id_A$ is both a left and right identity for composition of functions
+$A \to A$.
+\end{remark}
+\end{notebox}
+
+%=================================================================
+\section{Monomorphisms, Epimorphisms, and Isomorphisms}
+%=================================================================
+
+The following terminology packages the left/right inverse characterisations into
+standard names.
+
+\begin{defbox}
+\begin{definition}[Monomorphism (Monic)]
+Let $f\colon A \to B$. We say $f$ is a \textbf{monomorphism} (or $f$ is \textbf{monic})
+if and only if
+\[
+  (\exists\, g\colon B \to A)\;\bigl(g \circ f = \id_A\bigr).
+\]
+Equivalently, $f$ has a left inverse.
+\end{definition}
+\end{defbox}
+
+\begin{defbox}
+\begin{definition}[Epimorphism (Epic)]
+Let $f\colon A \to B$. We say $f$ is an \textbf{epimorphism} (or $f$ is \textbf{epic})
+if and only if
+\[
+  (\exists\, g\colon B \to A)\;\bigl(f \circ g = \id_B\bigr).
+\]
+Equivalently, $f$ has a right inverse.
+\end{definition}
+\end{defbox}
+
+\begin{defbox}
+\begin{definition}[Isomorphism (of Sets)]
+A function $f$ is an \textbf{isomorphism} (of sets) if and only if $f$ is both monic
+and epic:
+\[
+  f \text{ is an isomorphism} \iff f \text{ is monic} \;\wedge\; f \text{ is epic}.
+\]
+\end{definition}
+\end{defbox}
+
+%=================================================================
+\section{Main Theorems}
+%=================================================================
+
+\begin{thmbox}
+\begin{theorem}[Injection $\Rightarrow$ Left Inverse \& Injective Retract]
+For any sets $A, B$ and any $f\colon A \to B$: if $f$ is injective, then there exists
+$g\colon B \to A$ such that
+\[
+  g \text{ is surjective} \qquad\text{and}\qquad g \circ f = \id_A.
+\]
+\end{theorem}
+\end{thmbox}
+
+\begin{thmbox}
+\begin{corollary}
+$|A| \leq |B| \Rightarrow |B| \geq |A|$.
+\end{corollary}
+\end{thmbox}
+
+\begin{thmbox}
+\begin{theorem}[Surjection $\Rightarrow$ Right Inverse \& Injective Section]
+For any sets $A, B$ and any $f\colon A \to B$: if $f$ is surjective, then there exists
+$g\colon B \to A$ such that
+\[
+  g \text{ is injective} \qquad\text{and}\qquad f \circ g = \id_B.
+\]
+\end{theorem}
+\end{thmbox}
+
+\begin{thmbox}
+\begin{corollary}
+$|A| \geq |B| \Rightarrow |B| \leq |A|$.
+\end{corollary}
+\end{thmbox}
+
+%=================================================================
+\section{Trichotomy of Cardinality}
+%=================================================================
+
+\begin{thmbox}
+\begin{theorem}[Axiom 7 --- Trichotomy of Cardinality]
+For any sets $A$ and $B$,
+\[
+  |A| \leq |B| \;\;\lor\;\; |A| \geq |B|.
+\]
+Equivalently, exactly one of the following holds:
+\[
+  \bigl(|A| < |B|\bigr) \;\;\lor\;\; \bigl(|A| > |B|\bigr) \;\;\lor\;\; \bigl(|A| = |B|\bigr).
+\]
+\end{theorem}
+\end{thmbox}
+
+\begin{notebox}
+\begin{remark}
+Trichotomy says that cardinalities are always comparable.  Note that $|A| < |B|$ means
+$|A| \leq |B|$ and $\lnot(|A| \geq |B|)$, i.e.\ there is an injection $A \to B$ but
+no injection $B \to A$.  Similarly $|A| > |B|$ and $|A| = |B|$ cover the remaining
+cases. This axiom is equivalent to the Axiom of Choice and is not provable from ZF
+alone.
+\end{remark}
+\end{notebox}
+
+%=================================================================
+\section{Summary}
+%=================================================================
+
+\begin{enumerate}[label=\textbf{\arabic*.}, leftmargin=*, itemsep=4pt]
+  \item A set $X$ is \textbf{finite} iff $(\exists\, n \in \N)(|X| = |n|)$, where
+        $n = \{0, 1, \dots, n-1\}$.
+  \item $|A| = |B|$ iff there exists a bijection $A \to B$.
+  \item The \textbf{identity function} $\id_A(a) = a$ is left and right neutral for
+        composition.
+  \item A \textbf{left inverse} of $f\colon A \to B$ is $g\colon B \to A$ with
+        $g \circ f = \id_A$.
+  \item \textbf{Mono/Epi/Iso}: $f$ is monic $\iff$ $f$ has a left inverse;
+        $f$ is epic $\iff$ $f$ has a right inverse;
+        $f$ is an isomorphism $\iff$ $f$ is monic and epic.
+  \item Injection $\Rightarrow$ $\exists$ surjective left inverse;
+        corollary: $|A| \leq |B| \Rightarrow |B| \geq |A|$.
+  \item Surjection $\Rightarrow$ $\exists$ injective right inverse;
+        corollary: $|A| \geq |B| \Rightarrow |B| \leq |A|$.
+  \item \textbf{Trichotomy} (Axiom~7): for any $A, B$,
+        $|A| \leq |B| \lor |A| \geq |B|$; equivalently,
+        exactly one of $|A| < |B|$, $|A| > |B|$, $|A| = |B|$ holds.
+\end{enumerate}
+
+\begin{notebox}
+\begin{remark}[Looking Ahead]
+With trichotomy in hand, the Cantor--Bernstein theorem ($|A| \leq |B|$ and
+$|B| \leq |A|$ implies $|A| = |B|$) will give us a robust framework for comparing the
+sizes of infinite sets.
+\end{remark}
+\end{notebox}
+
+\end{document}

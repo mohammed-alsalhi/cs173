@@ -1,0 +1,260 @@
+\documentclass[12pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{pagecolor}
+\usepackage{marginnote}
+\usepackage{fancyhdr}
+\usepackage{bm}
+\usepackage{etoolbox}
+\usepackage{mdframed}
+
+\definecolor{cream}{HTML}{faf7f1}
+\pagecolor{cream}
+\mdfdefinestyle{lemmastyle}{backgroundcolor=cream}
+
+\newcommand{\defn}[1]{\textbf{#1}}
+\newcommand{\defeq}{\mathrel{\vcenter{\baselineskip0.5ex \lineskiplimit0pt
+                     \hbox{\scriptsize.}\hbox{\scriptsize.}}}=}
+\newcommand{\T}{\top}
+\newcommand{\F}{\bot}
+\newcommand{\Pow}{\mathbb{P}}
+\newcommand{\suc}{\mathfrak{suc}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Func}{\mathcal{F}}
+
+\newtheoremstyle{proofstyle}
+  {}{}{}{}{\bfseries}{.}{ }{}
+\theoremstyle{proofstyle}
+\newtheorem*{proof*}{Proof}
+
+\newcommand{\sidenote}[1]{\marginnote{\small\itshape #1}}
+
+\makeatletter
+\renewcommand{\maketitle}{%
+  \begin{flushleft}
+    {\Large\bfseries CS173: Discrete Structures}\\[0.3em]
+    {\Large\bfseries Problem Set 6}\\[0.5em]
+    {\normalsize Mohammed Al Salhi}
+  \end{flushleft}
+  \vspace{1em}
+}
+\makeatother
+
+\AtBeginDocument{\mathversion{bold}}
+
+\begin{document}
+
+\maketitle
+
+\begin{enumerate}[left=0pt, itemsep=2em, parsep=1em]
+
+%% ---------------------------------------------------------------
+%% Problem 1
+%% ---------------------------------------------------------------
+\item Prove $(\forall a, b, x, y, n \in \Z)((n \mid x \land n \mid y) \Rightarrow (n \mid ax + by))$.
+
+\begin{proof*}
+Let $a, b, x, y, n \in \Z$ be arbitrary, and suppose $n \mid x$ and $n \mid y$.
+
+By definition of divisibility, there exist integers $k_1, k_2 \in \Z$ such that $x = n k_1$ and $y = n k_2$. Then:
+\begin{align*}
+  ax + by &= a(nk_1) + b(nk_2) \\
+          &= n(ak_1) + n(bk_2) \\
+          &= n(ak_1 + bk_2)
+\end{align*}
+Since $\Z$ is closed under addition and multiplication, $ak_1 + bk_2 \in \Z$.
+
+Therefore $n \mid ax + by$ by definition of divisibility. Since $a, b, x, y, n$ were arbitrary, we conclude $(\forall a, b, x, y, n \in \Z)((n \mid x \land n \mid y) \Rightarrow (n \mid ax + by))$.
+\end{proof*}
+
+%% ---------------------------------------------------------------
+%% Problem 2
+%% ---------------------------------------------------------------
+\item We say an integer $z \in \Z$ is \defn{even} $:\Leftrightarrow 2 \mid z$, and we say $z$ is \defn{odd} $:\Leftrightarrow 2 \mid z - 1$.
+
+\begin{enumerate}[label=(\alph*), itemsep=1.5em, leftmargin=2em]
+
+  \item Prove that no integer can be both even and odd at the same time.
+
+  \begin{proof*}
+  Suppose for contradiction that some $z \in \Z$ is both even and odd.
+
+  Then $2 \mid z$ and $2 \mid z - 1$, so there exist $k_1, k_2 \in \Z$ such that $z = 2k_1$ and $z - 1 = 2k_2$. Substituting the first into the second:
+  \begin{align*}
+    2k_1 - 1 &= 2k_2 \\
+    2(k_1 - k_2) &= 1
+  \end{align*}
+  Since $\Z$ is closed under subtraction, $k_1 - k_2 \in \Z$, this gives $2 \mid 1$, which contradicts the fact that $1 < 2$. Therefore no integer can be both even and odd.
+  \end{proof*}
+
+  \item Prove that $(\forall z \in \Z)((z \text{ is even}) \Leftrightarrow (z + 1 \text{ is odd}))$.
+
+  \begin{proof*}
+  Let $z \in \Z$ be arbitrary.
+
+  $(\Rightarrow)$ Suppose $z$ is even, i.e.\ $2 \mid z$. We must show $z + 1$ is odd, i.e.\ $2 \mid (z+1) - 1$. But $(z+1) - 1 = z$, and $2 \mid z$ by assumption. Therefore $z + 1$ is odd.
+
+  $(\Leftarrow)$ Suppose $z + 1$ is odd, i.e.\ $2 \mid (z+1) - 1$. But $(z+1) - 1 = z$, so $2 \mid z$. Therefore $z$ is even.
+
+  Since $z$ was arbitrary, $(\forall z \in \Z)((z \text{ is even}) \Leftrightarrow (z + 1 \text{ is odd}))$.
+  \end{proof*}
+
+  \item Prove that $(n \text{ is even}) \vee (n \text{ is odd})$ for all $n \in \N$.
+
+  \begin{proof*}
+  We proceed by weak induction on $n$.
+
+  \textbf{Basis Step:} We must show $0$ is even or $0$ is odd. Since $0 = 2 \cdot 0$ and $0 \in \Z$, we have $2 \mid 0$, so $0$ is even.
+
+  \textbf{Inductive Hypothesis:} Let $k \in \N$ and assume $k$ is even or $k$ is odd.
+
+  \textbf{Inductive Step:} We must show $k+1$ is even or $k+1$ is odd. We consider two cases.
+
+  \textit{Case 1:} Suppose $k$ is even. By part (b), $k + 1$ is odd.
+
+  \textit{Case 2:} Suppose $k$ is odd, so $2 \mid k - 1$. Then there exists $m \in \Z$ such that
+  \begin{align*}
+        k - 1 &= 2m \\
+        k &= 2m + 1 \\
+        k + 1 &= 2m + 2 \\
+        k + 1 &= 2(m+1)
+  \end{align*}
+  Since $m + 1 \in \Z$, we have $2 \mid k+1$, so $k+1$ is even.
+
+  Therefore, by weak induction, $(n \text{ is even}) \vee (n \text{ is odd})$ for all $n \in \N$.
+  \end{proof*}
+\end{enumerate}
+
+\newpage
+
+%% ---------------------------------------------------------------
+%% Problem 3
+%% ---------------------------------------------------------------
+\item Show that $(\exists m \in \N)(\forall n \in \N)(n \geq m \Rightarrow n^2 < 2^n)$.
+
+\begin{proof*}
+By inspection of small cases, $m = 5$ suffices. We claim $m = 5$ witnesses the existential.
+
+We first establish a lemma.
+\begin{mdframed}[style=lemmastyle]
+\textbf{Lemma:} $(\forall k \in \N)(k \geq 5 \Rightarrow 2k + 1 < k^2)$.
+
+\textit{Proof of Lemma.} We proceed by weak induction on $k$.
+
+\textit{Basis Step:} We have $2(5) + 1 = 11 < 25 = 5^2$.
+
+\textit{Inductive Hypothesis:} Let $k \in \N$ with $k \geq 5$, and assume $2k + 1 < k^2$.
+
+\textit{Inductive Step:} We must show $2(k+1) + 1 < (k+1)^2$. Observe:
+\begin{align*}
+  2(k+1) + 1 &= 2k + 3 \\
+  (k+1)^2    &= k^2 + 2k + 1
+\end{align*}
+So it suffices to show $2k + 3 < k^2 + 2k + 1$, i.e.\ $2 < k^2$. Since $k \geq 5$, we have $k^2 \geq 25 > 2$. Therefore $2(k+1) + 1 < (k+1)^2$. \qed
+\end{mdframed}
+
+We proceed by weak induction on $n$.
+
+\textbf{Basis Step:} We have $5^2 = 25 < 32 = 2^5$.
+
+\textbf{Inductive Hypothesis:} Let $k \in \N$ with $k \geq 5$, and assume $k^2 < 2^k$.
+
+\textbf{Inductive Step:} We must show $(k+1)^2 < 2^{k+1}$. Observe:
+\begin{align*}
+  (k+1)^2 &= k^2 + 2k + 1 \\
+           &< 2k^2           &&\text{by the Lemma, since }2k+1 < k^2 \\
+           &< 2 \cdot 2^k &&\text{by the inductive hypothesis} \\
+           &= 2^{k+1}        &&\text{by definition of exponentiation}
+\end{align*}
+Therefore $(k+1)^2 < 2^{k+1}$.
+
+By induction, $(\forall n \in \N)(n \geq 5 \Rightarrow n^2 < 2^n)$, and so $m = 5$ witnesses $(\exists m \in \N)(\forall n \in \N)(n \geq m \Rightarrow n^2 < 2^n)$.
+\end{proof*}
+
+\newpage
+
+%% ---------------------------------------------------------------
+%% Problem 4
+%% ---------------------------------------------------------------
+\item The factorial function ${\cdot}! : \N \to \N$ is the recursive function given below for all $n \in \N$.
+\[
+  0! \defeq 1
+\]
+\[
+  (n+1)! \defeq (n!) \cdot (n+1)
+\]
+Prove that $(\forall n \in \N)(n \geq 4 \Rightarrow 2^n < n!)$.
+
+\begin{proof*}
+We will prove by weak induction on $n$.
+
+\textbf{Basis Step:} We must show $2^4 < 4!$. We first expand $4!$ using the recursive definition.
+\begin{align*}
+  4! &= ((((1) \cdot 1) \cdot 2) \cdot 3) \cdot 4 &&\text{by definition of }! \\
+     &= 24 &&\text{by arithmetic}
+\end{align*}
+Since $2^4 = 16 < 24 = 4!$, the basis step holds.
+
+\textbf{Inductive Hypothesis:} Let $k \in \N$ with $k \geq 4$, and assume $2^k < k!$.
+
+\textbf{Inductive Step:} We must show $2^{k+1} < (k+1)!$. Observe:
+\begin{align*}
+  2^{k+1} &= 2^k \cdot 2 &&\text{by definition of exponentiation} \\
+          &< k! \cdot 2 &&\text{by the inductive hypothesis} \\
+          &< k! \cdot (k+1) &&\text{since }k \geq 4 \text{ implies } k + 1 > 2\\
+          &= (k+1)! &&\text{by definition of }!
+\end{align*}
+Therefore $2^{k+1} < (k+1)!$.
+
+By induction, $(\forall n \in \N)(n \geq 4 \Rightarrow 2^n < n!)$.
+\end{proof*}
+
+\newpage
+
+%% ---------------------------------------------------------------
+%% Problem 5
+%% ---------------------------------------------------------------
+\item The Fibonacci sequence is the function $\mathcal{F} : \N \to \N$ defined below for all $n \in \N$.
+\[
+  \mathcal{F}(0) \defeq 0
+\]
+\[
+  \mathcal{F}(1) \defeq 1
+\]
+\[
+  \mathcal{F}(n+2) \defeq \mathcal{F}(n+1) + \mathcal{F}(n)
+\]
+Prove that $\displaystyle\sum_{i=1}^{n} \mathcal{F}(2i-1) = \mathcal{F}(2n)$ for all $n \in \N$.
+
+\begin{proof*}
+We proceed by weak induction on $n$.
+
+\textbf{Basis Step:} We must show $\displaystyle\sum_{i=1}^{0} \mathcal{F}(2i-1) = \mathcal{F}(0)$. The left side is an empty sum, which equals $0$ by convention. The right side is $\mathcal{F}(0) = 0$ by definition. Therefore both sides are equal.
+
+\textbf{Inductive Hypothesis:} Let $k \in \N$ and assume $\displaystyle\sum_{i=1}^{k} \mathcal{F}(2i-1) = \mathcal{F}(2k)$.
+
+\textbf{Inductive Step:} We must show $\displaystyle\sum_{i=1}^{k+1} \mathcal{F}(2i-1) = \mathcal{F}(2k+2)$. Observe:
+\begin{align*}
+  \sum_{i=1}^{k+1} \mathcal{F}(2i-1)
+    &= \left(\sum_{i=1}^{k} \mathcal{F}(2i-1)\right) + \mathcal{F}(2(k+1)-1)
+      &&\text{by definition of iterated summation} \\
+    &= \mathcal{F}(2k) + \mathcal{F}(2(k+1)-1)
+      &&\text{by the inductive hypothesis} \\
+    &= \mathcal{F}(2k) + \mathcal{F}(2k+1)
+      &&\text{by arithmetic} \\
+    &= \mathcal{F}(2k+2)
+      &&\text{by definition of }\mathcal{F}
+\end{align*}
+Therefore $\displaystyle\sum_{i=1}^{k+1} \mathcal{F}(2i-1) = \mathcal{F}(2k+2)$.
+
+By induction, $\displaystyle\sum_{i=1}^{n} \mathcal{F}(2i-1) = \mathcal{F}(2n)$ for all $n \in \N$.
+\end{proof*}
+
+\end{enumerate}
+
+\end{document}

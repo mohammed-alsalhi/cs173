@@ -1,0 +1,251 @@
+% Compile with: pdflatex supplement_27_1.tex
+% Requires: amsmath, amssymb, amsthm, mathtools, xcolor, mdframed,
+%           enumitem, hyperref, pagecolor, microtype
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{mathtools}
+\usepackage{xcolor}
+\usepackage{mdframed}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{pagecolor}
+\usepackage{microtype}
+
+% ── Colour palette ──────────────────────────────────────────
+\definecolor{cream}{HTML}{FFFDF5}
+\definecolor{defblue}{HTML}{1A4A7A}
+\definecolor{thmgreen}{HTML}{1A5C3A}
+\definecolor{warnAmber}{HTML}{7A4A00}
+\definecolor{dangerRed}{HTML}{7A1A1A}
+\definecolor{boxbluebg}{HTML}{EBF3FB}
+\definecolor{boxgreenbg}{HTML}{EBF7EF}
+\definecolor{boxamberbg}{HTML}{FDF5E6}
+\definecolor{boxredbg}{HTML}{FBEBEB}
+\pagecolor{cream}
+
+% ── Theorem styles ──────────────────────────────────────────
+\newtheoremstyle{defstyle}  {8pt}{8pt}{\normalfont}{0pt}{\bfseries\color{defblue}} {.}{0.5em}{}
+\newtheoremstyle{thmstyle}  {8pt}{8pt}{\normalfont}{0pt}{\bfseries\color{thmgreen}}{.}{0.5em}{}
+\newtheoremstyle{notstyle}  {8pt}{8pt}{\normalfont}{0pt}{\bfseries\color{warnAmber}}{.}{0.5em}{}
+\newtheoremstyle{cautionstyle}{8pt}{8pt}{\normalfont}{0pt}{\bfseries\color{dangerRed}}{.}{0.5em}{}
+
+\theoremstyle{defstyle}
+\newtheorem{definition}{Definition}[section]
+
+\theoremstyle{thmstyle}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{corollary}[theorem]{Corollary}
+
+\theoremstyle{notstyle}
+\newtheorem*{remark}{Remark}
+\newtheorem*{example}{Example}
+
+\theoremstyle{cautionstyle}
+\newtheorem*{caution}{Caution}
+
+% ── Framed boxes ────────────────────────────────────────────
+\newmdenv[
+  backgroundcolor=boxbluebg, linecolor=defblue, linewidth=2pt,
+  topline=false, rightline=false, bottomline=false,
+  innerleftmargin=10pt, innerrightmargin=10pt,
+  innertopmargin=6pt, innerbottommargin=6pt,
+  skipabove=8pt, skipbelow=8pt
+]{defbox}
+
+\newmdenv[
+  backgroundcolor=boxgreenbg, linecolor=thmgreen, linewidth=2pt,
+  topline=false, rightline=false, bottomline=false,
+  innerleftmargin=10pt, innerrightmargin=10pt,
+  innertopmargin=6pt, innerbottommargin=6pt,
+  skipabove=8pt, skipbelow=8pt
+]{thmbox}
+
+\newmdenv[
+  backgroundcolor=boxamberbg, linecolor=warnAmber, linewidth=2pt,
+  topline=false, rightline=false, bottomline=false,
+  innerleftmargin=10pt, innerrightmargin=10pt,
+  innertopmargin=6pt, innerbottommargin=6pt,
+  skipabove=8pt, skipbelow=8pt
+]{notebox}
+
+\newmdenv[
+  backgroundcolor=boxredbg, linecolor=dangerRed, linewidth=2pt,
+  topline=false, rightline=false, bottomline=false,
+  innerleftmargin=10pt, innerrightmargin=10pt,
+  innertopmargin=6pt, innerbottommargin=6pt,
+  skipabove=8pt, skipbelow=8pt
+]{cautionbox}
+
+% ── Macros ──────────────────────────────────────────────────
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\id}{\mathrm{id}}
+
+\begin{document}
+
+% ── Title ───────────────────────────────────────────────────
+\begin{center}
+  {\Large\bfseries Supplement 27.1 --- $|\N| = |E|$}\\[4pt]
+  {\normalsize CS 173: Discrete Structures \quad$\cdot$\quad Functions \& Cardinality}\\[2pt]
+  {\small\color{gray} University of Illinois at Urbana-Champaign}
+\end{center}
+\vspace{1em}\hrule\vspace{1.5em}
+
+%=================================================================
+\section{Setup}
+%=================================================================
+
+\begin{defbox}
+\begin{definition}[Even Integers]
+Let $E$ denote the set of \textbf{even integers}:
+\[
+  E \;=\; \bigl\{\, z \in \Z \;\big|\; (\exists\, k \in \Z)\;(2k = z) \,\bigr\}
+    \;=\; \{\dots,\, -4,\, -2,\, 0,\, 2,\, 4,\, \dots\}.
+\]
+\end{definition}
+\end{defbox}
+
+\begin{notebox}
+\begin{remark}
+We take $\N = \{0, 1, 2, \ldots\}$.  The goal is to prove $|\N| = |E|$ by
+constructing an explicit bijection $f\colon \N \to E$.  The key idea is to
+\emph{interleave}: map even-indexed naturals to the non-negative even integers
+($0, 2, 4, \ldots$) and odd-indexed naturals to the negative even integers
+($-2, -4, -6, \ldots$).
+\end{remark}
+\end{notebox}
+
+%=================================================================
+\section{The Theorem}
+%=================================================================
+
+\begin{thmbox}
+\begin{theorem}
+$|\N| = |E|$.
+\end{theorem}
+\begin{proof}
+Define $f\colon \N \to E$ by
+\[
+  f(n) \;=\;
+  \begin{cases}
+    n   & \text{if } 2 \mid n, \\
+    -n-1 & \text{if } 2 \nmid n.
+  \end{cases}
+\]
+
+\medskip
+\noindent\textbf{Well-defined (maps into $E$).}
+\begin{itemize}[leftmargin=2em, itemsep=2pt]
+  \item If $2 \mid n$, then $f(n) = n$ is even, so $f(n) \in E$.
+  \item If $2 \nmid n$, then $n$ is odd, so $n + 1$ is even, hence
+        $f(n) = -(n+1)$ is even, so $f(n) \in E$.
+\end{itemize}
+
+\medskip
+\noindent\textbf{Injective.}
+We must show $(\forall\, a, b \in \N)\bigl(f(a) = f(b) \Rightarrow a = b\bigr)$.
+Let $a, b \in \N$ and assume $f(a) = f(b)$.  We split on the sign of $f(a)$.
+
+\medskip
+\noindent\underline{Case 1: $f(a) \geq 0$.}
+
+First we show $2 \mid a$ (i.e.\ $a$ is even).
+Suppose, towards a contradiction, that $2 \nmid a$ (i.e.\ $a$ is odd).
+Then by definition of $f$, $f(a) = -a - 1 \leq -1 < 0$ since $a \in \N$,
+contradicting $f(a) \geq 0$.  Therefore $2 \mid a$.
+
+Since $f(a) = f(b) \geq 0$, by a similar argument $2 \mid b$.
+
+Since $2 \mid a$, by definition of $f$: $f(a) = a$.
+Since $2 \mid b$, by definition of $f$: $f(b) = b$.
+Therefore $a = f(a) = f(b) = b$, so $\boxed{a = b}$.
+
+\medskip
+\noindent\underline{Case 2: $f(a) < 0$.}
+
+Suppose, towards a contradiction, that $2 \mid a$.
+Then $f(a) = a \geq 0$ since $a \in \N$, contradicting $f(a) < 0$.
+Therefore $2 \nmid a$, i.e.\ $2 \mid a - 1$.
+
+Since $f(a) = f(b) < 0$, by a similar argument $2 \mid b - 1$.
+
+By definition of $f$: $f(a) = -a - 1$ and $f(b) = -b - 1$.
+So $-a - 1 = -b - 1$, which gives $-a = -b$, so $\boxed{a = b}$.
+
+\medskip
+In both cases $f(a) = f(b) \Rightarrow a = b$, so $f$ is injective.
+
+\medskip
+\noindent\textbf{Surjective.}
+We must show $(\forall\, y \in E)(\exists\, x \in \N)(f(x) = y)$.
+Let $y \in E$.  By definition of $E$, there exists $k \in \Z$ such that $2k = y$.
+We split on the sign of $y$.
+
+\medskip
+\noindent\underline{Case 1: $y \geq 0$.}
+
+Then $2k = y \geq 0$ means $k \geq 0$, so $k \in \N$.  Therefore $2k \in \N$.
+Take $x = 2k$.  Since $2 \mid 2k$, by definition of $f$:
+\[
+  f(x) = f(2k) = 2k = y.
+\]
+
+\medskip
+\noindent\underline{Case 2: $y < 0$.}
+
+Since $y \in \Z$ and $y < 0$, we have $y \leq -1$.
+Then $y + 1 \leq 0$, so $-(y+1) \geq 0$.
+Since $-(y+1) \in \Z$ and $-(y+1) \geq 0$, we have $-(y+1) \in \N$.
+
+Now observe: since $y = 2k$,
+\[
+  -(y+1) = -(2k+1) = -2k - 1.
+\]
+So
+\[
+  -(y+1) - 1 = -2k - 1 - 1 = -2k - 2 = 2(-k-1),
+\]
+which shows $2 \mid -(y+1) - 1$, i.e.\ $2 \nmid -(y+1)$ (since $-(y+1)$ is odd).
+Therefore by definition of $f$, with $x = -(y+1)$:
+\[
+  f(x) = f(-(y+1)) = -(-(y+1)) - 1 = (y+1) - 1 = y.
+\]
+
+\medskip
+In both cases we found $x \in \N$ with $f(x) = y$, so $f$ is surjective.
+
+\medskip
+Therefore $f$ is injective and $f$ is surjective, so $f$ is bijective by definition.
+Hence $|E| = |\N|$ by definition of cardinality equality. $\qed$
+\end{proof}
+\end{thmbox}
+
+%=================================================================
+\section{Explicit Correspondence}
+%=================================================================
+
+\begin{notebox}
+\begin{example}
+The first several values of $f$:
+
+\medskip
+\begin{center}
+\renewcommand{\arraystretch}{1.5}
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|}
+\hline
+$n$    & $0$ & $1$  & $2$ & $3$  & $4$ & $5$  & $6$ & $7$  & $\cdots$ \\
+\hline
+$f(n)$ & $0$ & $-2$ & $2$ & $-4$ & $4$ & $-6$ & $6$ & $-8$ & $\cdots$ \\
+\hline
+\end{tabular}
+\end{center}
+
+\medskip
+Even naturals hit $0, 2, 4, \ldots$ and odd naturals hit $-2, -4, -6, \ldots$,
+together covering every element of $E$ exactly once.
+\end{example}
+\end{notebox}
+
+\end{document}

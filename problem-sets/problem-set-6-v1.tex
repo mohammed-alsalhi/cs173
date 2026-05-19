@@ -1,0 +1,83 @@
+\documentclass[12pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{pagecolor}
+\usepackage{marginnote}
+\usepackage{fancyhdr}
+\usepackage{bm}
+\usepackage{etoolbox}
+\usepackage{mdframed}
+
+\definecolor{cream}{HTML}{faf7f1}
+\pagecolor{cream}
+\mdfdefinestyle{lemmastyle}{backgroundcolor=cream}
+
+\newcommand{\defn}[1]{\textbf{#1}}
+\newcommand{\defeq}{\mathrel{\vcenter{\baselineskip0.5ex \lineskiplimit0pt
+                     \hbox{\scriptsize.}\hbox{\scriptsize.}}}=}
+\newcommand{\T}{\top}
+\newcommand{\F}{\bot}
+\newcommand{\Pow}{\mathbb{P}}
+\newcommand{\suc}{\mathfrak{suc}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Func}{\mathcal{F}}
+
+\newtheoremstyle{proofstyle}
+  {}{}{}{}{\bfseries}{.}{ }{}
+\theoremstyle{proofstyle}
+\newtheorem*{proof*}{Proof}
+
+\newcommand{\sidenote}[1]{\marginnote{\small\itshape #1}}
+
+\makeatletter
+\renewcommand{\maketitle}{%
+  \begin{flushleft}
+    {\Large\bfseries CS173: Discrete Structures}\\[0.3em]
+    {\Large\bfseries Problem Set 6}\\[0.5em]
+    {\normalsize Mohammed Al Salhi}
+  \end{flushleft}
+  \vspace{1em}
+}
+\makeatother
+
+\AtBeginDocument{\mathversion{bold}}
+
+\begin{document}
+
+\maketitle
+
+\begin{enumerate}[left=0pt, itemsep=2em, parsep=1em]
+
+\item \textit{You may assume all theorems up to and including the Fundamental Theorem of
+Arithmetic, Euclid's Division Lemma, B\'{e}zout's Identity, and Euclid's Lemma.}
+
+\textit{Use induction to prove that $(\forall n \in \N)(5 \mid 8^n - 3^n)$.}
+\begin{proof}
+We proceed by weak induction on $n$.
+\textbf{Base case} ($n = 0$): We have $8^0 - 3^0 = 1 - 1 = 0 = 5 \cdot 0$,
+so $5 \mid 8^0 - 3^0$. \checkmark
+
+\textbf{Inductive hypothesis}: Let $k \in \mathbb{N}$ and assume $5 \mid 8^k - 3^k$.
+By definition of divisibility, there exists $c \in \mathbb{Z}$ such that $8^k - 3^k = 5c$.
+
+\textbf{Inductive step}: We need to show $5 \mid 8^{k+1} - 3^{k+1}$. Observe that:
+\begin{align*}
+8^{k+1} - 3^{k+1} &= 8 \cdot 8^k - 3 \cdot 3^k \\
+                   &= 8 \cdot 8^k - 8 \cdot 3^k + 8 \cdot 3^k - 3 \cdot 3^k \\
+                   &= 8(8^k - 3^k) + 5 \cdot 3^k \\
+                   &= 8(5c) + 5 \cdot 3^k \\
+                   &= 5(8c + 3^k)
+\end{align*}
+Since $8c + 3^k \in \mathbb{Z}$, we have $5 \mid 8^{k+1} - 3^{k+1}$. \checkmark
+
+Therefore by weak induction, $(\forall n \in \mathbb{N})(5 \mid 8^n - 3^n)$.
+\end{proof}
+
+\end{enumerate}
+
+\end{document}

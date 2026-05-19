@@ -1,0 +1,165 @@
+% ╔══════════════════════════════════════════════════════════════════════════╗
+% ║  CS 173 — Base Template                                                 ║
+% ║  Copy this file, change the title/subtitle below, and start writing.    ║
+% ╚══════════════════════════════════════════════════════════════════════════╝
+
+\documentclass[11pt]{article}
+
+% ── Core packages ─────────────────────────────────────────────────────────────
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath, amssymb, amsthm}   % math environments & symbols
+\usepackage{mathtools}                   % \coloneqq, \shortintertext, etc.
+\usepackage{stmaryrd}                    % \lightning (contradiction symbol)
+
+% ── Visual / layout ───────────────────────────────────────────────────────────
+\usepackage{xcolor}
+\usepackage{mdframed}                    % coloured framed boxes
+\usepackage{enumitem}                    % fine-grained list control
+\usepackage{hyperref}                    % clickable refs / links
+\usepackage{pagecolor}                   % cream background
+\usepackage{microtype}                   % better text spacing
+
+% ── Diagrams (TikZ) ───────────────────────────────────────────────────────────
+\usepackage{tikz}
+\usetikzlibrary{
+  arrows.meta,      % modern arrow tips
+  positioning,      % node placement: right=of X
+  graphs,           % \graph{} syntax
+  shapes.geometric, % ellipse, diamond, etc.
+  calc,             % coordinate arithmetic
+  patterns,         % hatch fills for Venn diagrams
+  decorations.pathreplacing, % curly braces
+}
+
+% ── Page colour ───────────────────────────────────────────────────────────────
+\definecolor{cream}{HTML}{FFFDF5}
+\pagecolor{cream}
+
+% ── Colour palette ────────────────────────────────────────────────────────────
+\definecolor{defblue}{HTML}{1A4A7A}
+\definecolor{thmgreen}{HTML}{1A5C3A}
+\definecolor{warnAmber}{HTML}{7A4A00}
+\definecolor{dangerRed}{HTML}{7A1A1A}
+\definecolor{boxbluebg}{HTML}{EBF3FB}
+\definecolor{boxgreenbg}{HTML}{EBF7EF}
+\definecolor{boxamberbg}{HTML}{FDF5E6}
+\definecolor{boxredbg}{HTML}{FBEBEB}
+
+% ── Theorem styles ────────────────────────────────────────────────────────────
+\newtheoremstyle{defstyle}    {8pt}{8pt}{\normalfont}{0pt}{\bfseries\color{defblue}}{.}{0.5em}{}
+\newtheoremstyle{thmstyle}    {8pt}{8pt}{\normalfont}{0pt}{\bfseries\color{thmgreen}}{.}{0.5em}{}
+\newtheoremstyle{notstyle}    {8pt}{8pt}{\normalfont}{0pt}{\bfseries\color{warnAmber}}{.}{0.5em}{}
+\newtheoremstyle{cautionstyle}{8pt}{8pt}{\normalfont}{0pt}{\bfseries\color{dangerRed}}{.}{0.5em}{}
+
+\theoremstyle{defstyle}
+\newtheorem{definition}{Definition}[section]
+
+\theoremstyle{thmstyle}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{proposition}[theorem]{Proposition}
+
+\theoremstyle{notstyle}
+\newtheorem*{remark}{Remark}
+\newtheorem*{example}{Example}
+\newtheorem*{exercise}{Exercise}
+
+\theoremstyle{cautionstyle}
+\newtheorem*{caution}{Caution}
+
+% ── Coloured boxes ────────────────────────────────────────────────────────────
+% Usage: \begin{defbox} ... \end{defbox}  (wrap a definition environment inside)
+\newmdenv[backgroundcolor=boxbluebg, linecolor=defblue,  linewidth=2pt,
+  topline=false, rightline=false, bottomline=false,
+  innerleftmargin=10pt, innerrightmargin=10pt,
+  innertopmargin=6pt,   innerbottommargin=6pt,
+  skipabove=8pt, skipbelow=8pt]{defbox}
+
+\newmdenv[backgroundcolor=boxgreenbg, linecolor=thmgreen, linewidth=2pt,
+  topline=false, rightline=false, bottomline=false,
+  innerleftmargin=10pt, innerrightmargin=10pt,
+  innertopmargin=6pt,   innerbottommargin=6pt,
+  skipabove=8pt, skipbelow=8pt]{thmbox}
+
+\newmdenv[backgroundcolor=boxamberbg, linecolor=warnAmber, linewidth=2pt,
+  topline=false, rightline=false, bottomline=false,
+  innerleftmargin=10pt, innerrightmargin=10pt,
+  innertopmargin=6pt,   innerbottommargin=6pt,
+  skipabove=8pt, skipbelow=8pt]{notebox}
+
+\newmdenv[backgroundcolor=boxredbg, linecolor=dangerRed, linewidth=2pt,
+  topline=false, rightline=false, bottomline=false,
+  innerleftmargin=10pt, innerrightmargin=10pt,
+  innertopmargin=6pt,   innerbottommargin=6pt,
+  skipabove=8pt, skipbelow=8pt]{cautionbox}
+
+% ── CS 173 math shorthands ────────────────────────────────────────────────────
+\newcommand{\N}{\mathbb{N}}             % naturals
+\newcommand{\Z}{\mathbb{Z}}             % integers
+\newcommand{\Q}{\mathbb{Q}}             % rationals
+\newcommand{\R}{\mathbb{R}}             % reals
+\newcommand{\Pow}{\mathcal{P}}          % power set  \Pow(A)
+\newcommand{\Zn}[1]{\mathbb{Z}_{#1}}   % Z_n
+
+\newcommand{\divides}{\mid}             % a \divides b
+\newcommand{\notdivides}{\nmid}
+
+\newcommand{\defeq}{\coloneqq}          % definition equality :=
+\newcommand{\setst}[2]{\{#1 \mid #2\}} % set-builder  \setst{x}{P(x)}
+\newcommand{\abs}[1]{\lvert #1 \rvert} % absolute value / cardinality
+\newcommand{\floor}[1]{\lfloor #1 \rfloor}
+\newcommand{\ceil}[1]{\lceil  #1 \rceil}
+
+\newcommand{\T}{\top}
+\newcommand{\F}{\bot}
+\newcommand{\contra}{\ensuremath{\Rightarrow\Leftarrow}}  % contradiction
+
+% Proof step labelling (use inside align/equation)
+\newcommand{\reason}[1]{\quad\text{(#1)}}
+
+% ── Document ──────────────────────────────────────────────────────────────────
+\begin{document}
+
+\begin{center}
+  {\Large\bfseries Lecture N --- Topic Title}\\[4pt]          % ← change
+  {\normalsize CS 173: Discrete Structures \quad$\cdot$\quad Subtopic}\\[2pt]
+  {\small\color{gray} University of Illinois at Urbana-Champaign}
+\end{center}
+
+\vspace{1em}
+\hrule
+\vspace{1.5em}
+
+% ──────────────────────────────────────────────────────────────────────────────
+\section{Your First Section}
+
+\begin{defbox}
+\begin{definition}[Term Name]
+  Write the definition here.  Use $\defeq$ for definitional equality.
+\end{definition}
+\end{defbox}
+
+\begin{thmbox}
+\begin{theorem}[Theorem Name]\label{thm:example}
+  Statement of the theorem.
+\end{theorem}
+\end{thmbox}
+
+\begin{proof}
+  Proof goes here.  To signal contradiction write $\contra$.
+\end{proof}
+
+\begin{notebox}
+\begin{remark}
+  Useful observation that doesn't rise to the level of a theorem.
+\end{remark}
+\end{notebox}
+
+\begin{cautionbox}
+\begin{caution}
+  Common mistake or subtle pitfall.
+\end{caution}
+\end{cautionbox}
+
+\end{document}

@@ -1,0 +1,223 @@
+% Compile with: pdflatex supplement_27_2.tex
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{mathtools}
+\usepackage{xcolor}
+\usepackage{mdframed}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{pagecolor}
+\usepackage{microtype}
+
+% ── Colour palette ───────────────────────────────────────────
+\definecolor{cream}{HTML}{FFFDF5}
+\definecolor{defblue}{HTML}{1A4A7A}
+\definecolor{thmgreen}{HTML}{1A5C3A}
+\definecolor{warnAmber}{HTML}{7A4A00}
+\definecolor{dangerRed}{HTML}{7A1A1A}
+\definecolor{boxbluebg}{HTML}{EBF3FB}
+\definecolor{boxgreenbg}{HTML}{EBF7EF}
+\definecolor{boxamberbg}{HTML}{FDF5E6}
+\definecolor{boxredbg}{HTML}{FBEBEB}
+\pagecolor{cream}
+
+% ── Theorem styles ───────────────────────────────────────────
+\newtheoremstyle{defstyle}  {8pt}{8pt}{\normalfont}{0pt}{\bfseries\color{defblue}} {.}{0.5em}{}
+\newtheoremstyle{thmstyle}  {8pt}{8pt}{\normalfont}{0pt}{\bfseries\color{thmgreen}}{.}{0.5em}{}
+\newtheoremstyle{notstyle}  {8pt}{8pt}{\normalfont}{0pt}{\bfseries\color{warnAmber}}{.}{0.5em}{}
+
+\theoremstyle{defstyle}
+\newtheorem{definition}{Definition}[section]
+
+\theoremstyle{thmstyle}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{corollary}[theorem]{Corollary}
+
+\theoremstyle{notstyle}
+\newtheorem*{remark}{Remark}
+
+% ── Framed boxes ─────────────────────────────────────────────
+\newmdenv[
+  backgroundcolor=boxbluebg, linecolor=defblue, linewidth=2pt,
+  topline=false, rightline=false, bottomline=false,
+  innerleftmargin=10pt, innerrightmargin=10pt,
+  innertopmargin=6pt, innerbottommargin=6pt,
+  skipabove=8pt, skipbelow=8pt
+]{defbox}
+
+\newmdenv[
+  backgroundcolor=boxgreenbg, linecolor=thmgreen, linewidth=2pt,
+  topline=false, rightline=false, bottomline=false,
+  innerleftmargin=10pt, innerrightmargin=10pt,
+  innertopmargin=6pt, innerbottommargin=6pt,
+  skipabove=8pt, skipbelow=8pt
+]{thmbox}
+
+\newmdenv[
+  backgroundcolor=boxamberbg, linecolor=warnAmber, linewidth=2pt,
+  topline=false, rightline=false, bottomline=false,
+  innerleftmargin=10pt, innerrightmargin=10pt,
+  innertopmargin=6pt, innerbottommargin=6pt,
+  skipabove=8pt, skipbelow=8pt
+]{notebox}
+
+% ── Macros ───────────────────────────────────────────────────
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\id}{\mathrm{id}}
+
+\begin{document}
+
+% ── Title ────────────────────────────────────────────────────
+\begin{center}
+  {\Large\bfseries Supplement 27.2 --- $|X \setminus \{a\}| = |X| - 1$}\\[4pt]
+  {\normalsize CS 173: Discrete Structures \quad$\cdot$\quad Functions \& Cardinality}\\[2pt]
+  {\small\color{gray} University of Illinois at Urbana-Champaign}
+\end{center}
+\vspace{1em}\hrule\vspace{1.5em}
+
+%=================================================================
+\section{Context}
+%=================================================================
+
+\begin{notebox}
+\begin{remark}[Theorem (!)]
+For any finite sets $X$ and $Y$, if $Y \subseteq X$, then
+\[
+  |X \setminus Y| = |X| - |Y|.
+\]
+\end{remark}
+\end{notebox}
+
+The theorem below is the special case $Y = \{a\}$, which is proved first and used
+to establish the general result.
+
+\begin{thmbox}
+\begin{theorem}[Theorem (?)]
+For any finite set $X$ and any $a$, if $a \in X$, then
+\[
+  |X \setminus \{a\}| = |X| - 1.
+\]
+\end{theorem}
+\end{thmbox}
+
+%=================================================================
+\section{Proof}
+%=================================================================
+
+\begin{thmbox}
+\begin{proof}
+Let $X$ be a finite set, let $a$ be a set, and assume $a \in X$.
+
+Since $X$ is finite, there exists $n \in \N$ such that $|X| = |n|$.
+(Recall $n = \{0, 1, 2, \ldots, n-1\}$.)
+This means there exists a bijection $f\colon X \to n$; in particular, $f$ is injective
+and surjective.
+
+\medskip
+\noindent\textbf{Define} $g\colon X \setminus \{a\} \to n-1$ by: for any
+$b \in X \setminus \{a\}$,
+\[
+  g(b) \;:=\;
+  \begin{cases}
+    f(b)     & \text{if } f(b) < f(a), \\
+    f(b) - 1 & \text{if } f(b) > f(a).
+  \end{cases}
+\]
+
+\begin{notebox}
+\begin{remark}
+Since $f$ is a bijection and $b \neq a$, we have $f(b) \neq f(a)$, so
+$f(b) < f(a)$ or $f(b) > f(a)$ — the two cases are exhaustive and mutually exclusive,
+so $g$ is well-defined.
+\end{remark}
+\end{notebox}
+
+%--- Injectivity --------------------------------------------------
+\noindent\textbf{Part 1: Injectivity.}
+We prove $(\forall\, b_1, b_2 \in X \setminus \{a\})\bigl(g(b_1) = g(b_2)
+\Rightarrow b_1 = b_2\bigr)$.
+
+Let $b_1, b_2 \in X \setminus \{a\}$ and assume $g(b_1) = g(b_2)$.
+
+\medskip
+\noindent\underline{Case 1: $f(b_1) < f(a)$.}
+
+By definition of $g$, $g(b_1) = f(b_1)$, so $f(b_1) = g(b_1) = g(b_2)$.
+
+Towards a contradiction, suppose $f(b_2) > f(a)$.
+Then by definition, $g(b_2) = f(b_2) - 1 \geq f(a)$ since $f(b_2) > f(a)$.
+So $f(b_1) = g(b_1) = g(b_2) \geq f(a)$, contradicting $f(b_1) < f(a)$.
+$\Rightarrow\!\Leftarrow$
+
+Therefore $f(b_2) < f(a)$, so by definition $g(b_2) = f(b_2)$.
+Thus $f(b_1) = f(b_2)$, so $b_1 = b_2$ because $f$ is injective.
+
+\medskip
+\noindent\underline{Case 2: $f(b_1) > f(a)$.}
+
+By definition of $g$, $g(b_1) = f(b_1) - 1$, so $f(b_1) - 1 = g(b_2)$.
+
+Towards a contradiction, suppose $f(b_2) < f(a)$.
+Then by definition, $g(b_2) = f(b_2)$, so $f(b_1) - 1 = f(b_2)$.
+Since $f(b_1) > f(a)$ we have $f(b_1) \geq f(a) + 1$, hence
+$f(b_2) = f(b_1) - 1 \geq f(a)$, contradicting $f(b_2) < f(a)$.
+$\Rightarrow\!\Leftarrow$
+
+Therefore $f(b_2) > f(a)$, so by definition $g(b_2) = f(b_2) - 1$.
+Thus $f(b_1) - 1 = f(b_2) - 1$, implying $f(b_1) = f(b_2)$,
+so $\boxed{b_1 = b_2}$ because $f$ is injective.
+
+\medskip
+In both cases $g(b_1) = g(b_2) \Rightarrow b_1 = b_2$, so $g$ is injective.
+
+%--- Surjectivity -------------------------------------------------
+\medskip
+\noindent\textbf{Part 2: Surjectivity.}
+We prove $(\forall\, y \in n{-}1)(\exists\, b \in X \setminus \{a\})\bigl(g(b) = y\bigr)$.
+
+Let $y \in n-1$.  We know $n-1 < n$, so $n-1 \in n$, so $n-1 \subseteq n$,
+which gives $y \in n$.
+
+\medskip
+\noindent\underline{Case 1: $y < f(a)$.}
+
+Since $f$ is surjective and $y \in n$, there exists $b \in X$ such that $f(b) = y$.
+
+We know $b \neq a$ because if $b = a$, then $y = f(b) = f(a) < f(a)$, a
+contradiction. $\Rightarrow\!\Leftarrow$
+
+So $b \in X \setminus \{a\}$ by definition.
+Since $f(b) = y < f(a)$, by definition of $g$:
+\[
+  g(b) = f(b) = y.
+\]
+
+\medskip
+\noindent\underline{Case 2: $y \geq f(a)$.}
+
+Notice $y + 1 > y \geq f(a)$, so $y + 1 > f(a)$.
+Since $y \in n-1$, we know $y < n-1$, so $y+1 < n$, hence $y+1 \in n$.
+
+So, since $f$ is surjective, there exists $b \in X$ such that $f(b) = y+1$.
+
+We know $b \neq a$ because if $b = a$, then $f(a) = f(b) = y+1 > f(a)$, a
+contradiction. $\Rightarrow\!\Leftarrow$
+
+So $b \in X \setminus \{a\}$.
+Since $f(b) = y+1 > f(a)$, by definition of $g$:
+\[
+  g(b) = f(b) - 1 = (y+1) - 1 = y.
+\]
+
+\medskip
+In both cases we found $b \in X \setminus \{a\}$ with $g(b) = y$, so $g$ is
+surjective.
+
+\medskip
+So, since $g$ is injective and surjective, $g$ is a bijection, and therefore
+$|X \setminus \{a\}| = n - 1$ by definition. $\qed$
+\end{proof}
+\end{thmbox}
+
+\end{document}

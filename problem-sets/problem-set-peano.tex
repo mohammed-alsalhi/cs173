@@ -1,0 +1,422 @@
+\documentclass[12pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{pagecolor}
+\usepackage{marginnote}
+\usepackage{fancyhdr}
+\usepackage{bm}
+\usepackage{etoolbox}
+
+\definecolor{cream}{HTML}{faf7f1}
+\pagecolor{cream}
+
+\newcommand{\defn}[1]{\textbf{#1}}
+\newcommand{\defeq}{\mathrel{\vcenter{\baselineskip0.5ex \lineskiplimit0pt
+                     \hbox{\scriptsize.}\hbox{\scriptsize.}}}=}
+\newcommand{\T}{\top}
+\newcommand{\F}{\bot}
+\newcommand{\Pow}{\mathbb{P}}
+\newcommand{\N}{\mathbb{N}}
+
+\newtheoremstyle{proofstyle}
+  {}{}{\itshape}{}{\bfseries}{.}{ }{}
+\theoremstyle{proofstyle}
+\newtheorem*{proof*}{Proof}
+
+\AtBeginEnvironment{proof*}{\setlength{\parskip}{0.5em}}
+
+\newcommand{\sidenote}[1]{\marginnote{\small\itshape #1}}
+
+\makeatletter
+\renewcommand{\maketitle}{%
+  \begin{flushleft}
+    {\Large\bfseries CS173: Discrete Structures}\\[0.3em]
+    {\Large\bfseries Problem Set}\\[0.5em]
+    {\normalsize Mohammed Al Salhi}
+  \end{flushleft}
+  \vspace{1em}
+}
+\makeatother
+
+\AtBeginDocument{\mathversion{bold}}
+
+\begin{document}
+
+\maketitle
+
+\begin{enumerate}[left=0pt, itemsep=2em, parsep=1em]
+
+\item Prove $(\forall x \in \mathbb{N})(S(x) \neq \emptyset$).
+
+\begin{proof*}
+    Let $n \in \mathbb{N}$. We proceed by contradiction. Assume $S(n) = \emptyset$.
+
+    By definition, $S(n) = n \cup \{n\}$, so we have:
+    \[
+        n \cup \{n\} = \emptyset.
+    \]
+    But $n \in \{n\}$, so $n \in n \cup \{n\}$, which means $n \cup \{n\} \neq \emptyset$ is a 
+    a contradiction.
+
+    Therefore $S(n) \neq \emptyset$ for all $n \in \mathbb{N}$. \qed
+\end{proof*}
+
+\item Prove $(\forall n \in \mathbb{N})(n \neq 0\Rightarrow (\exists m \in \mathbb{N})(S(m) = n)$.
+
+\begin{proof*}
+    Let $n \in \mathbb{N}$ and assume $n \neq 0$.
+
+    By the definition of natural numbers, every natural number is either $0$
+    or the successor of some natural number. Since $n \neq 0$, it must be the
+    case that $n = S(m)$ for some $m \in \mathbb{N}$.
+
+    This $m$ is our witness and $S(m) = n$. \qed
+\end{proof*}
+
+\item Prove $(\forall n \in \mathbb{N})(\forall m \in \mathbb{N})(S(n + m) = S(n) + m)$.
+
+\begin{proof*}
+    Let $n \in \mathbb{N}$. We induct on $m$.
+
+    \textbf{Base case:} $m = 0$. We need to show $S(n + 0) = S(n) + 0$.
+    \[
+        S(n + 0) = S(n) = S(n) + 0
+    \]
+    where the first equality is by definition of addition and the second is by
+    definition of addition.
+
+    \textbf{Inductive hypothesis:} Assume $S(n + k) = S(n) + k$ for some
+    $k \in \mathbb{N}$.
+
+    \textbf{Inductive step:} We need to show $S(n + S(k)) = S(n) + S(k)$.
+    \[
+        S(n + S(k)) = S(S(n + k)) = S(S(n) + k) = S(n) + S(k)
+    \]
+    where the first equality is by definition of addition, the second is by
+    the inductive hypothesis, and the third is by definition of addition. \qed
+\end{proof*}
+
+\item Prove $(\forall n \in \mathbb{N})(0 \leq n)$.
+
+\textbf{Proof by induction:}
+
+\begin{proof*}
+    We induct on $n$.
+
+    \textbf{Base case:} $n = 0$. We need to show $0 \leq 0$, which holds
+    immediately since $\leq$ is reflexive.
+
+    \textbf{Inductive hypothesis:} Assume $0 \leq k$ for some $k \in \mathbb{N}$.
+
+    \textbf{Inductive step:} We need to show $0 \leq S(k)$.
+    By the inductive hypothesis $0 \leq k$, and by definition $k < S(k)$,
+    so by transitivity $0 \leq S(k)$. \qed
+\end{proof*}
+
+\textbf{Proof by definition of $\leq$:}
+
+\begin{proof*}
+    Let $n \in \mathbb{N}$. By definition, $0 \leq n$ if and only if there
+    exists $m \in \mathbb{N}$ such that $0 + m = n$. Taking $m = n$, we have
+    $0 + n = n$ by definition of addition. Hence $0 \leq n$. \qed
+\end{proof*}
+
+\item Prove $(\forall n \in \mathbb{N})(n \neq 0 \Rightarrow 0 < n)$.
+
+\begin{proof*}
+    We induct on $n$.
+
+    \textbf{Base case:} NTS: $0 \neq 0 \Rightarrow 0 < 0$.
+    Assume $0 \neq 0$. We know $(\forall x)(x = x)$, so $0 = 0$ ---
+    a contradiction. Thus the implication holds vacuously.
+
+    \textbf{Inductive hypothesis:} Assume $k \neq 0 \Rightarrow 0 < k$
+    for some $k \in \mathbb{N}$.
+
+    \textbf{Inductive step:} NTS: $S(k) \neq 0 \Rightarrow 0 < S(k)$.
+    Assume $S(k) \neq 0$. By definition of $<$, we have $0 < S(k)$
+    if and only if $0 \leq k$, which holds by the previous theorem. \qed
+\end{proof*}
+
+\item Prove $(\forall x \in \mathbb{N})(\forall y \in \mathbb{N})(x + y = y + x)$.
+
+\textbf{Lemma:} $(\forall n \in \mathbb{N})(\forall x \in \mathbb{N})(S(n) + x = S(n + x))$.
+
+\begin{proof*}
+    Let $n \in \mathbb{N}$. We induct on $x$.
+
+    \textbf{Base case:} NTS: $S(n) + 0 = S(n + 0)$.
+    \[
+        S(n) + 0 = S(n) = S(n + 0)
+    \]
+    where the first equality is by definition of addition and the second is
+    by definition of addition.
+
+    \textbf{Inductive hypothesis:} Assume $S(n) + k = S(n + k)$
+    for some $k \in \mathbb{N}$.
+
+    \textbf{Inductive step:} NTS: $S(n) + S(k) = S(n + S(k))$.
+    \[
+        S(n) + S(k) = S(S(n) + k) = S(S(n + k)) = S(n + S(k))
+    \]
+    where the first equality is by definition of addition, the second is by
+    the inductive hypothesis, and the third is by definition of addition. \qed
+\end{proof*}
+
+\textbf{Main proof:}
+
+\begin{proof*}
+    Let $x \in \mathbb{N}$. We induct on $y$.
+
+    \textbf{Base case:} NTS: $x + 0 = 0 + x$.
+    By definition of addition, $x + 0 = x$. By theorem, $0 + x = x$.
+    Hence $x + 0 = 0 + x$.
+
+    \textbf{Inductive hypothesis:} Assume $x + k = k + x$
+    for some $k \in \mathbb{N}$.
+
+    \textbf{Inductive step:} NTS: $x + S(k) = S(k) + x$.
+    \[
+        x + S(k) = S(x + k) = S(k + x) = S(k) + x
+    \]
+    where the first equality is by definition of addition, the second is by
+    the inductive hypothesis, and the third is by the lemma. \qed
+\end{proof*}
+
+\item Prove $(\forall x \in \mathbb{N})((x \cdot 1 = x) \wedge (1 \cdot x = x))$.
+
+\begin{proof*}
+    We induct on $x$.
+
+    \textbf{Base case:} NTS: $(0 \cdot 1 = 0) \wedge (1 \cdot 0 = 0)$.
+
+    Consider $0 \cdot 1$:
+    \[
+        0 \cdot 1 = 0 \cdot S(0) = (0 \cdot 0) + 0 = 0 + 0 = 0
+    \]
+    where the first equality is by definition of $1 = S(0)$, the second is
+    by definition of multiplication, and the third and fourth are by
+    definition of addition.
+
+    Consider $1 \cdot 0$:
+    \[
+        1 \cdot 0 = 0
+    \]
+    by definition of multiplication.
+
+    \textbf{Inductive hypothesis:} Assume $k \cdot 1 = k$ and $1 \cdot k = k$
+    for some $k \in \mathbb{N}$.
+
+    \textbf{Inductive step:} NTS: $S(k) \cdot 1 = S(k)$ and $1 \cdot S(k) = S(k)$.
+
+    Consider $S(k) \cdot 1$:
+    \[
+        S(k) \cdot 1 = S(k) \cdot S(0) = (S(k) \cdot 0) + S(k) = 0 + S(k) = S(k)
+    \]
+    where the first equality is by definition of $1 = S(0)$, the second is
+    by definition of multiplication, the third is by definition of
+    multiplication, and the fourth is by theorem.
+
+    Consider $1 \cdot S(k)$:
+    \[
+        1 \cdot S(k) = (1 \cdot k) + 1 = k + 1 = S(k)
+    \]
+    where the first equality is by definition of multiplication, the second
+    is by the inductive hypothesis, and the third is by definition of
+    $S(k) = k + 1$. \qed
+\end{proof*}
+
+\item Prove $(\forall x \in \mathbb{N})((x \cdot 0 = 0) \wedge (0 \cdot x = 0))$.
+
+\begin{proof*}
+    For the first conjunct, $x \cdot 0 = 0$ holds directly by definition
+    of multiplication.
+
+    For the second conjunct, we induct on $x$ to prove
+    $(\forall x \in \mathbb{N})(0 \cdot x = 0)$.
+
+    \textbf{Base case:} NTS: $0 \cdot 0 = 0$.
+    This holds by definition of multiplication.
+
+    \textbf{Inductive hypothesis:} Let $k \in \mathbb{N}$ and assume
+    $0 \cdot k = 0$.
+
+    \textbf{Inductive step:} NTS: $0 \cdot S(k) = 0$.
+    \[
+        0 \cdot S(k) = (0 \cdot k) + 0 = 0 + 0 = 0
+    \]
+    where the first equality is by definition of multiplication, the second
+    is by the inductive hypothesis, and the third is by definition of
+    addition. \qed
+\end{proof*}
+
+\item Prove $(\forall x, y, z \in \mathbb{N})(x \cdot (y + z) = (x \cdot y) + (x \cdot z))$.
+
+\begin{proof*}
+    Let $x, y \in \mathbb{N}$. We induct on $z$ to prove
+    $(\forall z \in \mathbb{N})(x \cdot (y + z) = (x \cdot y) + (x \cdot z))$.
+
+    \textbf{Base case:} NTS: $x \cdot (y + 0) = (x \cdot y) + (x \cdot 0)$.
+
+    Consider the LHS:
+    \[
+        x \cdot (y + 0) = x \cdot y
+    \]
+    by definition of addition. Consider the RHS:
+    \[
+        (x \cdot y) + (x \cdot 0) = (x \cdot y) + 0 = x \cdot y
+    \]
+    where the first equality is by definition of multiplication and the
+    second is by definition of addition. Hence LHS $=$ RHS.
+
+    \textbf{Inductive hypothesis:} Assume $x \cdot (y + k) = (x \cdot y) + (x \cdot k)$
+    for some $k \in \mathbb{N}$.
+
+    \textbf{Inductive step:} NTS: $x \cdot (y + S(k)) = (x \cdot y) + (x \cdot S(k))$.
+    \[
+        x \cdot (y + S(k)) = x \cdot S(y + k) = (x \cdot (y + k)) + x
+        = ((x \cdot y) + (x \cdot k)) + x
+    \]
+    \[
+        = (x \cdot y) + ((x \cdot k) + x) = (x \cdot y) + (x \cdot S(k))
+    \]
+    where the first equality is by definition of addition, the second is by
+    definition of multiplication, the third is by the inductive hypothesis,
+    the fourth is by associativity of addition, and the fifth is by
+    definition of multiplication. \qed
+\end{proof*}
+
+\item Prove $(\forall x, y \in \mathbb{N})(x \cdot y = y \cdot x)$.
+
+\textbf{Lemma:} $(\forall k \in \mathbb{N})(\forall x \in \mathbb{N})(S(k) \cdot x = (k \cdot x) + x)$.
+
+\begin{proof*}
+    Let $k \in \mathbb{N}$. We induct on $x$.
+
+    \textbf{Base case:} NTS: $S(k) \cdot 0 = (k \cdot 0) + 0$.
+    \[
+        S(k) \cdot 0 = 0 = 0 + 0 = (k \cdot 0) + 0
+    \]
+    where the first equality is by definition of multiplication, the second
+    is by definition of addition, and the third is by definition of
+    multiplication.
+
+    \textbf{Inductive hypothesis:} Assume $S(k) \cdot x = (k \cdot x) + x$
+    for some $x \in \mathbb{N}$.
+
+    \textbf{Inductive step:} NTS: $S(k) \cdot S(x) = (k \cdot S(x)) + S(x)$.
+    \[
+        S(k) \cdot S(x) = (S(k) \cdot x) + S(k) = ((k \cdot x) + x) + S(k)
+    \]
+    \[
+        = (k \cdot x) + (x + S(k)) = (k \cdot x) + S(x + k)
+    \]
+    \[
+        = (k \cdot x) + S(k + x) = (k \cdot x) + (k + S(x))
+    \]
+    \[
+        = (k \cdot S(x)) + S(x)
+    \]
+    where the first equality is by definition of multiplication, the second
+    is by the inductive hypothesis, the third and fourth are by associativity
+    and definition of addition, the fifth is by commutativity of addition,
+    the sixth is by definition of addition, and the seventh is by definition
+    of multiplication. \qed
+\end{proof*}
+
+\textbf{Main proof:}
+
+\begin{proof*}
+    Let $x \in \mathbb{N}$. We induct on $y$.
+
+    \textbf{Base case:} NTS: $x \cdot 0 = 0 \cdot x$.
+    By definition of multiplication, $x \cdot 0 = 0$. By theorem,
+    $0 \cdot x = 0$. Hence $x \cdot 0 = 0 \cdot x$.
+
+    \textbf{Inductive hypothesis:} Assume $x \cdot k = k \cdot x$
+    for some $k \in \mathbb{N}$.
+
+    \textbf{Inductive step:} NTS: $x \cdot S(k) = S(k) \cdot x$.
+    \[
+        x \cdot S(k) = (x \cdot k) + x = (k \cdot x) + x = S(k) \cdot x
+    \]
+    where the first equality is by definition of multiplication, the second
+    is by the inductive hypothesis, and the third is by the lemma. \qed
+\end{proof*}
+
+\item Prove $(\forall x, y, z \in \mathbb{N})(x^y \cdot x^z = x^{y+z})$.
+
+\begin{proof*}
+    Let $x, y \in \mathbb{N}$. We induct on $z$.
+
+    \textbf{Base case:} NTS: $x^y \cdot x^0 = x^{y+0}$.
+    \[
+        x^y \cdot x^0 = x^y \cdot 1 = x^y = x^{y+0}
+    \]
+    where the first equality is by definition of exponentiation, the second
+    is by definition of multiplication, and the third is by definition of
+    addition.
+
+    \textbf{Inductive hypothesis:} Assume $x^y \cdot x^k = x^{y+k}$
+    for some $k \in \mathbb{N}$.
+
+    \textbf{Inductive step:} NTS: $x^y \cdot x^{S(k)} = x^{y+S(k)}$.
+    \[
+        x^y \cdot x^{S(k)} = x^y \cdot (x^k \cdot x) = (x^y \cdot x^k) \cdot x
+        = x^{y+k} \cdot x = x^{S(y+k)} = x^{y+S(k)}
+    \]
+    where the first equality is by definition of exponentiation, the second
+    is by associativity of multiplication, the third is by the inductive
+    hypothesis, the fourth is by definition of exponentiation, and the fifth
+    is by definition of addition. \qed
+\end{proof*}
+
+\item Prove $(\forall n \in \mathbb{N})\left(6 \cdot \sum_{i=0}^{n} i^2 = n(n+1)(2n+1)\right)$.
+
+\begin{proof*}
+    We induct on $n$.
+
+    \textbf{Base case:} NTS: $6 \cdot \sum_{i=0}^{0} i^2 = 0 \cdot 1 \cdot 1$.
+    \[
+        6 \cdot \sum_{i=0}^{0} i^2 = 6 \cdot 0 = 0 = 0 \cdot 1 \cdot 1
+    \]
+    as required.
+
+    \textbf{Inductive hypothesis:} Assume $6 \cdot \sum_{i=0}^{k} i^2 = k(k+1)(2k+1)$
+    for some $k \in \mathbb{N}$.
+
+    \textbf{Inductive step:} NTS: $6 \cdot \sum_{i=0}^{S(k)} i^2 = S(k)(S(k)+1)(2S(k)+1)$.
+    \[
+        6 \cdot \sum_{i=0}^{S(k)} i^2 = 6 \cdot \left(\sum_{i=0}^{k} i^2 + S(k)^2\right)
+        = 6 \cdot \sum_{i=0}^{k} i^2 + 6 \cdot S(k)^2
+    \]
+    \[
+        = k(k+1)(2k+1) + 6(k+1)^2
+    \]
+    \[
+        = (k+1)\left[k(2k+1) + 6(k+1)\right]
+    \]
+    \[
+        = (k+1)(2k^2 + k + 6k + 6)
+    \]
+    \[
+        = (k+1)(2k^2 + 7k + 6)
+    \]
+    \[
+        = (k+1)(k+2)(2k+3)
+    \]
+    \[
+        = S(k)(S(k)+1)(2S(k)+1)
+    \]
+    where the first equality splits the sum, the second distributes the $6$,
+    the third applies the inductive hypothesis and uses $S(k) = k+1$, and
+    the remaining steps are algebraic simplification. \qed
+\end{proof*}
+
+\end{enumerate}
+
+\end{document}

@@ -1,0 +1,336 @@
+\documentclass[12pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{pagecolor}
+\usepackage{marginnote}
+\usepackage{fancyhdr}
+\usepackage{bm}
+\usepackage{etoolbox}
+
+\definecolor{cream}{HTML}{faf7f1}
+\pagecolor{cream}
+
+\newcommand{\defn}[1]{\textbf{#1}}
+\newcommand{\defeq}{\mathrel{\vcenter{\baselineskip0.5ex \lineskiplimit0pt
+                     \hbox{\scriptsize.}\hbox{\scriptsize.}}}=}
+\newcommand{\T}{\top}
+\newcommand{\F}{\bot}
+\newcommand{\Pow}{\mathbb{P}}
+\newcommand{\N}{\mathbb{N}}
+
+\newtheoremstyle{proofstyle}
+  {}{}{\itshape}{}{\bfseries}{.}{ }{}
+\theoremstyle{proofstyle}
+\newtheorem*{proof*}{Proof}
+
+\AtBeginEnvironment{proof*}{\setlength{\parskip}{0.5em}}
+
+\newcommand{\sidenote}[1]{\marginnote{\small\itshape #1}}
+
+\makeatletter
+\renewcommand{\maketitle}{%
+  \begin{flushleft}
+    {\Large\bfseries CS173: Discrete Structures}\\[0.3em]
+    {\Large\bfseries Notes}\\[0.5em]
+    {\normalsize Mohammed Al Salhi}
+  \end{flushleft}
+  \vspace{1em}
+}
+\makeatother
+
+\AtBeginDocument{\mathversion{bold}}
+
+\begin{document}
+
+\maketitle
+
+\section*{Divisibility}
+
+\textbf{Definition.} Given $x, y \in \mathbb{Z}$, we define
+\[
+    x \mid y \iff (\exists z \in \mathbb{Z})(x \cdot z = y).
+\]
+We read $x \mid y$ as ``$x$ divides $y$''. For example,
+$3 \mid 6 \iff (\exists z \in \mathbb{Z})(3 \cdot z = 6) \iff 3 \cdot 2 = 6$.
+
+\textbf{Definition.} Given $x, y \in \mathbb{Z}$, we define
+\[
+    x - y := x + (-y).
+\]
+
+\textbf{Definition.} We define $|\cdot| : \mathbb{Z} \to \mathbb{N}$ given by,
+for every $x \in \mathbb{Z}$:
+\[
+    |x| :=
+    \begin{cases}
+        x  & \text{if } x \geq 0 \\
+        -x & \text{if } x < 0
+    \end{cases}
+\]
+
+\textbf{Examples.}
+\begin{itemize}[itemsep=0.5em]
+    \item $2 \mid 0 \iff (\exists z \in \mathbb{Z})(2 \cdot z = 0)$,
+          witnessed by $z = 0$ since $2 \cdot 0 = 0$.
+    \item $0 \nmid 2 \iff \neg(\exists z \in \mathbb{Z})(0 \cdot z = 2)
+          \iff (\forall z \in \mathbb{Z})(0 \cdot z \neq 2)$,
+          which holds since $0 \cdot z = 0 \neq 2$ for all $z$.
+\end{itemize}
+
+\section*{Divisibility is a Partial Order on $\mathbb{N}$}
+
+\textbf{Theorem.} Divisibility on $\mathbb{N}$ is a partial order:
+\begin{itemize}[itemsep=0.5em]
+    \item \textbf{Reflexivity:} $(\forall x \in \mathbb{Z})(x \mid x)$.
+    \item \textbf{Antisymmetry (up to sign):} $(\forall x, y \in \mathbb{Z})((x \mid y \wedge y \mid x)
+          \Rightarrow |x| = |y|)$.
+    \item \textbf{Transitivity:} $(\forall x, y, z \in \mathbb{Z})((x \mid y \wedge y \mid z)
+          \Rightarrow x \mid z)$.
+\end{itemize}
+
+\begin{proof*}
+    We prove transitivity. Let $x, y, z \in \mathbb{Z}$
+    and assume $x \mid y$ and $y \mid z$. So there exist $k_1 \in \mathbb{Z}$
+    and $k_2 \in \mathbb{Z}$ such that $x \cdot k_1 = y$ and $y \cdot k_2 = z$.
+    Then $(x \cdot k_1) \cdot k_2 = z$, therefore $x \cdot (k_1 \cdot k_2) = z$,
+    where $k_1 \cdot k_2 \in \mathbb{Z}$. Hence $x \mid z$. \qed
+\end{proof*}
+
+\textbf{Theorem.}
+\begin{itemize}[itemsep=0.5em]
+    \item $(\forall x \in \mathbb{Z})(x \mid 0)$. \sidenote{$0$ is a universal dividend}
+    \item $(\forall x \in \mathbb{Z})(1 \mid x)$. \sidenote{$1$ is a universal divisor}
+    \item $(\forall x \in \mathbb{Z})(x \mid x)$. \sidenote{reflex. of $\mid$}
+    \item $(\forall x, y \in \mathbb{Z})(x \mid y \Rightarrow |x| \leq |y|)$.
+\end{itemize}
+
+\section*{Primality}
+
+\textbf{Definition.} We say $x \in \mathbb{N}$ is \defn{prime} if
+\[
+    (x \geq 2) \wedge (\forall p \in \mathbb{N})(p \mid x \Rightarrow p \in \{1, x\}).
+\]
+
+\textbf{Example.}
+\begin{itemize}[itemsep=0.5em]
+    \item $1$ is not prime since $1 < 2$.
+    \item $4$ is not prime since $2 \mid 4$ but $2 \notin \{1, 4\}$.
+\end{itemize}
+
+\textbf{Theorem.} $\mathbb{N} \subseteq \mathbb{Z}$ (false, but spiritually true).
+
+\section*{Properties of $(\mathbb{N}, +, \cdot)$}
+
+\begin{itemize}[itemsep=0.5em]
+    \item $0$ is the $+$ identity.
+    \item $+$ is associative.
+    \item $+$ is commutative.
+    \item $1$ is the $\cdot$ identity.
+    \item $\cdot$ is associative.
+    \item $\cdot$ is commutative.
+    \item $\cdot$ distributes over $+$.
+    \item $0$ is the annihilator of $\cdot$.
+\end{itemize}
+
+\section*{Strong Induction}
+
+\textbf{Theorem (Strong Induction).} Let $\varphi$ be a predicate on $\mathbb{N}$.
+If
+\[
+    \varphi(0) \wedge (\forall k \in \mathbb{N})\Big((\forall \ell \in \mathbb{N})
+    (\ell < k \Rightarrow \varphi(\ell)) \Rightarrow \varphi(k)\Big)
+\]
+then $(\forall n \in \mathbb{N})(\varphi(n))$.
+
+The bracketed part $(\forall \ell \in \mathbb{N})(\ell < k \Rightarrow \varphi(\ell))$
+is the \defn{inductive hypothesis} --- we assume $\varphi$ holds for
+\textit{all} values strictly less than $k$, not just the immediate predecessor.
+
+\section*{Fundamental Lemma of Arithmetic}
+
+\textbf{Theorem (Fundamental Lemma of Arithmetic).}
+\[
+    (\forall n \in \mathbb{N})\Big(n \geq 2 \Rightarrow (\exists p \in \mathbb{N})
+    (p \text{ is prime} \wedge p \mid n)\Big)
+\]
+
+\begin{proof*}
+    \textbf{Base case:} Observe $2 \mid 2$ because $2 \cdot 1 = 2$ and $1 \in \mathbb{Z}$.
+    Exercise: NTS $2$ is prime.
+
+    \textbf{Inductive step:} Let $k \in \mathbb{N}$. Assume
+    \[
+        (\forall \ell \in \mathbb{N})\Big(\ell < k \Rightarrow
+        \big(\ell \geq 2 \Rightarrow (\exists p \in \mathbb{N})(p \text{ is prime}
+        \wedge p \mid \ell)\big)\Big).
+    \]
+    Assume $k \geq 2$.
+
+    \textbf{Case 1:} Suppose $k$ is prime. Then $k \mid k$, and $k$ is prime,
+    so $k$ itself is the required prime divisor.
+
+    \textbf{Case 2:} Suppose $k$ is not prime (i.e., $k$ is composite). Then
+    there exists $p \in \mathbb{N}$ such that $p \mid k$ and $p \notin \{1, k\}$.
+    So $p \neq 1$ and $p \neq k$. Notice $p \neq 0$ because if $p = 0$, then
+    $p \mid k$ would imply $k = 0$, contradicting $k \geq 2$. So $p \geq 2$.
+    Also, since $p \mid k$, we have $|p| \leq |k|$, so $p \leq k$, and since
+    $p \neq k$, we get $p < k$. By the inductive hypothesis, there exists
+    $q \in \mathbb{N}$ such that $q$ is prime and $q \mid p$. We know $q \mid k$
+    by transitivity of divisibility.
+
+    Therefore $(\forall n \in \mathbb{N})(n \geq 2 \Rightarrow \exists z \in \mathbb{N}
+    (z \mid n \wedge z \text{ is prime}))$. \qed
+\end{proof*}
+
+\section*{Fundamental Theorem of Arithmetic}
+
+\textbf{Theorem (Fundamental Theorem of Arithmetic).} Every $n \in \mathbb{N}$
+with $n \geq 2$ has a unique prime factorization:
+\[
+    (\forall n \in \mathbb{N})\Big(n \geq 2 \Rightarrow
+    (\exists! k \in \mathbb{N}^+)(\exists! p_1, p_2, \ldots, p_k \in \mathbb{N})
+    (\exists! \alpha_1, \alpha_2, \ldots, \alpha_k \in \mathbb{N}^+)
+\]
+\[
+    \left(n = \prod_{i=1}^{k} p_i^{\alpha_i}\right)
+    \wedge (p_1 \text{ is prime}) \wedge (p_2 \text{ is prime})
+    \wedge \cdots \wedge (p_k \text{ is prime})\Big)
+\]
+
+\section*{GCD and Coprimality}
+
+\textbf{Definition (GCD).} Given $x, y \in \mathbb{Z}$, we say that $d \in \mathbb{N}$
+is the \defn{greatest common divisor} of $x$ and $y$, written $\gcd(x, y) = d$, if:
+\begin{enumerate}[label=\arabic*., itemsep=0.5em]
+    \item $d \mid x$.
+    \item $d \mid y$.
+    \item $(\forall z \in \mathbb{N})(z \mid x \wedge z \mid y \Rightarrow z \mid d)$.
+\end{enumerate}
+
+\textbf{Definition (Coprime).} We say $x, y \in \mathbb{Z}$ are \defn{coprime} if
+$\gcd(x, y) = 1$.
+
+\textbf{Theorem.}
+\[
+    (\forall x, y \in \mathbb{Z})\Big(\gcd(x,y) = 1 \iff
+    (\forall p \in \mathbb{N})\big(p \text{ is prime} \Rightarrow
+    (p \nmid x) \vee (p \nmid y)\big)\Big)
+\]
+
+\textbf{Lemma.}
+\begin{enumerate}[label=\arabic*., itemsep=0.5em]
+    \item $(\forall x, y \in \mathbb{Z})(\gcd(x,y) = 0 \iff x = 0 \wedge y = 0)$.
+    \item $(\forall x, y \in \mathbb{Z})(\gcd(x,y) = x \iff x \mid y)$.
+    \item $(\forall x, y \in \mathbb{Z})(x \neq 0 \vee y \neq 0 \Rightarrow \gcd(x,y) \geq 1)$.
+\end{enumerate}
+
+\textbf{Examples.}
+\begin{itemize}[itemsep=0.5em]
+    \item $\gcd(1, 9) = 1$, \quad $\gcd(2, 4) = 2$, \quad $\gcd(4, 10) = 2$.
+    \item $\gcd(0, 9) = 9$ since $9 \mid 9$. \quad $\gcd(4, 20) = 4 = 2^2$.
+    \item $4 = 2^2$, \quad $10 = 2 \cdot 5$, \quad $20 = 2^2 \cdot 5$.
+    \item $\gcd(0, 1) = 1$, \quad $(\forall x \in \mathbb{Z})(\gcd(1, x) = 1)$.
+\end{itemize}
+
+\section*{LCM}
+
+\textbf{Definition (LCM).} The \defn{least common multiple} of $x, y \in \mathbb{Z}$
+is a natural number $d \in \mathbb{N}$ such that:
+\begin{enumerate}[label=\arabic*., itemsep=0.5em]
+    \item $x \mid d$.
+    \item $y \mid d$.
+    \item $(\forall z \in \mathbb{Z})(x \mid z \wedge y \mid z \Rightarrow d \mid z)$.
+\end{enumerate}
+
+\section*{Euclid's Division Lemma}
+
+\textbf{Theorem (Euclid's Division Lemma).} For any $x, y \in \mathbb{Z}$,
+if $y \neq 0$, then
+\[
+    (\exists! q, r \in \mathbb{Z})(x = q \cdot y + r \ \wedge \ 0 \leq r < |y|).
+\]
+
+\textbf{Lemma.}
+\[
+    (\forall x, y, n \in \mathbb{Z})\Big((n \mid x \wedge n \mid y) \Rightarrow
+    (\forall a, b \in \mathbb{Z})(n \mid ax + by)\Big)
+\]
+
+\textbf{Lemma.}
+\[
+    (\forall a, b, c \in \mathbb{Z})(a = b + c \Rightarrow \gcd(a,b) = \gcd(a,c) = \gcd(b,c))
+\]
+
+\textbf{Algorithm (Euclidean Algorithm).} For $a, b \in \mathbb{Z}$:
+\[
+    \gcd(a, b) :=
+    \begin{cases}
+        a           & \text{if } b = 0 \\
+        \gcd(b, r)  & \text{if } b \neq 0,\ \text{where } r \in \mathbb{Z}
+                      \text{ s.t. } (\exists q \in \mathbb{Z})(a = q \cdot b + r)
+                      \wedge 0 \leq r < |b|
+    \end{cases}
+\]
+Note: $\gcd(x, y) = \gcd(x, r)$ where $x = q \cdot y + r$ and $0 \leq r < |y|$,
+so $\gcd(x,y) = \gcd(y, r)$.
+
+\section*{Bezout's Theorem}
+
+\textbf{Theorem (Bezout).}
+\[
+    (\forall x, y \in \mathbb{Z})(\exists a, b \in \mathbb{Z})(\gcd(x,y) = ax + by)
+\]
+
+\begin{proof*}
+    Let $x, y \in \mathbb{Z}$. WLOG suppose $x \neq 0$ and $y \neq 0$.
+    Consider
+    \[
+        M := \{ax + by \mid a \in \mathbb{Z} \wedge b \in \mathbb{Z} \wedge ax + by > 0\}.
+    \]
+    Observe $(\forall m \in M)(m \in \mathbb{Z} \wedge m > 0)$, so $M \subseteq \mathbb{N}$.
+    If $x > 0$, then $x = 1 \cdot x + 0 \cdot y \in M$. If $x < 0$, then
+    $-x = (-1) \cdot x + 0 \cdot y \in M$. So $M \neq \emptyset$.
+
+    Therefore, there is some $d \in M$ such that $(\forall m \in M)(d \leq m)$.
+    Since $d \in M$, we know $d = ax + by$ for some $a, b \in \mathbb{Z}$.
+
+    We verify the three conditions for $\gcd(x, y) = d$:
+
+    \textbf{Condition 1 --- $d \mid x$:} By Euclid's Division Lemma, there exist
+    $q, r \in \mathbb{Z}$ such that $x = q \cdot d + r$ and $0 \leq r < d$. Then:
+    \[
+        x = q \cdot d + r \Rightarrow x = q(ax+by) + r
+        \Rightarrow (1-qa)x + (-qb)y = r.
+    \]
+    Towards a contradiction, suppose $r \neq 0$, so $0 < r < d$. Since $r > 0$
+    and $r = (1-qa)x + (-qb)y$, we know $r \in M$. But $d \leq r$ by minimality
+    of $d$, contradicting $r < d$. So $r = 0$, hence $x = q \cdot d$, so $d \mid x$.
+
+    \textbf{Condition 2 --- $d \mid y$:} By the same argument applied to $y$,
+    using Euclid's Division Lemma to write $y = q' \cdot d + r'$ with $0 \leq r' < d$,
+    we get $r' = (- q'a)x + (1 - q'b)y \in M$ if $r' \neq 0$, contradicting
+    minimality of $d$. So $r' = 0$, hence $d \mid y$.
+
+    \textbf{Condition 3 --- $d$ is the greatest:} Let $z \in \mathbb{N}$ and
+    suppose $z \mid x$ and $z \mid y$. Since $d = ax + by$, by the linear
+    combination lemma $z \mid ax + by$, so $z \mid d$.
+
+    Therefore $d = \gcd(x, y)$, and $\gcd(x,y) = ax + by$ for some
+    $a, b \in \mathbb{Z}$. \qed
+\end{proof*}
+\section*{Prime Divisibility}
+
+\textbf{Theorem.}
+\[
+    (\forall p \in \mathbb{N})(\forall a, b \in \mathbb{Z})
+    \Big((p \text{ is prime} \wedge p \mid ab) \Rightarrow (p \mid a \vee p \mid b)\Big)
+\]
+
+Note: this is special to primes. In general, $m \mid ab \not\Rightarrow (m \mid a \vee m \mid b)$.
+For example, $20 \mid 50 \cdot 2$ but $20 \nmid 2$ and $20 \nmid 50$.
+
+\end{document}

@@ -1,0 +1,200 @@
+\documentclass[12pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{pagecolor}
+\usepackage{marginnote}
+\usepackage{fancyhdr}
+\usepackage{bm}
+\usepackage{etoolbox}
+\usepackage{mdframed}
+
+\definecolor{cream}{HTML}{faf7f1}
+\pagecolor{cream}
+\mdfdefinestyle{lemmastyle}{backgroundcolor=cream}
+
+\newcommand{\defn}[1]{\textbf{#1}}
+\newcommand{\defeq}{\mathrel{\vcenter{\baselineskip0.5ex \lineskiplimit0pt
+                     \hbox{\scriptsize.}\hbox{\scriptsize.}}}=}
+\newcommand{\T}{\top}
+\newcommand{\F}{\bot}
+\newcommand{\Pow}{\mathbb{P}}
+\newcommand{\suc}{\mathfrak{suc}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Func}{\mathcal{F}}
+\newcommand{\id}{\mathrm{id}}
+
+\newtheoremstyle{proofstyle}
+  {}{}{}{}{\bfseries}{.}{ }{}
+\theoremstyle{proofstyle}
+\newtheorem*{proof*}{Proof}
+
+\newcommand{\sidenote}[1]{\marginnote{\small\itshape #1}}
+
+\makeatletter
+\renewcommand{\maketitle}{%
+  \begin{flushleft}
+    {\Large\bfseries CS173: Discrete Structures}\\[0.3em]
+    {\Large\bfseries Problem Set 7}\\[0.5em]
+    {\normalsize Mohammed Al Salhi}
+  \end{flushleft}
+  \vspace{1em}
+}
+\makeatother
+
+\AtBeginDocument{\mathversion{bold}}
+
+\begin{document}
+
+\maketitle
+
+\begin{enumerate}[left=0pt, itemsep=2em, parsep=1em]
+
+%% ---------------------------------------------------------------
+%% Problem 1
+%% ---------------------------------------------------------------
+\item
+\begin{enumerate}[label=(\alph*), itemsep=1.5em, leftmargin=2em]
+
+  \item Show that $\forall X \forall Y (X \subseteq Y \Rightarrow |X| \leq |Y|)$.
+
+  \begin{proof*}
+  Let $X$ and $Y$ be arbitrary sets, and suppose $X \subseteq Y$. We must show $|X| \leq |Y|$, i.e., that there exists an injection $f : X \to Y$.
+
+  Define $f : X \to Y$ by $f(x) \defeq x$ for all $x \in X$. This is well-defined since $X \subseteq Y$ implies every element of $X$ is an element of $Y$.
+
+  We verify $f$ is injective. Let $x_1, x_2 \in X$ and assume $f(x_1) = f(x_2)$. By definition of $f$, this gives $x_1 = x_2$. Therefore $f$ is injective, and so $|X| \leq |Y|$.
+
+  Since $X$ and $Y$ were arbitrary, $\forall X \forall Y (X \subseteq Y \Rightarrow |X| \leq |Y|)$.\qed
+  \end{proof*}
+
+  \item Let $X$ and $Y$ be sets such that $X \neq \varnothing$ and $Y \neq \varnothing$, and let $f : X \to Y$ be an injection. Prove that there exists a function $g : Y \to X$ such that $g \circ f = \id_X$.
+ 
+  \begin{proof*}
+  Since $X \neq \varnothing$, fix an arbitrary element $x_0 \in X$.
+ 
+  Define $g : Y \to X$ by: for each $y \in Y$,
+  \[
+    g(y) \defeq \begin{cases} x & \text{if } \exists x' \in X \text{ s.t.\ } f(x') = y, \\ x_0 & \text{otherwise.} \end{cases}
+  \]
+  This is well-defined as, if $\exists x \in X$ s.t.\ $f(x) = y$, then that $x$ is unique by injectivity of $f$, so $g(y)$ is determined unambiguously. Otherwise $g(y) = x_0 \in X$.
+ 
+  We verify $g \circ f = \id_X$. Let $x \in X$ be arbitrary. Then $f(x) \in Y$ and $x$ itself witnesses $\exists x' \in X$ s.t.\ $f(x') = f(x)$, so $g(f(x)) = x$ by definition of $g$. Therefore:
+  \[
+    (g \circ f)(x) = g(f(x)) = x = \id_X(x).
+  \]
+  Since $x$ was arbitrary, $g \circ f = \id_X$. \qed
+  \end{proof*}
+
+\end{enumerate}
+
+\newpage
+
+%% ---------------------------------------------------------------
+%% Problem 2
+%% ---------------------------------------------------------------
+\item
+\begin{enumerate}[label=(\alph*), itemsep=1.5em, leftmargin=2em]
+
+  \item Prove that $\forall A \forall B \forall C\,((|A| \leq |B| \land |B| \leq |C|) \Rightarrow |A| \leq |C|)$.
+
+  \begin{proof*}
+  Let $A$, $B$, $C$ be arbitrary sets, and suppose $|A| \leq |B|$ and $|B| \leq |C|$. By definition of $\leq$ on cardinalities, there exist injections $f : A \to B$ and $g : B \to C$.
+
+  Define $h : A \to C$ by $h \defeq g \circ f$, i.e.\ $h(a) = g(f(a))$ for all $a \in A$.
+
+  We verify $h$ is injective. Let $a_1, a_2 \in A$ and suppose $h(a_1) = h(a_2)$, i.e.\ $g(f(a_1)) = g(f(a_2))$. Since $g$ is injective, $f(a_1) = f(a_2)$. Since $f$ is injective, $a_1 = a_2$. Therefore $h$ is injective, so $|A| \leq |C|$. \qed
+  \end{proof*}
+
+  \item Prove that $\forall A \forall B \forall C\,((|A| \geq |B| \land |B| \geq |C|) \Rightarrow |A| \geq |C|)$. 
+
+  \begin{proof*}
+  Let $A$, $B$, $C$ be arbitrary sets, and suppose $|A| \geq |B|$ and $|B| \geq |C|$. By definition, there exist surjections $f : A \to B$ and $g : B \to C$.
+ 
+  Define $h : A \to C$ by $h \defeq g \circ f$.
+ 
+  We verify $h$ is surjective. Let $c \in C$ be arbitrary. Since $g$ is surjective, there exists $b \in B$ with $g(b) = c$. Since $f$ is surjective, there exists $a \in A$ with $f(a) = b$. Then $h(a) = g(f(a)) = g(b) = c$.
+ 
+  Since $c$ was arbitrary, $h$ is surjective, so $|A| \geq |C|$. \qed
+  \end{proof*}
+
+  \item Prove that $\forall A \forall B \forall C\,((|A| = |B| \land |B| = |C|) \Rightarrow |A| = |C|)$.
+
+  \begin{proof*}
+  Let $A$, $B$, $C$ be arbitrary sets, and suppose $|A| = |B|$ and $|B| = |C|$. By Cantor-Schröder-Bernstein theorem, $|A| \leq |B|$, $|B| \leq |A|$, $|B| \leq |C|$, and $|C| \leq |B|$.
+ 
+  By part (a), $|A| \leq |B|$ and $|B| \leq |C|$ gives $|A| \leq |C|$.
+ 
+  By part (a) again, $|C| \leq |B|$ and $|B| \leq |A|$ gives $|C| \leq |A|$.
+ 
+  By Cantor-Schröder-Bernstein theorem, $|A| \leq |C|$ and $|C| \leq |A|$ gives $|A| = |C|$. 
+  
+  \qed
+  \end{proof*}
+
+\end{enumerate}
+
+\newpage
+
+%% ---------------------------------------------------------------
+%% Problem 3
+%% ---------------------------------------------------------------
+\item For any finite sets $A$ and $B$, prove that $|A \cup B| = |A| + |B|$ when $A \cap B = \varnothing$.
+
+\begin{proof*}
+Let $A$ and $B$ be finite sets with $A \cap B = \varnothing$.
+ 
+Since $A \cap B = \varnothing$, we have $(A \cup B) \setminus A = B$. Since $A$ and $B$ are finite, $A \cup B$ is finite. Since $A \subseteq A \cup B$, by the theorem $(Y \subseteq X \Rightarrow |X \setminus Y| = |X| - |Y|)$ with $X = A \cup B$ and $Y = A$:
+\[
+  |(A \cup B) \setminus A| = |A \cup B| - |A|.
+\]
+Since $(A \cup B) \setminus A = B$, we have $|B| = |A \cup B| - |A|$, and therefore $|A \cup B| = |A| + |B|$.
+\end{proof*}
+\newpage
+
+%% ---------------------------------------------------------------
+%% Problem 4
+%% ---------------------------------------------------------------
+\item For any finite set $X$, show that $|\Pow(X)| = 2^{|X|}$.
+
+\begin{proof*}
+We proceed by induction on $|X| = n$.
+
+\textbf{Basis Step ($n = 0$):} If $|X| = 0$ then $X = \varnothing$, so $\Pow(X) = \{\varnothing\}$, which has cardinality $1 = 2^0$. So $|\Pow(\varnothing)| = 1= 2^{0}$.
+
+\textbf{Inductive Hypothesis:} Suppose that for some $k \in \N$, every finite set $Y$ with $|Y| = k$ satisfies $|\Pow(Y)| = 2^k$.
+
+\textbf{Inductive Step:} Let $X$ be a finite set with $|X| = k + 1$. Fix an element $x_0 \in X$, and let $X' \defeq X \setminus \{x_0\}$, so $|X'| = k$ by the corollary.
+
+Partition $\Pow(X)$ into two disjoint sets:
+\begin{align*}
+  \mathcal{A} &\defeq \{ S \in \Pow(X) \mid x_0 \notin S \}, \\
+  \mathcal{B} &\defeq \{ S \in \Pow(X) \mid x_0 \in S \}.
+\end{align*}
+By Problem~3, $|\Pow(X)| = |\mathcal{A}| + |\mathcal{B}|$ since $\mathcal{A}$ and $\mathcal{B}$ are disjoint $\mathcal{A} \cap \mathcal{B} = \varnothing$,.
+
+\textit{Counting $\mathcal{A}$:} A subset $S \subseteq X$ with $x_0 \notin S$ is exactly a subset of $X'$. Thus the map $S \mapsto S$ is a bijection $\mathcal{A} \to \Pow(X')$. By the inductive hypothesis, $|\mathcal{A}| = |\Pow(X')| = 2^k$.
+
+\textit{Counting $\mathcal{B}$:} A subset $S \subseteq X$ with $x_0 \in S$ is exactly a set of the form $T \cup \{x_0\}$ for some $T \subseteq X'$. Thus the map $T \mapsto T \cup \{x_0\}$ is a bijection $\Pow(X') \to \mathcal{B}$.
+
+\quad \textit{Injective:} If $T_1 \cup \{x_0\} = T_2 \cup \{x_0\}$ then $T_1 = T_2$ (removing $x_0$ from both sides, noting $x_0 \notin T_i$ since $T_i \subseteq X'$ and $x_0 \notin X'$).
+
+\quad \textit{Surjective:} For any $S \in \mathcal{B}$, let $T = S \setminus \{x_0\} \subseteq X'$; then $T \cup \{x_0\} = S$.
+
+Therefore $|\mathcal{B}| = |\Pow(X')| = 2^k$.
+
+Combining:
+\[
+  |\Pow(X)| = |\mathcal{A}| + |\mathcal{B}| = 2^k + 2^k = 2^{k+1}.
+\]
+
+By induction, $|\Pow(X)| = 2^{|X|}$ for all finite sets $X$.
+\end{proof*}
+
+\end{enumerate}
+
+\end{document}

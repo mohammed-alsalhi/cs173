@@ -1,0 +1,433 @@
+% Compile with: pdflatex lecture_28.tex
+% Requires: amsmath, amssymb, amsthm, mathtools, xcolor, mdframed,
+%           enumitem, hyperref, pagecolor, microtype
+
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{mathtools}
+\usepackage{xcolor}
+\usepackage{mdframed}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{pagecolor}
+\usepackage{microtype}
+
+% ---------- Colour palette ----------
+\definecolor{cream}{HTML}{FFFDF5}
+\definecolor{defblue}{HTML}{1A4A7A}
+\definecolor{thmgreen}{HTML}{1A5C3A}
+\definecolor{warnAmber}{HTML}{7A4A00}
+\definecolor{dangerRed}{HTML}{7A1A1A}
+\definecolor{boxbluebg}{HTML}{EBF3FB}
+\definecolor{boxgreenbg}{HTML}{EBF7EF}
+\definecolor{boxamberbg}{HTML}{FDF5E6}
+\definecolor{boxredbg}{HTML}{FBEBEB}
+\pagecolor{cream}
+
+% ---------- Theorem styles ----------
+\newtheoremstyle{defstyle}    {8pt}{8pt}{\normalfont}{0pt}{\bfseries\color{defblue}} {.}{0.5em}{}
+\newtheoremstyle{thmstyle}    {8pt}{8pt}{\normalfont}{0pt}{\bfseries\color{thmgreen}}{.}{0.5em}{}
+\newtheoremstyle{notstyle}    {8pt}{8pt}{\normalfont}{0pt}{\bfseries\color{warnAmber}}{.}{0.5em}{}
+\newtheoremstyle{cautionstyle}{8pt}{8pt}{\normalfont}{0pt}{\bfseries\color{dangerRed}}{.}{0.5em}{}
+
+\theoremstyle{defstyle}
+\newtheorem{definition}{Definition}[section]
+
+\theoremstyle{thmstyle}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{lemma}[theorem]{Lemma}
+
+\theoremstyle{notstyle}
+\newtheorem*{remark}{Remark}
+\newtheorem*{example}{Example}
+\newtheorem*{addendum}{Addendum}
+
+\theoremstyle{cautionstyle}
+\newtheorem*{caution}{Caution}
+
+% ---------- Boxes ----------
+\newmdenv[
+  backgroundcolor=boxbluebg, linecolor=defblue, linewidth=2pt,
+  topline=false, rightline=false, bottomline=false,
+  innerleftmargin=10pt, innerrightmargin=10pt,
+  innertopmargin=6pt, innerbottommargin=6pt,
+  skipabove=8pt, skipbelow=8pt
+]{defbox}
+
+\newmdenv[
+  backgroundcolor=boxgreenbg, linecolor=thmgreen, linewidth=2pt,
+  topline=false, rightline=false, bottomline=false,
+  innerleftmargin=10pt, innerrightmargin=10pt,
+  innertopmargin=6pt, innerbottommargin=6pt,
+  skipabove=8pt, skipbelow=8pt
+]{thmbox}
+
+\newmdenv[
+  backgroundcolor=boxamberbg, linecolor=warnAmber, linewidth=2pt,
+  topline=false, rightline=false, bottomline=false,
+  innerleftmargin=10pt, innerrightmargin=10pt,
+  innertopmargin=6pt, innerbottommargin=6pt,
+  skipabove=8pt, skipbelow=8pt
+]{notebox}
+
+\newmdenv[
+  backgroundcolor=boxredbg, linecolor=dangerRed, linewidth=2pt,
+  topline=false, rightline=false, bottomline=false,
+  innerleftmargin=10pt, innerrightmargin=10pt,
+  innertopmargin=6pt, innerbottommargin=6pt,
+  skipabove=8pt, skipbelow=8pt
+]{cautionbox}
+
+% ---------- Macros ----------
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\card}[1]{\lvert #1 \rvert}
+
+\begin{document}
+
+\begin{center}
+  {\Large\bfseries Lecture 28 --- Cardinality}\\[4pt]
+  {\normalsize CS 173: Discrete Structures \quad$\cdot$\quad Comparing and Counting Sizes of Sets}\\[2pt]
+  {\small\color{gray} University of Illinois at Urbana-Champaign}
+\end{center}
+\vspace{1em}\hrule\vspace{1.5em}
+
+% ============================================================
+\section{Review and the Empty-Set Addendum}
+% ============================================================
+
+Cardinality comparisons must work for infinite sets too, so we phrase them in
+terms of functions, not counts.
+
+\begin{defbox}
+\begin{definition}[Cardinality comparison]
+For any sets $A$ and $B$:
+\begin{enumerate}[label=\textnormal{(\roman*)}, leftmargin=2em, itemsep=2pt]
+  \item $\card{A} \leq \card{B} \iff \exists f \;(f : A \to B \,\land\, f \text{ injective})$.
+  \item If $B \neq \emptyset$:
+        $\card{A} \geq \card{B} \iff \exists f \;(f : A \to B \,\land\, f \text{ surjective})$.
+\end{enumerate}
+\end{definition}
+\end{defbox}
+
+\begin{notebox}
+\begin{addendum}[Empty target]
+We stipulate $\card{A} \geq \card{\emptyset}$ for all $A$.
+\end{addendum}
+\end{notebox}
+
+\paragraph{Why the side condition?}
+If $B = \emptyset$ and $A \neq \emptyset$, no function $A \to \emptyset$
+exists, so the surjection definition would falsely give
+$\card{A} \not\geq \card{\emptyset}$. We patch this by fiat. The injection
+definition needs no such fix: the empty function $\emptyset \to B$ is
+vacuously injective, so $\card{\emptyset} \leq \card{B}$ comes for free.
+
+% ============================================================
+\section{Order-Theoretic Properties of $\leq$}
+% ============================================================
+
+\begin{thmbox}
+\begin{theorem}[Reflexivity]
+$\forall A \;(\card{A} = \card{A})$.
+\end{theorem}
+\end{thmbox}
+\begin{proof}
+$\mathrm{id}_A : A \to A$ is a bijection.
+\end{proof}
+
+\begin{thmbox}
+\begin{theorem}[Duality]
+$\forall A\, \forall B \;(\card{A} \leq \card{B} \iff \card{B} \geq \card{A})$.
+\end{theorem}
+\end{thmbox}
+
+\begin{thmbox}
+\begin{theorem}[Transitivity]
+$\forall A\, \forall B\, \forall C \;\bigl((\card{A} \leq \card{B} \,\land\, \card{B} \leq \card{C}) \Rightarrow \card{A} \leq \card{C}\bigr)$.
+\end{theorem}
+\end{thmbox}
+\begin{proof}
+If $f : A \to B$ and $g : B \to C$ are injective, so is $g \circ f$: from
+$g(f(a_1)) = g(f(a_2))$, injectivity of $g$ then $f$ yields $a_1 = a_2$.
+\end{proof}
+
+\begin{thmbox}
+\begin{theorem}[Antisymmetry --- Cantor--Schr\"oder--Bernstein]
+$\forall A\, \forall B \;\bigl((\card{A} \leq \card{B} \,\land\, \card{A} \geq \card{B}) \Rightarrow \card{A} = \card{B}\bigr)$.
+\end{theorem}
+\end{thmbox}
+
+\begin{notebox}
+\begin{remark}
+For finite sets, antisymmetry is immediate by counting; for infinite sets, a
+bijection has to be \emph{built} from the two given functions. This is the
+content of Cantor--Schr\"oder--Bernstein, proved separately.
+\end{remark}
+\end{notebox}
+
+\subsection*{Summary}
+
+\begin{center}
+\renewcommand{\arraystretch}{1.4}
+\begin{tabular}{|l|l|}
+\hline
+\textbf{Property} & \textbf{Statement} \\
+\hline
+Reflexive     & $\card{A} = \card{A}$ \\
+Duality       & $\card{A} \leq \card{B} \iff \card{B} \geq \card{A}$ \\
+Transitive    & $\card{A} \leq \card{B} \,\land\, \card{B} \leq \card{C} \Rightarrow \card{A} \leq \card{C}$ \\
+Antisymmetric & $\card{A} \leq \card{B} \,\land\, \card{A} \geq \card{B} \Rightarrow \card{A} = \card{B}$ \\
+\hline
+\end{tabular}
+\end{center}
+
+Reflexivity, antisymmetry, and transitivity make $\leq$ a partial order on
+cardinalities. Duality just says $\geq$ is $\leq$ read backwards.
+
+% ============================================================
+\section{Inverses}
+% ============================================================
+
+To prove duality, we need: every injection has a surjective left inverse, and
+every surjection has an injective right inverse.
+
+\begin{thmbox}
+\begin{theorem}[Left and right inverses]
+For any $X, Y$ and $f : X \to Y$:
+\begin{enumerate}[label=\textnormal{(\Roman*)}, leftmargin=2.5em, itemsep=2pt]
+  \item If $f$ is injective, then $\exists g \;(g : Y \to X \,\land\, g \text{ surjective} \,\land\, g \circ f = \mathrm{id}_X)$.
+  \item If $f$ is surjective, then $\exists g \;(g : Y \to X \,\land\, g \text{ injective} \,\land\, f \circ g = \mathrm{id}_Y)$.
+\end{enumerate}
+\end{theorem}
+\end{thmbox}
+
+The names ``left'' and ``right'' refer to where $g$ sits in the composition.
+Applied to duality: an injection $A \to B$ produces a surjection $B \to A$
+via~(I), giving $\card{B} \geq \card{A}$; conversely~(II) turns a surjection
+into an injection.
+
+\begin{cautionbox}
+\begin{caution}[Empty-domain corner case]
+Part~(I) fails as stated when $X = \emptyset$ and $Y \neq \emptyset$: the
+empty function $\emptyset \to Y$ is vacuously injective, but no
+$g : Y \to \emptyset$ exists. Either assume $X \neq \emptyset$ or handle the
+case separately, as with the empty-set addendum in Section~1.
+\end{caution}
+\end{cautionbox}
+
+\subsection*{The two-sided inverse}
+
+When $f$ is bijective, both parts apply, and the resulting inverse is unique
+and itself a bijection.
+
+\begin{thmbox}
+\begin{corollary}[Inverse of a bijection]
+If $f : X \to Y$ is a bijection, then
+\[
+  \exists ! g \;\bigl( g : Y \to X
+    \,\land\, g \text{ bijection}
+    \,\land\, g \circ f = \mathrm{id}_X
+    \,\land\, f \circ g = \mathrm{id}_Y \bigr).
+\]
+\end{corollary}
+\end{thmbox}
+
+\begin{defbox}
+\begin{definition}[Inverse $f^{-1}$]
+The unique $g$ above is called \textbf{the inverse} of $f$, written
+$f^{-1} : Y \to X$.
+\end{definition}
+\end{defbox}
+
+The jump from $\exists$ (one-sided) to $\exists !$ (two-sided) is real: a
+non-surjective injection has many left inverses, since values on $Y \setminus
+f(X)$ can be chosen freely. A bijection leaves no such freedom.
+
+% ============================================================
+\section{Categorical Vocabulary: Monic, Epic, Iso}
+% ============================================================
+
+The same three notions can be characterised purely by how $f$ composes with
+other functions --- no reference to elements.
+
+\begin{thmbox}
+\begin{theorem}[Cancellation characterisations]
+For any $X, Y$ and $f : X \to Y$:
+\begin{enumerate}[label=\textnormal{(\arabic*)}, leftmargin=2em, itemsep=4pt]
+  \item $f$ injective $\iff$ $f$ is \textbf{monic}: \;
+        $\forall W,\, \forall h_1, h_2 : W \to X,\;
+         f \circ h_1 = f \circ h_2 \Rightarrow h_1 = h_2$.
+  \item $f$ surjective $\iff$ $f$ is \textbf{epic}: \;
+        $\forall Z,\, \forall k_1, k_2 : Y \to Z,\;
+         k_1 \circ f = k_2 \circ f \Rightarrow k_1 = k_2$.
+  \item $f$ bijection $\iff$ $f$ is an \textbf{isomorphism}: $f$ has a two-sided inverse.
+\end{enumerate}
+\end{theorem}
+\end{thmbox}
+
+\begin{notebox}
+\begin{remark}[Why this matters]
+Mono- (one), epi- (onto), iso- (equal) match the elementary names. The point
+of the rephrasing: injective/surjective/bijective look \emph{inside} $X$ and
+$Y$; monic/epic/iso only mention compositions. This generalises to settings
+where objects don't have ``elements'' --- the entry point to category theory.
+\end{remark}
+\end{notebox}
+
+% ============================================================
+\section{Finite Sets}
+% ============================================================
+
+So far ``$\card{X}$'' has been a comparison device, not a number. For finite
+sets we can finally pin it down to a natural number.
+
+\begin{defbox}
+\begin{definition}[Finite set]
+$X$ is \textbf{finite} iff $\exists n \in \N \;(\card{X} = \card{n})$.
+\end{definition}
+\end{defbox}
+
+Here $n \in \N$ is identified with the set $\{0, 1, \dots, n-1\}$ (so
+$\card{n} = n$ in the everyday sense), and $\card{X} = \card{n}$ means there
+is a bijection $X \to n$.
+
+\begin{defbox}
+\begin{definition}[Cardinality of a finite set]
+If $X$ is finite, define $\card{X} := n$, where $n \in \N$ is the unique
+natural number with $\card{X} = \card{n}$.
+\end{definition}
+\end{defbox}
+
+\begin{notebox}
+\begin{remark}[Why $n$ is unique]
+Two distinct naturals $m \neq n$ satisfy $\card{m} \neq \card{n}$ (no
+bijection between sets of different sizes), so antisymmetry forces the $n$
+matching $X$ to be unique. Without this fact, ``$\card{X} := n$'' would be
+ill-defined.
+\end{remark}
+\end{notebox}
+
+\subsection*{Counting formulas}
+
+\begin{thmbox}
+\begin{theorem}[Subtraction for subsets]
+If $X$ is finite and $Y \subseteq X$, then
+\[
+  \card{X \setminus Y} = \card{X} - \card{Y}.
+\]
+\end{theorem}
+\end{thmbox}
+
+\begin{thmbox}
+\begin{lemma}[Subtraction in general]
+If $X$ is finite and $Y$ is finite, then
+\[
+  \card{X \setminus Y} = \card{X} - \card{X \cap Y}.
+\]
+\end{lemma}
+\end{thmbox}
+
+\begin{notebox}
+\begin{remark}
+The lemma reduces the general case to the previous theorem: $X \setminus Y =
+X \setminus (X \cap Y)$, and $X \cap Y \subseteq X$. The point is that only
+the part of $Y$ \emph{inside} $X$ can be removed; elements of $Y$ outside $X$
+were never there to begin with.
+\end{remark}
+\end{notebox}
+
+\subsection*{Closure properties}
+
+\begin{thmbox}
+\begin{theorem}[Intersections with finite sets]
+If $X$ is finite and $Y$ is a set, then $X \cap Y$ is finite.
+\end{theorem}
+\end{thmbox}
+
+\begin{cautionbox}
+\begin{caution}[Board check]
+The right-hand side of this theorem was partially obscured on the board.
+The natural reading --- ``$X \cap Y$ is finite'' --- is the standard companion
+to the next theorem, but the conclusion could instead have been a counting
+formula such as $\card{X \cap Y} \leq \card{X}$. Worth confirming.
+\end{caution}
+\end{cautionbox}
+
+\begin{thmbox}
+\begin{theorem}[Subsets of finite sets are finite]
+If $X$ is finite and $Y \subseteq X$, then $Y$ is finite.
+
+\hfill ($\star$ exercise)
+\end{theorem}
+\end{thmbox}
+
+% ============================================================
+\section{Counting Formulas}
+% ============================================================
+
+With finiteness defined, we can prove the elementary counting laws on
+products and unions.
+
+\subsection*{Products}
+
+\begin{thmbox}
+\begin{theorem}[Cardinality of a product]
+If $X$ and $Y$ are finite, then
+\[
+  \card{X \times Y} = \card{X} \cdot \card{Y}.
+\]
+\end{theorem}
+\end{thmbox}
+
+\begin{notebox}
+\begin{remark}[Why the right-hand side makes sense]
+On the natural numbers, the product is the size of the standard set
+$n \cdot m = \{0, 1, 2, \dots, n \cdot m - 1\} = \{w \in \N \mid w < n \cdot m\}$,
+matching the von Neumann construction used to define $\card{n} = n$. So
+``$\card{X} \cdot \card{Y}$'' is genuinely a natural number, and the theorem
+says the product set has exactly that many elements.
+\end{remark}
+\end{notebox}
+
+\subsection*{Unions}
+
+\begin{thmbox}
+\begin{lemma}[Two-set inclusion--exclusion]
+If $X$ and $Y$ are finite, then
+\[
+  \card{X \cup Y} = \card{X} + \card{Y} - \card{X \cap Y}.
+\]
+\end{lemma}
+\end{thmbox}
+
+The correction $-\card{X \cap Y}$ accounts for elements counted twice when
+adding $\card{X}$ and $\card{Y}$ separately.
+
+\begin{thmbox}
+\begin{theorem}[Inclusion/Exclusion --- union bound]
+If $n \in \N$ and $A_1, A_2, \dots, A_n$ are finite sets, then
+\[
+  \left\lvert \bigcup_{i=1}^{n} A_i \right\rvert
+  \;\leq\;
+  \sum_{i=1}^{n} \card{A_i}.
+\]
+\end{theorem}
+\end{thmbox}
+
+\begin{notebox}
+\begin{remark}[Inequality, not equality]
+For $n$ sets the exact formula has alternating-sign correction terms (the
+full inclusion--exclusion principle); the inequality stated here drops them
+and gives only the upper bound. Equality holds iff the $A_i$ are pairwise
+disjoint, in which case all the correction terms vanish. The two-set lemma
+above is the smallest case where the correction is actually visible:
+$\card{A_1 \cup A_2} = \card{A_1} + \card{A_2} - \card{A_1 \cap A_2} \leq
+\card{A_1} + \card{A_2}$.
+\end{remark}
+\end{notebox}
+
+\end{document}

@@ -1,0 +1,351 @@
+\documentclass[11pt]{article}
+
+% ── Packages ──────────────────────────────────────────────────────────────────
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{mathtools}
+\usepackage{xcolor}
+\usepackage{mdframed}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{pagecolor}
+\usepackage{microtype}
+
+% ── Page colour (cream) ───────────────────────────────────────────────────────
+\definecolor{cream}{HTML}{FFFDF5}
+\definecolor{defblue}{HTML}{1A4A7A}
+\definecolor{thmgreen}{HTML}{1A5C3A}
+\definecolor{warnAmber}{HTML}{7A4A00}
+\definecolor{dangerRed}{HTML}{7A1A1A}
+\definecolor{boxbluebg}{HTML}{EBF3FB}
+\definecolor{boxgreenbg}{HTML}{EBF7EF}
+\definecolor{boxamberbg}{HTML}{FDF5E6}
+\definecolor{boxredbg}{HTML}{FBEBEB}
+\pagecolor{cream}
+
+% ── Theorem environments ───────────────────────────────────────────────────────
+\newtheoremstyle{defstyle}{8pt}{8pt}{\normalfont}{0pt}{\bfseries\color{defblue}}{.}{0.5em}{}
+\newtheoremstyle{thmstyle}{8pt}{8pt}{\normalfont}{0pt}{\bfseries\color{thmgreen}}{.}{0.5em}{}
+\newtheoremstyle{notstyle}{8pt}{8pt}{\normalfont}{0pt}{\bfseries\color{warnAmber}}{.}{0.5em}{}
+\newtheoremstyle{cautionstyle}{8pt}{8pt}{\normalfont}{0pt}{\bfseries\color{dangerRed}}{.}{0.5em}{}
+
+\theoremstyle{defstyle}
+\newtheorem{definition}{Definition}[section]
+
+\theoremstyle{thmstyle}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{corollary}[theorem]{Corollary}
+
+\theoremstyle{notstyle}
+\newtheorem*{remark}{Remark}
+\newtheorem*{example}{Example}
+
+\theoremstyle{cautionstyle}
+\newtheorem*{caution}{Caution}
+
+% ── Coloured framed boxes ──────────────────────────────────────────────────────
+\newmdenv[
+  backgroundcolor=boxbluebg,
+  linecolor=defblue,
+  linewidth=2pt,
+  topline=false, rightline=false, bottomline=false,
+  innerleftmargin=10pt, innerrightmargin=10pt,
+  innertopmargin=6pt, innerbottommargin=6pt,
+  skipabove=8pt, skipbelow=8pt
+]{defbox}
+
+\newmdenv[
+  backgroundcolor=boxgreenbg,
+  linecolor=thmgreen,
+  linewidth=2pt,
+  topline=false, rightline=false, bottomline=false,
+  innerleftmargin=10pt, innerrightmargin=10pt,
+  innertopmargin=6pt, innerbottommargin=6pt,
+  skipabove=8pt, skipbelow=8pt
+]{thmbox}
+
+\newmdenv[
+  backgroundcolor=boxamberbg,
+  linecolor=warnAmber,
+  linewidth=2pt,
+  topline=false, rightline=false, bottomline=false,
+  innerleftmargin=10pt, innerrightmargin=10pt,
+  innertopmargin=6pt, innerbottommargin=6pt,
+  skipabove=8pt, skipbelow=8pt
+]{notebox}
+
+\newmdenv[
+  backgroundcolor=boxredbg,
+  linecolor=dangerRed,
+  linewidth=2pt,
+  topline=false, rightline=false, bottomline=false,
+  innerleftmargin=10pt, innerrightmargin=10pt,
+  innertopmargin=6pt, innerbottommargin=6pt,
+  skipabove=8pt, skipbelow=8pt
+]{cautionbox}
+
+% ── Shorthand macros ──────────────────────────────────────────────────────────
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Zn}{\mathbb{Z}_n}
+\newcommand{\modn}{\pmod{n}}
+\newcommand{\congn}{\equiv}
+
+% ── Document ──────────────────────────────────────────────────────────────────
+\begin{document}
+
+\begin{center}
+  {\Large\bfseries Lecture 24 --- Modular Congruence}\\[4pt]
+  {\normalsize CS 173: Discrete Structures \quad$\cdot$\quad Number Theory}\\[2pt]
+  {\small\color{gray} University of Illinois at Urbana-Champaign}
+\end{center}
+
+\vspace{1em}
+\hrule
+\vspace{1.5em}
+
+% ══════════════════════════════════════════════════════════════════════════════
+\section{Definition of Congruence Modulo \texorpdfstring{$n$}{n}}
+
+\begin{defbox}
+\begin{definition}[Congruence modulo $n$]
+Given $x, y \in \Z$ and $n \in \N^+$, we say $x$ is \emph{congruent to $y$ modulo $n$}, written
+\[
+  x \equiv y \pmod{n},
+\]
+if and only if $n \mid (x - y)$.
+\end{definition}
+\end{defbox}
+
+\begin{notebox}
+\begin{remark}
+The symbol $\equiv$ here denotes an \emph{equivalence relation} on $\Z$.  Think of it as a structured version of $=$: rather than asking whether two integers are identical, we ask whether they leave the same remainder when divided by $n$.  The biconditional $p \equiv q$ uses $=$ as the underlying sign of equality at the level of equivalence classes.
+\end{remark}
+\end{notebox}
+
+% ══════════════════════════════════════════════════════════════════════════════
+\section{Congruence is an Equivalence Relation}
+
+\begin{thmbox}
+\begin{theorem}[Reflexivity]
+\[
+  \forall x \in \Z,\quad x \equiv x \pmod{n}.
+\]
+\begin{proof}
+$x - x = 0$ and $n \mid 0$ for all $n \in \N^+$.
+\end{proof}
+\end{theorem}
+\end{thmbox}
+
+\begin{thmbox}
+\begin{theorem}[Symmetry]
+\[
+  \forall x, y \in \Z,\quad x \equiv y \pmod{n} \;\Rightarrow\; y \equiv x \pmod{n}.
+\]
+\begin{proof}
+If $n \mid (x-y)$, then $n \mid (-(x-y)) = (y-x)$.
+\end{proof}
+\end{theorem}
+\end{thmbox}
+
+\begin{thmbox}
+\begin{theorem}[Transitivity]
+\[
+  \forall x,y,z \in \Z,\quad \bigl(x \equiv y \pmod{n} \;\wedge\; y \equiv z \pmod{n}\bigr)
+  \;\Rightarrow\; x \equiv z \pmod{n}.
+\]
+\begin{proof}
+$n \mid (x-y)$ and $n \mid (y-z)$ imply $n \mid \bigl((x-y)+(y-z)\bigr) = x-z$.
+\end{proof}
+\end{theorem}
+\end{thmbox}
+
+% ══════════════════════════════════════════════════════════════════════════════
+\section{Congruence and Addition}
+
+\begin{thmbox}
+\begin{theorem}[Addition compatibility]
+\[
+  (\forall n \in \N^+)\;(\forall x,y \in \Z)\;(\forall z \in \Z)\qquad
+  x \equiv y \pmod{n} \;\Rightarrow\; x+z \equiv y+z \pmod{n}.
+\]
+\end{theorem}
+\end{thmbox}
+
+\begin{thmbox}
+\begin{theorem}[Additive cancellation]
+Addition cancellation holds unconditionally:
+\[
+  x + z \equiv y + z \pmod{n} \;\Rightarrow\; x \equiv y \pmod{n}.
+\]
+\end{theorem}
+\end{thmbox}
+
+% ══════════════════════════════════════════════════════════════════════════════
+\section{Congruence and Multiplication}
+
+\begin{thmbox}
+\begin{theorem}[Multiplication compatibility]
+\[
+  (\forall n \in \N^+)\;(\forall x,y \in \Z)\;(\forall z \in \Z)\qquad
+  x \equiv y \pmod{n} \;\Rightarrow\; x \cdot z \equiv y \cdot z \pmod{n}.
+\]
+\end{theorem}
+\end{thmbox}
+
+\begin{cautionbox}
+\begin{caution}[Multiplicative cancellation is \emph{not} always valid]
+The converse requires an extra hypothesis.  In general,
+\[
+  x \cdot z \equiv y \cdot z \pmod{n}
+  \;\;\text{and}\;\; z \not\equiv 0 \pmod{n}
+  \;\;\not\Rightarrow\;\; x \equiv y \pmod{n}.
+\]
+Cancellation \emph{is} valid when $\gcd(z, n) = 1$:
+\[
+  x \cdot z \equiv y \cdot z \pmod{n}
+  \;\;\text{and}\;\; \gcd(z,n)=1
+  \;\;\Rightarrow\;\; x \equiv y \pmod{n}.
+\]
+\end{caution}
+\end{cautionbox}
+
+% ══════════════════════════════════════════════════════════════════════════════
+\section{The Set \texorpdfstring{$\mathbb{Z}_n$}{Zn} and Modular Arithmetic}
+
+\subsection{Definition of \texorpdfstring{$\mathbb{Z}_n$}{Zn}}
+
+\begin{defbox}
+\begin{definition}[Integers modulo $n$]
+For $n \in \N^+$, define
+\[
+  \mathbb{Z}_n \;=\; \{0, 1, 2, \ldots, n-1\}.
+\]
+This is the set of \emph{residues} modulo $n$.  Every integer $x \in \Z$ is congruent to exactly one element of $\mathbb{Z}_n$.
+\end{definition}
+\end{defbox}
+
+\subsection{Modular Addition and Multiplication on \texorpdfstring{$\mathbb{Z}_n$}{Zn}}
+
+\begin{defbox}
+\begin{definition}[Operations on $\mathbb{Z}_n$]
+For $a, b \in \mathbb{Z}_n$, define:
+\begin{align*}
+  a \oplus b &\;=\; (a + b) \bmod n, \\
+  a \otimes b &\;=\; (a \cdot b) \bmod n.
+\end{align*}
+Results are always reduced to lie in $\{0, 1, \ldots, n-1\}$.
+\end{definition}
+\end{defbox}
+
+\begin{example}
+Working in $\mathbb{Z}_6 = \{0,1,2,3,4,5\}$:
+\begin{align*}
+  1 \cdot 2 &= 2, \\
+  2 \cdot 2 &= 4, \\
+  4 \cdot 4 &\equiv -2 \equiv 4 \pmod{6}, \\
+  2 + 1 &= 3, \\
+  2 + 4 &\equiv 0 \pmod{6}, \\
+  3 + 3 &\equiv 0 \pmod{6}, \\
+  1 + 5 &\equiv 0 \pmod{6}, \\
+  2 + 5 &\equiv 1 \pmod{6}, \\
+  3 + 0 &\equiv 3 \pmod{6}.
+\end{align*}
+\end{example}
+
+\subsection{Algebraic Properties of \texorpdfstring{$(\mathbb{Z}_n, +, \cdot)$}{(Zn, +, .)}}
+
+$\mathbb{Z}_n$ equipped with modular addition and multiplication satisfies the following properties.
+
+\begin{thmbox}
+\begin{theorem}[Commutativity]
+For all $a, b \in \mathbb{Z}_n$:
+\[
+  a \oplus b = b \oplus a, \qquad a \otimes b = b \otimes a.
+\]
+\end{theorem}
+\end{thmbox}
+
+\begin{thmbox}
+\begin{theorem}[Associativity]
+For all $a, b, c \in \mathbb{Z}_n$:
+\[
+  (a \oplus b) \oplus c = a \oplus (b \oplus c), \qquad
+  (a \otimes b) \otimes c = a \otimes (b \otimes c).
+\]
+\end{theorem}
+\end{thmbox}
+
+\begin{thmbox}
+\begin{theorem}[Distributivity]
+For all $a, b, c \in \mathbb{Z}_n$:
+\[
+  a \otimes (b \oplus c) = (a \otimes b) \oplus (a \otimes c).
+\]
+\end{theorem}
+\end{thmbox}
+
+\begin{thmbox}
+\begin{theorem}[Additive identity]
+The element $0 \in \mathbb{Z}_n$ is the additive identity:
+\[
+  \forall a \in \mathbb{Z}_n, \quad a \oplus 0 = a.
+\]
+\end{theorem}
+\end{thmbox}
+
+\begin{thmbox}
+\begin{theorem}[Additive inverse]
+Every element of $\mathbb{Z}_n$ has an additive inverse.  For $a \in \mathbb{Z}_n$,
+\[
+  -a \;\equiv\; n - a \pmod{n}.
+\]
+That is, $a \oplus (n-a) \equiv 0 \pmod{n}$.
+\end{theorem}
+\end{thmbox}
+
+\begin{notebox}
+\begin{remark}
+The presence of additive inverses is precisely what the board examples illustrate:
+\[
+  1+5\equiv 0,\quad 2+4\equiv 0,\quad 3+3\equiv 0 \pmod{6}.
+\]
+Each pair $(a,\, 6-a)$ sums to $0$ in $\mathbb{Z}_6$.
+\end{remark}
+\end{notebox}
+
+\begin{thmbox}
+\begin{theorem}[Multiplicative identity]
+The element $1 \in \mathbb{Z}_n$ is the multiplicative identity:
+\[
+  \forall a \in \mathbb{Z}_n, \quad a \otimes 1 = a.
+\]
+\end{theorem}
+\end{thmbox}
+
+\begin{cautionbox}
+\begin{caution}[Multiplicative inverses need not exist]
+Unlike additive inverses, a multiplicative inverse of $a$ in $\mathbb{Z}_n$ exists if and only if $\gcd(a,n) = 1$.  When $n$ is prime, every nonzero element has a multiplicative inverse and $\mathbb{Z}_n$ forms a \emph{field}.
+\end{caution}
+\end{cautionbox}
+
+% ══════════════════════════════════════════════════════════════════════════════
+\section{Summary}
+
+\begin{enumerate}[leftmargin=*, label=\arabic*.]
+  \item $x \equiv y \pmod{n} \iff n \mid (x-y)$.
+  \item $\equiv \pmod{n}$ is an equivalence relation (reflexive, symmetric, transitive).
+  \item Addition is fully compatible: cancellation holds in both directions.
+  \item Multiplication is compatible in one direction.  Cancellation requires $\gcd(z,n)=1$.
+  \item $\mathbb{Z}_n = \{0,1,\ldots,n-1\}$ is closed under modular $+$ and $\cdot$.
+  \item $(\mathbb{Z}_n, +)$ is a commutative group: it is associative, commutative, has an identity ($0$), and every element has an additive inverse ($n-a$).
+  \item $(\mathbb{Z}_n, +, \cdot)$ satisfies distributivity, making it a commutative ring.
+\end{enumerate}
+
+\begin{notebox}
+\begin{remark}[Looking ahead]
+These ring-theoretic properties underpin modular arithmetic.  We will use them to solve linear congruences $ax \equiv b \pmod{n}$ via the extended Euclidean algorithm, and to characterise when solutions exist and how many there are.
+\end{remark}
+\end{notebox}
+
+\end{document}

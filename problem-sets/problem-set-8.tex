@@ -1,0 +1,245 @@
+\documentclass[12pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{pagecolor}
+\usepackage{marginnote}
+\usepackage{fancyhdr}
+\usepackage{bm}
+\usepackage{etoolbox}
+\usepackage{mdframed}
+
+\definecolor{cream}{HTML}{faf7f1}
+\pagecolor{cream}
+\mdfdefinestyle{lemmastyle}{backgroundcolor=cream}
+
+\newcommand{\defn}[1]{\textbf{#1}}
+\newcommand{\defeq}{\mathrel{\vcenter{\baselineskip0.5ex \lineskiplimit0pt
+                     \hbox{\scriptsize.}\hbox{\scriptsize.}}}=}
+\newcommand{\T}{\top}
+\newcommand{\F}{\bot}
+\newcommand{\Pow}{\mathbb{P}}
+\newcommand{\suc}{\mathfrak{suc}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\Func}{\mathcal{F}}
+\newcommand{\id}{\mathrm{id}}
+
+\newtheoremstyle{proofstyle}
+  {}{}{}{}{\bfseries}{.}{ }{}
+\theoremstyle{proofstyle}
+\newtheorem*{proof*}{Proof}
+
+\newcommand{\sidenote}[1]{\marginnote{\small\itshape #1}}
+
+\makeatletter
+\renewcommand{\maketitle}{%
+  \begin{flushleft}
+    {\Large\bfseries CS173: Discrete Structures}\\[0.3em]
+    {\Large\bfseries Problem Set 8}\\[0.5em]
+    {\normalsize Mohammed Al Salhi}
+  \end{flushleft}
+  \vspace{1em}
+}
+\makeatother
+
+\AtBeginDocument{\mathversion{bold}}
+
+\begin{document}
+
+\maketitle
+
+\begin{enumerate}[left=0pt, itemsep=2em, parsep=1em]
+
+%% ---------------------------------------------------------------
+%% Problem 1
+%% ---------------------------------------------------------------
+\item An archaeologist on a recent expedition to the British Isles has discovered, for each
+positive natural number $n \in \mathbb{N}^{+}$, evidence of a manuscript written in a language
+called nglish. Each such manuscript is exactly $n$ pages long and contains precisely $2n$
+distinct words. Prove each manuscript contains a page with two distinct words on it.
+
+\begin{proof*}
+
+Let $n \in \mathbb{N}^{+}$ be arbitrary, and consider an nglish manuscript with $n$ pages
+and $2n$ distinct words. For each $i \in n$, let $P_i$ denote the set of words on page $i$.
+
+Since the manuscript contains $2n$ distinct words,
+$\left|\bigcup_{i=0}^{n-1} P_i\right| = 2n$.
+
+Assume for contradiction that no page contains two distinct words, i.e.,
+$(\forall i \in n)(|P_i| \leq 1)$. Observe:
+\[
+  2n = \left|\bigcup_{i=0}^{n-1} P_i\right| \leq \sum_{i=0}^{n-1} |P_i| \leq \sum_{i=0}^{n-1} 1 = n.
+\]
+This gives $2n \leq n$, a contradiction since $n \in \mathbb{N}^{+}$.
+
+Therefore $(\exists i \in n)(|P_i| \geq 2)$, i.e., a manuscript contains a page with two
+distinct words. \qed
+
+\end{proof*}
+
+\newpage
+
+%% ---------------------------------------------------------------
+%% Problem 2
+%% ---------------------------------------------------------------
+\item Show that there exist $a, b \in \mathbb{N}$ such that $256 < a < b$ and $7^{a} \equiv 7^{b} \pmod{512}$.
+
+\begin{proof*}
+By the Euclidean Division Lemma,
+\[
+(\forall a \in \mathbb{Z})(\forall b \in \mathbb{Z} \setminus \{0\})(\exists! q, r \in \mathbb{Z})(a = bq + r \land 0 \leq r < |b|).
+\]
+Define $\mathbin{\%} : \mathbb{Z} \times (\mathbb{Z} \setminus \{0\}) \to \mathbb{Z}$ by
+$x \mathbin{\%} y \defeq r$, where $r$ is the unique integer guaranteed by the Euclidean
+Division Lemma satisfying $x = yq + r$ and $0 \leq r < |y|$ for some $q \in \mathbb{Z}$.
+
+Let $A \defeq \mathbb{N} \setminus \{k \in \mathbb{N} \mid k < 257\}$ and
+$B \defeq \{k \in \mathbb{N} \mid k < 512\}$, so $|B| = 512$.
+
+Define $f : A \to B$ by $(\forall x \in A)(f(x) \defeq 7^x \mathbin{\%} 512)$.
+
+By the Corollary, $|A| = |\mathbb{N}|$. By the Theorem, an infinite set is larger than any
+finite set, so
+\[
+|A| = |\mathbb{N}| > |B| = 512.
+\]
+
+By the Pigeonhole Theorem,
+\[
+    |A| > |B| \Rightarrow (\forall f : A \to B)(\exists x, y \in A)(x \neq y \land f(x) = f(y)),
+\]
+so $(\exists c, d \in A)(c \neq d \land f(c) = f(d))$, i.e., $7^c \mathbin{\%} 512 = 7^d \mathbin{\%} 512$.
+
+By the Euclidean Division Lemma, $7^c = 512 q_1 + r_1$ and $7^d = 512 q_2 + r_2$ with
+$0 \leq r_1, r_2 < 512$. Since $f(c) = f(d)$, we have $r_1 = r_2$, so subtracting gives
+$7^c - 7^d = 512(q_1 - q_2)$. Since $q_1 - q_2 \in \mathbb{Z}$, we have
+$512 \mid (7^c - 7^d)$, i.e., $7^c \equiv 7^d \pmod{512}$.
+
+Let $a \defeq \min(c, d)$ and $b \defeq \max(c, d)$. Since $c \neq d$ we have $a < b$,
+and since $c, d \in A$ we have $a, b > 256$.
+
+Therefore there exist $a, b \in \mathbb{N}$ such that $256 < a < b$ and $7^a \equiv 7^b \pmod{512}$. \qed
+\end{proof*}
+
+\newpage
+
+%% ---------------------------------------------------------------
+%% Problem 3
+%% ---------------------------------------------------------------
+\item Consider the set $\mathcal{S} \defeq \{3, 4, 7, 8, 9, 10, 12, 15, 18, 19, 27, 28\}$. Show that, in any subset
+$\mathcal{X} \subseteq \mathcal{S}$ of cardinality $|\mathcal{X}| \geq 9$, there exist three distinct elements
+$x_1, x_2, x_3 \in \mathcal{X}$ such that $x_1 + x_2 + x_3 = 40$.
+
+\begin{proof*}
+Partition $\mathcal{S}$ into four triples:
+\[
+  G_1 = \{3, 10, 27\}, \quad G_2 = \{9, 12, 19\}, \quad G_3 = \{4, 8, 28\}, \quad G_4 = \{7, 15, 18\},
+\]
+where $3+10+27 = 9+12+19 = 4+8+28 = 7+15+18 = 40$, the $G_i$ are pairwise disjoint,
+and $G_1 \cup G_2 \cup G_3 \cup G_4 = \mathcal{S}$.
+
+Let $\mathcal{X} \subseteq \mathcal{S}$ with $|\mathcal{X}| \geq 9$. Suppose for contradiction
+that no three distinct elements of $\mathcal{X}$ sum to 40. If $G_i \subseteq \mathcal{X}$
+for some $i$, then the three distinct elements of $G_i$ are in $\mathcal{X}$ and sum to 40,
+contradicting our assumption. Hence $|\mathcal{X} \cap G_i| \leq 2$ for each $i$.
+
+Since $\{G_1, G_2, G_3, G_4\}$ partitions $\mathcal{S}$ and $\mathcal{X} \subseteq \mathcal{S}$,
+the sets $\mathcal{X} \cap G_1, \ldots, \mathcal{X} \cap G_4$ are pairwise disjoint with union
+$\mathcal{X}$. Observe,
+\[
+  |\mathcal{X}| = \sum_{i=1}^{4} |\mathcal{X} \cap G_i| \leq 4 \times 2 = 8,
+\]
+contradicting $|\mathcal{X} \geq 9|$.
+
+Therefore our claim that $|\mathcal{X} \cap G_i| \leq 2$ for all $i$ is false, so there
+exists some $i$ with $|\mathcal{X} \cap G_i| = 3$, i.e., $G_i \subseteq \mathcal{X}$. The
+three distinct elements of $G_i$ are then in $\mathcal{X}$ and sum to 40, giving
+$x_1, x_2, x_3 \in \mathcal{X}$ with $x_1 + x_2 + x_3 = 40$. \qed
+\end{proof*}
+\newpage
+
+%% ---------------------------------------------------------------
+%% Problem 4
+%% ---------------------------------------------------------------
+\item For this problem, you may assume that $\binom{n}{0} = \binom{n}{n} = 1$ for all $n \in \mathbb{N}$.
+Prove that, for every $n, k \in \mathbb{N}$ such that $k \leq n$, we have
+$\binom{n}{k} = \binom{n}{n-k}$.
+
+\begin{proof*}
+Let $n, k \in \mathbb{N}$ with $k \leq n$. Define
+\[
+  S_k \defeq \{B \mid B \subseteq n \land |B| = k\}, \qquad
+  S_{n-k} \defeq \{B \mid B \subseteq n \land |B| = n-k\},
+\]
+so that $\binom{n}{k} = |S_k|$ and $\binom{n}{n-k} = |S_{n-k}|$ by definition.
+
+Define $f : S_k \to S_{n-k}$ by $(\forall B \in S_k)(f(B) \defeq n \setminus B)$.
+
+\textbf{Well-defined.} Let $B \in S_k$. Then $f(B) = n \setminus B \subseteq n$, and by the
+Theorem ($B \subseteq n \Rightarrow |n \setminus B| = |n| - |B|$), we have
+$|n \setminus B| = n - k$, so $f(B) \in S_{n-k}$.
+
+\textbf{Injective.} Let $B_1, B_2 \in S_k$ with $f(B_1) = f(B_2)$. Then
+$n \setminus B_1 = n \setminus B_2$. Since $B_1, B_2 \subseteq n$, we have
+$B_1 = n \setminus (n \setminus B_1) = n \setminus (n \setminus B_2) = B_2$.
+
+\textbf{Surjective.} Let $C \in S_{n-k}$. Then $n \setminus C \subseteq n$, and by the
+Theorem, $|n \setminus C| = |n| - |C| = n - (n-k) = k$, so $n \setminus C \in S_k$.
+Then $f(n \setminus C) = n \setminus (n \setminus C) = C$.
+
+Since $f$ is a bijection, $|S_k| = |S_{n-k}|$, i.e., $\binom{n}{k} = \binom{n}{n-k}$. \qed
+\end{proof*}
+\newpage
+
+%% ---------------------------------------------------------------
+%% Problem 5
+%% ---------------------------------------------------------------
+\item We define a \defn{finite binary string} to be a function $b : n \to \{0, 1\}$, where $n \in \mathbb{N}$
+is the length of the string. We define an \defn{infinite binary string} to be a function
+$b : \mathbb{N} \to \{0, 1\}$.
+
+How many infinite binary strings are there that each contain one contiguous finite
+substring consisting only of $1$s? Formalize your claim and justify it with a proof.
+
+\textbf{Claim:} There are countably many infinite binary strings containing exactly one
+contiguous finite substring of all 1s, i.e., the set of such strings has cardinality $|\mathbb{N}|$.
+
+\begin{proof*}
+Let $\mathcal{T}$ denote the set of all infinite binary strings $b : \mathbb{N} \to \{0,1\}$
+such that the set $\{n \in \mathbb{N} \mid b(n) = 1\}$ is a nonempty finite contiguous
+interval.
+
+For $i, k \in \mathbb{N}$ with $i \leq k$, define $b_{i,k} : \mathbb{N} \to \{0,1\}$ by
+\[
+  b_{i,k}(n) \defeq \begin{cases} 0 & \text{if } n < i \\ 1 & \text{if } i \leq n \leq k \\ 0 & \text{if } n > k \end{cases}
+\]
+
+Let $S \defeq \{(i,k) \in \mathbb{N} \times \mathbb{N} \mid i \leq k\}$ and define
+$f : S \to \mathcal{T}$ by $f(i,k) \defeq b_{i,k}$.
+
+\textbf{Injective.} Let $(i_1, k_1), (i_2, k_2) \in S$ with $f(i_1, k_1) = f(i_2, k_2)$,
+and let $b = b_{i_1, k_1} = b_{i_2, k_2}$. Then
+$i_1 = \min\{n \in \mathbb{N} \mid b(n) = 1\} = i_2$ and
+$k_1 = \max\{n \in \mathbb{N} \mid b(n) = 1\} = k_2$.
+
+\textbf{Surjective.} Let $b \in \mathcal{T}$. Since $b$ has exactly one maximal block of 1s,
+let $i \defeq \min\{n \in \mathbb{N} \mid b(n) = 1\}$ and $k \defeq \max\{n \in \mathbb{N} \mid b(n) = 1\}$.
+Then $(i, k) \in S$ and $f(i, k) = b$.
+
+Since $f$ is a bijection, $|S| = |\mathcal{T}|$. The set $\{(0, k) \mid k \in \mathbb{N}\} \subseteq S$
+is infinite, so $S$ is infinite. Since $S \subseteq \mathbb{N} \times \mathbb{N}$ and
+$|\mathbb{N} \times \mathbb{N}| = |\mathbb{N}|$, by Theorem, so $|S| = |\mathbb{N}|$. Therefore $|\mathcal{T}| = |\mathbb{N}|$.
+
+Including the all-zero string adds one element to our count, giving $|\mathcal{T}| + 1$
+total strings. Since $\mathcal{T}$ is infinite, adding a single element does not change
+its cardinality, so the total count remains $|\mathbb{N}|$. \qed
+\end{proof*}
+\end{enumerate}
+
+\end{document}

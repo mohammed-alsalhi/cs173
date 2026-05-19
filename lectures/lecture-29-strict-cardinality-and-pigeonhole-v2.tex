@@ -1,0 +1,243 @@
+% Compile with: pdflatex lecture29.tex
+% Requires: amsmath, amssymb, amsthm, mathtools, xcolor, mdframed,
+%           enumitem, hyperref, pagecolor, microtype
+
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{mathtools}
+\usepackage{xcolor}
+\usepackage{mdframed}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{pagecolor}
+\usepackage{microtype}
+
+% ---------- Colours ----------
+\definecolor{cream}{HTML}{FFFDF5}
+\definecolor{defblue}{HTML}{1A4A7A}
+\definecolor{thmgreen}{HTML}{1A5C3A}
+\definecolor{warnAmber}{HTML}{7A4A00}
+\definecolor{dangerRed}{HTML}{7A1A1A}
+\definecolor{boxbluebg}{HTML}{EBF3FB}
+\definecolor{boxgreenbg}{HTML}{EBF7EF}
+\definecolor{boxamberbg}{HTML}{FDF5E6}
+\definecolor{boxredbg}{HTML}{FBEBEB}
+\pagecolor{cream}
+
+% ---------- Theorem styles ----------
+\newtheoremstyle{defstyle}    {8pt}{8pt}{\normalfont}{0pt}{\bfseries\color{defblue}}  {.}{0.5em}{}
+\newtheoremstyle{thmstyle}    {8pt}{8pt}{\normalfont}{0pt}{\bfseries\color{thmgreen}} {.}{0.5em}{}
+\newtheoremstyle{notstyle}    {8pt}{8pt}{\normalfont}{0pt}{\bfseries\color{warnAmber}}{.}{0.5em}{}
+\newtheoremstyle{cautionstyle}{8pt}{8pt}{\normalfont}{0pt}{\bfseries\color{dangerRed}}{.}{0.5em}{}
+
+\theoremstyle{defstyle}
+\newtheorem{definition}{Definition}[section]
+
+\theoremstyle{thmstyle}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+
+\theoremstyle{notstyle}
+\newtheorem*{remark}{Remark}
+\newtheorem*{example}{Example}
+
+\theoremstyle{cautionstyle}
+\newtheorem*{caution}{Caution}
+
+% ---------- Boxes ----------
+\newmdenv[
+  backgroundcolor=boxbluebg, linecolor=defblue, linewidth=2pt,
+  topline=false, rightline=false, bottomline=false,
+  innerleftmargin=10pt, innerrightmargin=10pt,
+  innertopmargin=6pt, innerbottommargin=6pt,
+  skipabove=8pt, skipbelow=8pt
+]{defbox}
+
+\newmdenv[
+  backgroundcolor=boxgreenbg, linecolor=thmgreen, linewidth=2pt,
+  topline=false, rightline=false, bottomline=false,
+  innerleftmargin=10pt, innerrightmargin=10pt,
+  innertopmargin=6pt, innerbottommargin=6pt,
+  skipabove=8pt, skipbelow=8pt
+]{thmbox}
+
+\newmdenv[
+  backgroundcolor=boxamberbg, linecolor=warnAmber, linewidth=2pt,
+  topline=false, rightline=false, bottomline=false,
+  innerleftmargin=10pt, innerrightmargin=10pt,
+  innertopmargin=6pt, innerbottommargin=6pt,
+  skipabove=8pt, skipbelow=8pt
+]{notebox}
+
+\newmdenv[
+  backgroundcolor=boxredbg, linecolor=dangerRed, linewidth=2pt,
+  topline=false, rightline=false, bottomline=false,
+  innerleftmargin=10pt, innerrightmargin=10pt,
+  innertopmargin=6pt, innerbottommargin=6pt,
+  skipabove=8pt, skipbelow=8pt
+]{cautionbox}
+
+% ---------- Macros ----------
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\card}[1]{\lvert #1 \rvert}
+\newcommand{\Npos}{\mathbb{N}^+}
+\newcommand{\fib}[1]{f^{-1}(\{#1\})}
+
+\begin{document}
+
+\begin{center}
+  {\Large\bfseries Lecture 29 --- Strict Cardinality and Pigeonhole}\\[4pt]
+  {\normalsize CS 173: Discrete Structures \quad$\cdot$\quad $\card{A} < \card{B}$, $\card{A} > \card{B}$}\\[2pt]
+  {\small\color{gray} University of Illinois at Urbana-Champaign}
+\end{center}
+\vspace{1em}\hrule\vspace{1.5em}
+
+% ============================================================
+\section{Strict Cardinality}
+% ============================================================
+
+\begin{defbox}
+\begin{definition}[$\card{A} < \card{B}$]
+For any sets $A, B$:
+\[
+  \card{A} < \card{B}
+  \;\iff\;
+  \exists f\,(f : A \to B \,\wedge\, f \text{ injective})
+  \;\wedge\;
+  \forall g\,(g : A \to B \Rightarrow g \text{ not surjective}).
+\]
+\end{definition}
+\end{defbox}
+
+\begin{defbox}
+\begin{definition}[$\card{A} > \card{B}$]
+For any sets $A, B$:
+\[
+  \card{A} > \card{B}
+  \;\iff\;
+  \exists g\,(g : A \to B \,\wedge\, g \text{ surjective})
+  \;\wedge\;
+  \forall f\,(f : A \to B \Rightarrow f \text{ not injective}).
+\]
+\end{definition}
+\end{defbox}
+
+\begin{notebox}
+\begin{remark}
+Each definition pairs an existential witness with a universal failure: $A$ fits
+inside $B$ but cannot cover it, or covers $B$ but cannot embed in it. The
+universal clause is essential --- a single non-surjective function (e.g.\ a
+constant) proves nothing on its own.
+\end{remark}
+\end{notebox}
+
+% ============================================================
+\section{Pigeonhole Theorem}
+% ============================================================
+
+\begin{thmbox}
+\begin{theorem}[Pigeonhole]
+For any sets $A, B$:
+\begin{enumerate}[label=\textnormal{(\roman*)}, leftmargin=2em, itemsep=2pt]
+  \item $\card{A} > \card{B} \;\Rightarrow\; \forall f\,(f : A \to B \Rightarrow f \text{ not injective})$.
+  \item $\card{A} < \card{B} \;\Rightarrow\; \forall f\,(f : A \to B \Rightarrow f \text{ not surjective})$.
+\end{enumerate}
+\end{theorem}
+\end{thmbox}
+
+\begin{notebox}
+\begin{remark}
+Pigeonhole upgrades the universal clause of each definition into a theorem you
+can apply once strict inequality is established.
+\end{remark}
+\end{notebox}
+
+% ============================================================
+\section{Quantitative Pigeonhole}
+% ============================================================
+
+The basic theorem says some fibre is non-singleton. The quantitative form pins
+down \emph{how} crowded that fibre must be.
+
+\begin{thmbox}
+\begin{theorem}[Quantitative Pigeonhole]
+Let $\card{A} = n \in \Npos$ and $\card{B} = k \in \Npos$. Then for any
+function $f : A \to B$:
+\[
+  \exists b \in B \;\Bigl(\;\card{\{\,a \in A \mid f(a) = b\,\}} \;\geq\; \left\lceil \tfrac{n}{k} \right\rceil\;\Bigr).
+\]
+\end{theorem}
+\end{thmbox}
+
+\begin{notebox}
+\begin{remark}
+When $k \nmid n$, the bound rewrites as $\left\lceil \tfrac{n}{k} \right\rceil = \left\lfloor \tfrac{n}{k} \right\rfloor + 1$
+--- the form written on the board. When $k \mid n$, ceiling and floor agree
+and equal $n/k$.
+\end{remark}
+\end{notebox}
+
+\begin{notebox}
+\begin{remark}[Sanity check]
+If every fibre had size $< \lceil n/k \rceil$, i.e.\ at most
+$\lceil n/k \rceil - 1$, the total $\sum_{b \in B} \card{\fib{b}}$ would be at
+most $k\bigl(\lceil n/k \rceil - 1\bigr) < n$ --- but this sum equals
+$\card{A} = n$. Contradiction.
+\end{remark}
+\end{notebox}
+
+% ============================================================
+\section{Finite Sets: One Witness Suffices}
+% ============================================================
+
+\begin{thmbox}
+\begin{proposition}[Finite shortcut]
+Let $A, B$ be finite. Then:
+\begin{enumerate}[label=\textnormal{(\roman*)}, leftmargin=2em, itemsep=2pt]
+  \item If $f : A \to B$ is injective and not surjective, then $\card{A} < \card{B}$.
+  \item If $g : A \to B$ is surjective and not injective, then $\card{A} > \card{B}$.
+\end{enumerate}
+\end{proposition}
+\end{thmbox}
+
+\begin{proof}
+\textbf{(i)} $f$ witnesses the existential clause. For the universal: if some
+$g : A \to B$ were surjective, then $\card{A} \leq \card{B}$ (from $f$) and
+$\card{A} \geq \card{B}$ (from $g$) give $\card{A} = \card{B}$, forcing $f$ to
+be a bijection --- contradicting non-surjectivity.
+
+\smallskip
+\textbf{(ii)} Symmetric: a rival injection $f$ would force $g$ to be a
+bijection, contradicting non-injectivity.
+\end{proof}
+
+\begin{cautionbox}
+\begin{caution}[Infinite sets break the shortcut]
+Take $A = B = \N$, $f(n) = 2n$: injective, not surjective, yet
+$\card{\N} = \card{\N}$. The identity $g(n) = n$ kills the universal clause.
+For $\card{\N} < \card{\R}$ and similar infinite strict comparisons, the
+universal clause must be proved directly --- the job of Cantor's diagonal.
+\end{caution}
+\end{cautionbox}
+
+% ============================================================
+\section{Summary}
+% ============================================================
+
+\begin{enumerate}[leftmargin=2em, itemsep=2pt]
+  \item Strict cardinality $=$ existential witness $\wedge$ universal failure
+        of the opposite kind of function.
+  \item Pigeonhole supplies the universal clause once strict inequality holds.
+  \item Quantitative form: with $\card{A}=n$, $\card{B}=k$, some fibre has size
+        at least $\lceil n/k \rceil$.
+  \item Finite case: a non-surjective injection witnesses $\card{A} < \card{B}$;
+        a non-injective surjection witnesses $\card{A} > \card{B}$.
+  \item Infinite case: the universal clause needs a direct proof.
+\end{enumerate}
+
+\end{document}
